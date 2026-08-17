@@ -79,7 +79,7 @@ Add project-specific domain types here once the data model is defined.
 
 ## .claude/
 
-- `skills/` — specialized tools that complement superpowers, copied verbatim from Zoney.vn-Web (generic coding/design skills, not project-specific).
+- `skills/` — specialized tools that complement superpowers, copied verbatim from Zoney.vn-Web (generic coding/design skills, not project-specific). Plus one project-specific skill: `web-clone/` — the 80/100 factory that clones a live site's frontend into this repo (recon → design model → parallel build → gates). Design decisions live in `_bmad-output/brainstorming/brain-flyer-clone-skill-2026-08-17/brainstorm-intent.md` (repo root's parent); run artifacts land in `_webclone/`.
 - `rules/` — coding and workflow rules, copied verbatim from Zoney.vn-Web.
 - `superpowers/` — superpowers working directory (specs, plans) — starts empty for this project.
 
