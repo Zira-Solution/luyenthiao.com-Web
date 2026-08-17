@@ -74,6 +74,7 @@ Add project-specific domain types here once the data model is defined.
 - **Prettier** — `bun run format`. Config: `.prettierrc`
 - **ESLint** — `bun run lint`. Enforces import order and TypeScript strict rules
 - **TypeScript** — strict mode on, `bunx tsc --noEmit` to type-check
+- **Vitest + React Testing Library** — `bun run test` (single run) / `bun run test:watch`. Config: `vitest.config.mts`, setup: `vitest.setup.ts`. Tests are co-located next to the file they cover (`*.test.tsx`)
 - **shadcn/ui** — add component: `bunx shadcn@latest add <component-name>`
 
 ## .claude/
