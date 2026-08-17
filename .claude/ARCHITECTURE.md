@@ -2,12 +2,12 @@
 
 ## Overview
 
-Next.js App Router project for **english-game** — a web app to help users learn English (exact game/quiz mechanics not yet decided). Scaffolded from the Zoney.vn-Web project's tooling and folder conventions so AI-assisted development stays consistent across both repos. No backend/API is wired up yet — the data layer (API client, schemas, hooks) will be added once the backend is decided.
+Next.js App Router project for **english-learning-app** — a web app to help users learn English (exact game/quiz mechanics not yet decided). Scaffolded from the Zoney.vn-Web project's tooling and folder conventions so AI-assisted development stays consistent across both repos. No backend/API is wired up yet — the data layer (API client, schemas, hooks) will be added once the backend is decided.
 
 - **Language:** TypeScript (strict mode) — no `.js` or `.jsx` anywhere
 - **Framework:** Next.js App Router
 - **Styling:** Tailwind CSS v4 + shadcn/ui
-- **Project name:** english-game
+- **Project name:** english-learning-app
 - **Primary domain:** English learning / game — TODO, product scope not yet defined
 - **Target audience:** TODO
 - **Key technical constraints:** No backend/API decided yet; package manager is **Bun** (not npm, unlike Zoney.vn-Web)
@@ -90,7 +90,7 @@ Skills are already in the repo — no installation needed. The superpowers plugi
 /plugin install superpowers@claude-plugins-official
 ```
 
-Codegraph must be initialized once for this repo before Claude Code can use it here: run `codegraph init` inside `english-game/` and wait for indexing to finish before starting work.
+Codegraph must be initialized once for this repo before Claude Code can use it here: run `codegraph init` inside `english-learning-app/` and wait for indexing to finish before starting work.
 
 ## Supplementary Skills
 
