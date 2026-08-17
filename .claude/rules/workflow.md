@@ -1,0 +1,55 @@
+# Workflow Rules
+
+## New Feature Process
+
+1. **Brainstorm first** — use `superpowers:brainstorming` skill
+2. **Write a plan** — use `superpowers:writing-plans` skill
+3. **Write test cases before implementing** — use `superpowers:test-driven-development` skill
+4. **Execute** — use `superpowers:executing-plans` or `superpowers:subagent-driven-development`
+5. **Run tests to verify** — `npm run test` or the project's equivalent test command
+6. **Review** — use `superpowers:requesting-code-review` skill
+
+## Skill Selection Guide
+
+| Situation                    | Skill                                        |
+| ---------------------------- | -------------------------------------------- |
+| Starting a new task          | `superpowers:brainstorming`                  |
+| Have a spec, need a plan     | `superpowers:writing-plans`                  |
+| Need to write test cases     | `superpowers:test-driven-development`        |
+| Executing an existing plan   | `superpowers:executing-plans`                |
+| Debugging a bug              | `superpowers:systematic-debugging`           |
+| Feature done, need to verify | `superpowers:verification-before-completion` |
+| Designing UI                 | `frontend-design` (in `.claude/skills/`)     |
+| Optimising Tailwind          | `tailwind-4-docs` (in `.claude/skills/`)     |
+| Creating a page / heavy component / pre-deploy | `performance` (in `.claude/skills/`) |
+| Writing metadata / openGraph / canonical | `seo-metadata` (in `.claude/skills/`) |
+| Semantic HTML, ARIA, JSON-LD, sitemap | `html5-seo` (in `.claude/skills/`) |
+
+## Adding a shadcn/ui Component
+
+```bash
+npx shadcn@latest add <component-name>
+# Examples:
+npx shadcn@latest add input
+npx shadcn@latest add card
+npx shadcn@latest add dialog
+```
+
+The component is created at `src/components/ui/`. Then add its export to `src/components/ui/index.ts`.
+
+## New Page Process
+
+1. Create directory `src/app/[route]/`
+2. Create `src/app/[route]/page.tsx` following the 5-part pattern
+3. Create directory `src/components/[route]/` for page-specific components
+4. Add the route to `src/constants/index.ts` inside the `ROUTES` object
+5. Add the route to `src/app/sitemap.ts` if it is a public page
+
+## Format & Lint Before Finishing
+
+```bash
+npm run format      # format all code
+npm run lint        # run ESLint
+npx tsc --noEmit    # TypeScript type-check
+npm run build       # build to confirm no errors
+```
