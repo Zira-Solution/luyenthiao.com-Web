@@ -5,7 +5,7 @@ description: Clone the frontend of a live website (primary target exam.flyer.us)
 
 # Web Clone — the 80/100 factory
 
-Rebuilds a live site onto THIS repo's stack (Next.js 16 App Router, React 19, TypeScript strict, Tailwind v4, shadcn/ui, Bun). The deliverable is a **twin clone**:
+Rebuilds a live site onto THIS repo's stack — the single source of truth is the **Tech Stack block in `.claude/ARCHITECTURE.md`** (Next.js App Router on Node, TypeScript strict, Tailwind v4 `@theme` CSS variables, shadcn/ui, TanStack Query, Zustand; runner is npm/Node — never Bun). The deliverable is a **twin clone**:
 
 - **~80% visual fidelity** to the original — close enough that nobody double-takes, and no closer.
 - **100% code that reads like this repo wrote it** — passes `.claude/rules/coding.md` and every gate below.
@@ -29,7 +29,7 @@ Load each phase's reference only when that phase starts (keep context lean):
 |---|---|---|
 | 0 Setup | deps, MCP, codegraph, `.env`, smoke test | `references/phase-0-setup.md` |
 | 1 Recon | hybrid eye: MCP explores + logs in; `capture.ts` bulk-captures 3 viewports; asset harvest | `references/phase-1-recon.md` |
-| 2 Design Model | `design-tokens.json` + one spec per section (3-principles chunking); **human review point** | `references/phase-2-design-model.md` |
+| 2 Design Model | `design-tokens.json` + one spec per section (3-principles chunking; effect types declared → `references/animation-matrix.md` decides tech); **human review point** | `references/phase-2-design-model.md` |
 | 3 Build | foundation-first; N builders in isolated worktrees, one chunk each | `references/phase-3-build.md` |
 | 4 Assembly | merge worktrees, wire routes / ROUTES / sitemap / barrels | `references/phase-4-assembly.md` |
 | 5 QA | hard gates green + interaction sweep + side-by-side album (human eye) | `references/phase-5-qa.md` |
@@ -51,8 +51,8 @@ One dispatcher (you) + N builder subagents. Each builder gets its own git worktr
 
 ## Definition of done (per screen)
 
-All hard gates green (`lint`, `tsc --noEmit`, `test`, `gates.ts`) · spec satisfied incl. declared state · mock data wired through Zod + React Query · side-by-side album entry exists · no credentials anywhere. Full checklist: `references/phase-5-qa.md`.
+All hard gates green (`lint`, `tsc --noEmit`, `test`, `npm run gates` — A1–A8) · spec satisfied incl. declared 3-layer state + effect types · mock data wired through Zod + TanStack Query · route JS < 300 KB gzip · side-by-side album entry exists · no credentials anywhere. Full checklist: `references/phase-5-qa.md`.
 
 ## Out of scope (v1 — do not build)
 
-Pixel-diff automation · any Figma intermediate layer · MSW · content translation · exam-player playbook (timer/audio/drag-drop — parked for v1.1; recon still records it, build defers).
+Pixel-diff automation · any Figma intermediate layer · MSW · content translation · exam-player playbook (timer/audio/drag-drop — parked for v1.1; recon still records it, build defers) · PWA/offline sync — Service Worker + IndexedDB (15/08 doc §1.4) is app functionality, not clone functionality; parked for v1.1.

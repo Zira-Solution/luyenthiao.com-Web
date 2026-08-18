@@ -31,8 +31,20 @@ Section (flex-col, gap-6, py-12)
 ## State, validation, interactions (REQUIRED — class B lives here)
 
 - Hover/press/selected/focus states for every interactive element
+- Every piece of state classified into its layer (coding.md): **server data → TanStack Query** · **client UI state → Zustand** · **local widget state → `useState`**
 - Forms: every field + Zod rule + error display + submit behavior (`react-hook-form` + `zod`)
 - Data-driven behavior: what changes when the mock query resolves / errors / loads
+
+## Animation (REQUIRED when anything moves)
+
+Declare each animated interaction's **effect type** — the matrix picks the tech, not the builder (`references/animation-matrix.md`).
+
+| Interaction | Effect type (matrix term) | Tech (from matrix) | Budget request |
+|---|---|---|---|
+| Card list enter | micro-interaction: list enter/exit | Framer Motion (already installed?) | — |
+| Reward badge pop | mascot/badge effect | Lottie | dotLottie web component ~40 KB |
+
+Any not-yet-installed library goes in **Budget request** with its weight — the dispatcher approves it against the route's remaining 300 KB gzip. transform/opacity only (gate A6) · reduced-motion handled (gate A7).
 
 ## Mock data (REQUIRED)
 
@@ -50,5 +62,6 @@ Section (flex-col, gap-6, py-12)
 
 - [ ] renders at 3 viewports per layout intent
 - [ ] all declared interactions work
+- [ ] animation matches the matrix tech; respects reduced-motion; ≥ 30 fps on mid-range Android
 - [ ] Vietnamese copy matches capture `.txt` verbatim
 - [ ] gates green on this chunk's files

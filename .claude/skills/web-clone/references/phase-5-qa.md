@@ -5,21 +5,30 @@ Two stages, in order. Machine first (cheap, objective), human second (the 80% ju
 ## Stage 1 — Hard gates (all must be green, no exceptions)
 
 ```bash
-bun run lint                                              # includes jsx-a11y
-bunx tsc --noEmit                                         # strict clean
-bun run test                                              # vitest suite
-bun run .claude/skills/web-clone/scripts/gates.ts         # class A structural bans
+npm run lint                     # includes jsx-a11y
+npx tsc --noEmit                 # strict clean
+npm run test                     # vitest suite
+npm run gates                    # class A structural bans (A1–A8)
+npm run build                    # produces the budget table below
+npx jscpd src --min-tokens 70    # copy-paste duplication report (A5 follow-up)
 ```
 
 A red gate is never silenced or downgraded — the code is redone the repo-idiomatic way (see `failure-gates.md`).
 
+## Stage 1b — Performance budget (doc 15/08 §1.5)
+
+- **Bundle:** record each route's *First Load JS* from the `next build` table; target **< 300 KB gzip** per route (gzip-check the route chunks in `.next/static/chunks` if unsure). Budget beats fidelity — if a route is over, cut animation weight and lower fidelity, never the reverse.
+- **Real device:** open the map/challenge screens on a mid-range Android 4 GB (never the dev machine): 60 fps target, ≥ 30 fps floor, LCP < 2.5 s on 4G.
+- **Motion review** (checklist from `references/animation-matrix.md`): no permanent `will-change`, Lottie lazy-loaded from `public/`, GSAP cleaned up, reduced-motion honored — toggle OS reduced-motion and re-check.
+
 ## Stage 2 — Interaction sweep on the CLONE (MCP)
 
-Run `bun run dev` and click through the built screens the same way Phase 1 swept the original — scroll, then click, then hover. Verify against each spec's declared interactions:
+Run `npm run dev` and click through the built screens the same way Phase 1 swept the original — scroll, then click, then hover. Verify against each spec's declared interactions:
 
 - forms: validation errors appear (react-hook-form + zod), submit flows through the mock layer
-- state changes (tabs, modals, menus, filters) behave as declared
+- state changes (tabs, modals, menus, filters) behave as declared — via the spec-declared layer (TanStack Query / Zustand / local)
 - hover/press/selected states exist
+- animation runs with the tech the animation matrix assigned — smooth on the Android device, off under reduced-motion
 - Vietnamese copy matches the captures verbatim
 
 Anything undeclared that the original does = a spec gap → back to Phase 2 for that section (small loop, not a full restart).
@@ -30,9 +39,12 @@ Build `_webclone/album/index.html`: for every screen × viewport, the original c
 
 ## Definition of done — per screen checklist
 
-- [ ] lint / tsc / test / gates.ts green
-- [ ] spec satisfied, including declared state & validation
-- [ ] mock data wired through Zod-validated React Query hooks
+- [ ] lint / tsc / test / gates green (A1–A8)
+- [ ] spec satisfied, including declared state (3 layers) & validation & effect types
+- [ ] mock data wired through Zod-validated TanStack Query hooks
+- [ ] route JS under 300 KB gzip (Stage 1b)
+- [ ] jscpd duplication reviewed — repeats are refactors, not accepted
+- [ ] ≥ 30 fps on the mid-range Android device; reduced-motion verified
 - [ ] interaction sweep findings match spec declarations
 - [ ] album entry exists; human 80% verdict = pass
 - [ ] no credentials anywhere in repo, code, logs, or album
@@ -43,4 +55,4 @@ Before handing over: (1) **spec compliance** — does it do what the approved De
 
 ## Run report
 
-Write `_webclone/run-report.md`: screens built, gates status, album verdicts, spec gaps found and how resolved, deferred players (v1.1). This is what the user reads first.
+Write `_webclone/run-report.md`: screens built, gates status, per-route bundle sizes vs budget, jscpd summary, device-test results, album verdicts, spec gaps found and how resolved, deferred players (v1.1). This is what the user reads first.

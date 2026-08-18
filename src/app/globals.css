@@ -41,6 +41,14 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  
+  /* Web Clone Tokens */
+  --color-brand-primary: #0075fb;
+  --color-brand-on-primary: #ffffff;
+  --color-semantic-success: #52c41a;
+  --color-semantic-warning: #faad14;
+  --color-semantic-danger: #f5222d;
+  --color-semantic-info: #1677ff;
 }
 
 :root {
@@ -122,5 +130,17 @@
   html {
     @apply font-sans;
     scroll-behavior: smooth;
+  }
+}
+
+/* Honor prefers-reduced-motion — gate A7 (Công nghệ đề xuất 15/08/2026 §1.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

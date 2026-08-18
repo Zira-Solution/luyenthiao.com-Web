@@ -47,3 +47,7 @@ volumes/
 .claude/projects/*
 .codegraph/*
 .superpowers/
+
+# Webclone
+_webclone/captures/
+_webclone/album/

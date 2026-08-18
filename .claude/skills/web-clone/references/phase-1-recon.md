@@ -26,7 +26,7 @@ Two instruments, two jobs: **Playwright MCP explores** (clicks around, logs in, 
 Create `_webclone/captures/routes.json` from the inventory (see the file's schema inside `scripts/capture.ts`), then:
 
 ```bash
-bun run .claude/skills/web-clone/scripts/capture.ts
+npx tsx .claude/skills/web-clone/scripts/capture.ts
 ```
 
 Per route × viewport (1440 / 768 / 390): full-page screenshot, HTML snapshot, visible-text dump. Output under `_webclone/captures/{route-slug}/`.
@@ -34,7 +34,7 @@ Per route × viewport (1440 / 768 / 390): full-page screenshot, HTML snapshot, v
 Then harvest assets verbatim:
 
 ```bash
-bun run .claude/skills/web-clone/scripts/capture.ts --download-assets
+npx tsx .claude/skills/web-clone/scripts/capture.ts --download-assets
 ```
 
 → `public/clone-assets/` + `_webclone/captures/assets-manifest.json`.

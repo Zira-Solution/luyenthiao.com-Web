@@ -6,7 +6,7 @@ Merge the chunk branches back into the working branch, deterministically.
 
 1. Merge foundation-related branches first if any straggler exists (normally all in main by end of 3a).
 2. Merge section chunk branches one at a time, in dependency order (chunks.md lists dependencies): shared-consumers after their providers.
-3. After EACH merge: `bun run lint && bunx tsc --noEmit && bun run .claude/skills/web-clone/scripts/gates.ts`. A merge that breaks a gate is fixed immediately — never "merge everything, fix at the end".
+3. After EACH merge: `npm run lint && npx tsc --noEmit && npm run gates`. A merge that breaks a gate is fixed immediately — never "merge everything, fix at the end".
 
 ## Conflicts
 
@@ -22,11 +22,11 @@ Expected only in barrel `index.ts` files and `src/constants/index.ts` (ROUTES). 
 ## Final build
 
 ```bash
-bun run build   # must pass clean
+npm run build   # must pass clean
 ```
 
 A failing production build after green lint/tsc usually means a client/server boundary mistake (browser APIs in a server component) — fix at the component, not by sprinkling `"use client"` blindly.
 
 ## Done when
 
-All chunks merged · ROUTES/sitemap/metadata wired · `bun run build` green · worktrees cleaned. → Phase 5.
+All chunks merged · ROUTES/sitemap/metadata wired · `npm run build` green · worktrees cleaned. → Phase 5.

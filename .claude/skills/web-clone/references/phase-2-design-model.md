@@ -6,7 +6,7 @@ Output lives in `_webclone/design-model/` and is **committed and reviewed via PR
 
 ## 1. Design tokens
 
-Start from `templates/design-tokens.json`. Fill it from captures: brand + semantic colors, typography scale, spacing scale, radii, shadows, breakpoints. Map into Tailwind v4 via `@theme` in `src/app/globals.css` during Phase 3 foundation. Only tokens actually used by specs belong here — no speculative palettes.
+Start from `templates/design-tokens.json`. Fill it from captures: brand + semantic colors, typography scale, spacing scale, radii, shadows, breakpoints. Map into Tailwind v4 via `@theme` in `src/app/globals.css` during Phase 3 foundation — colors live **only** as CSS-variable tokens (theme switching per age group/brand depends on this; arbitrary color classes are gate A8). Only tokens actually used by specs belong here — no speculative palettes.
 
 ## 2. Section specs
 
@@ -14,10 +14,15 @@ One file per section chunk, from `templates/section-spec.md`, into `_webclone/de
 
 - layout intent tree (≤ 6 deep — deeper means re-think, not transcribe)
 - component mapping: existing shadcn/ui primitive, existing repo component, or genuinely-new
-- **state, validation, and interactions** — even for "visual" sections, declare hover/press/selected states; for forms, every field with its Zod rule
+- **state, validation, and interactions** — every piece of state classified into the 3 layers (server = TanStack Query · client UI = Zustand · local = `useState`, per `coding.md`); even for "visual" sections, declare hover/press/selected states; for forms, every field with its Zod rule
+- **animation effect types** — each animated interaction labeled with its effect type from `references/animation-matrix.md`; the matrix (not the builder) decides the tech. Any not-yet-installed library the chunk needs goes into the spec's **budget request** with its weight, for the dispatcher to approve against the route's remaining 300 KB gzip budget
 - mock-data shape (Zod schema name + example JSON path)
 - evidence grade per non-obvious detail (SOURCE / PARTIAL / GUESS)
 - the reuse check performed (gate A5): which existing components were searched and considered
+
+## 2b. Shared-component inventory (fixes the duplication failure)
+
+Before chunk specs are frozen, scan all section specs for components that repeat across sections (cards, badges, buttons, shells). Record them in `_webclone/design-model/inventory.md`: component → sections using it → the foundation chunk that builds it. Everything in the inventory is built ONCE in Phase 3's foundation chunk; section builders import from the barrel and may not create their own variant. This inventory is the Phase 2 answer to the observed failure of parallel builders re-creating the same component three times.
 
 ## 3. Chunking — the 3 principles
 
@@ -35,4 +40,4 @@ Open a PR containing tokens + specs + chunks.md. The user (or their lead) review
 
 ## Done when
 
-Tokens complete · every non-player route fully covered by approved specs · chunks.md satisfies all 3 principles · PR approved. → Phase 3.
+Tokens complete · every non-player route fully covered by approved specs (state 3-layer + effect types + budget requests declared) · inventory.md lists every cross-section component · chunks.md satisfies all 3 principles · PR approved. → Phase 3.
