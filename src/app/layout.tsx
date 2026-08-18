@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/common'
 import { APP_DESCRIPTION, APP_NAME } from '@/constants'
 import { env } from '@/lib/env'
 import { QueryProvider } from '@/providers/query-provider'
+import { baloo2, nunito } from '@/lib/fonts'
 
 import './globals.css'
 
@@ -22,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>): React.ReactElement {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="antialiased">
+    <html lang="vi" suppressHydrationWarning className={`${baloo2.variable} ${nunito.variable}`}>
+      <body className="antialiased font-sans">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

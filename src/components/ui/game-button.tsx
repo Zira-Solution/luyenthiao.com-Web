@@ -3,51 +3,65 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface GameButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "cta" | "danger";
   children: React.ReactNode;
 }
 
 export const GameButton = React.forwardRef<HTMLButtonElement, GameButtonProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, children, variant = "primary", ...props }, ref) => {
+    
+    // 3D Claymorphic game design colors matching Flyer's vibrant theme
+    const themeStyles = {
+      primary: {
+        shadow: "bg-[#BF381C]", // Dark brick-red base
+        bg: "bg-gradient-to-b from-[#F48E77] to-[#E36245]", // Soft orange/coral to medium orange
+        border: "border-[#9C230C]", // Thick dark red outline
+        hoverBg: "hover:from-[#F69E8A] hover:to-[#E86D53]",
+      },
+      secondary: {
+        shadow: "bg-[#0b3b7a]", // Dark indigo base
+        bg: "bg-gradient-to-b from-[#3B82F6] to-[#1D4ED8]", // Royal blue to indigo
+        border: "border-[#1E3A8A]", // Indigo outline
+        hoverBg: "hover:from-[#60A5FA] hover:to-[#2563EB]",
+      },
+      cta: {
+        shadow: "bg-[#166534]", // Dark green base
+        bg: "bg-gradient-to-b from-[#4ADE80] to-[#16A34A]", // Emerald green to forest green
+        border: "border-[#14532D]", // Deep green outline
+        hoverBg: "hover:from-[#86EFAC] hover:to-[#15803D]",
+      },
+      danger: {
+        shadow: "bg-[#7F1D1D]", // Dark crimson base
+        bg: "bg-gradient-to-b from-[#F87171] to-[#DC2626]", // Rose red to dark red
+        border: "border-[#7F1D1D]", // Deep crimson outline
+        hoverBg: "hover:from-[#FCA5A5] hover:to-[#B91C1C]",
+      }
+    }[variant];
+
     return (
       <button
         ref={ref}
         {...props}
         className={cn(
-          "relative rounded-[8px] p-[3px] flex justify-center font-semibold bg-gradient-to-b h-fit",
-          "from-[#FDDBD4] to-[#BF381C] hover:opacity-90 active:scale-95 transition-all",
-          "disabled:pointer-events-none disabled:cursor-not-allowed",
-          "[&>.btn-content]:from-[#F48E77] [&>.btn-content]:to-[#E36245]",
-          "[&>.left-corner>svg>path:nth-child(1)]:fill-[#F8957F]",
-          "[&>.left-corner>svg>path:nth-child(2)]:fill-[#FFD5B9]",
-          "[&>.left-corner>svg>path:nth-child(3)]:fill-[#E66549]",
-          "[&>.left-corner>svg>path:nth-child(4)]:fill-[#E66549]",
-          "[&>.right-corner>svg>path:nth-child(1)]:fill-[#CB300E]",
-          "[&>.right-corner>svg>path:nth-child(2)]:fill-[#FFD5B9]",
-          "[&>.right-corner>svg>path:nth-child(3)]:fill-[#AE1F00]",
+          "relative group active:translate-y-[3px] active:shadow-none transition-all duration-150 cursor-pointer outline-none rounded-2xl w-full",
+          "disabled:pointer-events-none disabled:opacity-50 select-none",
           className
         )}
       >
-        <div className="absolute left-0 top-0 lg:w-[32px] w-[20px] left-corner pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 33 19">
-            <path d="M19.099 18.13H.106v-.89h18.362l11.254-9.905V0h1.3v7.642z" />
-            <path d="M19.768 19H.106v-.89h19.005l11.65-10.533V.242h1.345v7.642z" opacity="0.2" />
-            <path d="M18.416 17.2H.398v-.847h17.42l10.676-9.397V0h1.234v7.246z" />
-            <path d="m21.816 11.273-4.282 4.56h-4.522l4.522-4.56z" />
-          </svg>
-        </div>
+        {/* 3D shadow layer underneath */}
+        <div className={cn(
+          "absolute inset-x-0 -bottom-1 h-full rounded-2xl -z-10 transition-all group-active:bottom-0 shadow-lg",
+          themeStyles.shadow
+        )} />
         
-        <div className="absolute bottom-0 right-0 lg:w-[32px] w-[20px] right-corner pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 40 12">
-            <path d="m40 5.637-6.944-3.485h-4.474L26.9.694h-5.597l-2.46 1.585H9.666L2.275 6.84V12h1.46V6.84l6.044-3.929h21.823l7.275 3.421z" />
-            <path d="m38.88 6.331-7.275-3.42H9.782L3.738 6.84V12h1.23V6.902l5.15-3.357h20.146l7.833 3.357z" opacity="0.2" />
-            <path d="M30.71 2.153 27.572 0H20.41l-2.572 1.645H8.993L0 6.791l2.277.05 7.392-4.56h9.176l2.46-1.585h5.597l1.683 1.457z" />
-          </svg>
-        </div>
-
-        <div className="lg:px-3 sm:py-2 sm:text-[14px] lg:text-[16px] p-1 text-[13px] w-full rounded-[inherit] transition-all btn-content bg-gradient-to-b">
-          <div className="whitespace-nowrap uppercase text-white font-extrabold tracking-wide">
-            {children}
-          </div>
+        {/* Main button text container */}
+        <div className={cn(
+          "px-6 py-3 border-2 rounded-2xl flex justify-center items-center text-center font-black uppercase text-white tracking-widest text-sm md:text-base transition-all duration-100",
+          themeStyles.bg,
+          themeStyles.border,
+          themeStyles.hoverBg
+        )}>
+          {children}
         </div>
       </button>
     );

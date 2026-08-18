@@ -3,6 +3,8 @@
 @plugin '@tailwindcss/typography';
 
 @theme inline {
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-baloo), ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,6 +51,24 @@
   --color-semantic-warning: #faad14;
   --color-semantic-danger: #f5222d;
   --color-semantic-info: #1677ff;
+
+  /* Dashboard Theme Tokens */
+  --color-ribbon-bg: #065f21;
+  --color-ribbon-border: #033b14;
+  --color-ribbon-fold: #044a19;
+  
+  --color-nav-bg: #4a1c82;
+  --color-nav-border: #7c3aed;
+  
+  --color-banner-bg: #fcebb6;
+  --color-banner-text: #695107;
+  --color-challenge-bg: #0f4492;
+  --color-challenge-input-bg: #052b61;
+  
+  --color-dashboard-bg: #2b1055;
+  --color-bug-btn: #facc15;
+  --color-bug-btn-border: #ca8a04;
+  --color-bug-btn-text: #713f12;
 }
 
 :root {
@@ -125,7 +145,10 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans tracking-wide;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-wider;
   }
   html {
     @apply font-sans;
@@ -143,4 +166,21 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-24px); }
+}
+
+.clip-path-ribbon-left {
+  clip-path: polygon(100% 0, 100% 100%, 0 100%, 25% 50%, 0 0);
+}
+
+.clip-path-ribbon-right {
+  clip-path: polygon(0 0, 0 100%, 100% 100%, 75% 50%, 100% 0);
+}
+
+.writing-vertical-rl {
+  writing-mode: vertical-rl;
 }
