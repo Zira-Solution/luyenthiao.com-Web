@@ -1,104 +1,305 @@
 "use client";
 
-import { useState } from "react";
-import { X, AlertTriangle, Play } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { ChevronDown, Plus, Trophy, BookOpen, School, ClipboardList } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function Topbar() {
   const router = useRouter();
-  const [showWarning, setShowWarning] = useState(true);
-  const [showChallenge, setShowChallenge] = useState(true);
-  const [challengeCode, setChallengeCode] = useState("");
+  const pathname = usePathname();
 
   const handleLogin = () => {
     router.push("/login");
   };
 
+  const handleRanking = () => {
+    router.push("/ranking");
+  };
+
+  // Topbar Button Component (3D Game Style)
+  const GameNavButton = ({ 
+    onClick, 
+    className, 
+    children, 
+    variant = "blue",
+    badgeText,
+    badgeColor = "bg-green-500"
+  }: { 
+    onClick?: () => void; 
+    className?: string; 
+    children: React.ReactNode; 
+    variant?: "blue" | "orange" | "yellow" | "purple";
+    badgeText?: string;
+    badgeColor?: string;
+  }) => {
+    const styles = {
+      blue: "bg-[#1E1F66] border-[#0F103F] hover:bg-[#2A2B85] active:bg-[#15164B]",
+      orange: "bg-[#FF5D24] border-[#B83E14] hover:bg-[#FF723F] active:bg-[#D64614]",
+      yellow: "bg-[#F59E0B] border-[#B45309] hover:bg-[#FBBF24] active:bg-[#D97706]",
+      purple: "bg-[#7C3AED] border-[#5B21B6] hover:bg-[#8B5CF6] active:bg-[#6D28D9]"
+    }[variant];
+
+    return (
+      <button
+        onClick={onClick}
+        className={cn(
+          "relative group active:translate-y-[2px] active:border-b-[2px] transition-all duration-100 cursor-pointer rounded-2xl px-3 py-1.5 md:py-2 border-b-4 flex flex-col items-center justify-center min-w-[70px] md:min-w-[85px] h-[65px] md:h-[75px] shadow-[0_4px_6px_rgba(0,0,0,0.3)]",
+          styles,
+          className
+        )}
+      >
+        {/* Cute badge on top-left of the button */}
+        {badgeText && (
+          <span className={cn(
+            "absolute -top-1.5 -left-1.5 text-[8px] md:text-[9px] font-black text-white px-1.5 py-0.5 rounded-md border border-white/20 transform -rotate-6 tracking-wider uppercase animate-pulse shadow-md z-20",
+            badgeColor
+          )}>
+            {badgeText}
+          </span>
+        )}
+        <div className="flex flex-col items-center justify-between h-full w-full">
+          {children}
+        </div>
+      </button>
+    );
+  };
+
   return (
-    <header className="w-full flex flex-col absolute top-0 left-0 z-50">
+    <header className="w-full absolute top-0 left-0 z-50 p-2 md:p-4 select-none">
       
-      {/* 3D Warning Banner for Trial Status */}
-      {showWarning && (
-        <div className="bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 text-amber-950 px-4 md:px-8 py-3 w-full flex flex-col md:flex-row items-center justify-between text-xs sm:text-sm font-semibold shadow-md gap-4 md:gap-0 border-b-2 border-amber-300 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
+      {/* Container wraps layout into 3 distinct sections */}
+      <div className="w-full max-w-[100dvw] flex flex-wrap items-center justify-between gap-y-3 lg:gap-0">
+        
+        {/* ================= LEFT SECTION ================= */}
+        <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
           
-          <div className="flex items-center gap-2.5 text-center md:text-left select-none">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 animate-bounce" />
-            <span>
-              <strong className="font-black uppercase tracking-wider text-amber-900 mr-1">Thông báo:</strong> 
-              Hiện bạn đang dùng thử. Hãy đăng nhập để lưu trữ lịch sử học tập, đáp án và mở khóa toàn bộ bài học!
+          {/* Thách Đấu Button */}
+          <GameNavButton variant="orange">
+            <img 
+              src="/clone-assets/media/ic-challenge.9b2229cb.png" 
+              alt="Thách đấu" 
+              className="w-7 h-7 md:w-9 md:h-9 object-contain"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://api.dicebear.com/7.x/bottts/svg?seed=challenge';
+              }}
+            />
+            <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+              Thách đấu
             </span>
+          </GameNavButton>
+
+          {/* Writing Button */}
+          <GameNavButton variant="blue" badgeText="FREE" badgeColor="bg-gradient-to-r from-emerald-400 to-green-600">
+            <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9">
+              <img 
+                src="/clone-assets/media/ic-writing.9b3fd4e6.png" 
+                alt="Writing" 
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://api.dicebear.com/7.x/bottts/svg?seed=writing';
+                }}
+              />
+            </div>
+            <div className="flex items-center gap-0.5">
+              <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+                Writing
+              </span>
+              <ChevronDown className="w-2.5 h-2.5 text-blue-300" />
+            </div>
+          </GameNavButton>
+
+          {/* Speaking Button */}
+          <GameNavButton variant="blue">
+            <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9">
+              <img 
+                src="/clone-assets/media/ic-speaking.3f0031fd.png" 
+                alt="Speaking" 
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://api.dicebear.com/7.x/bottts/svg?seed=speaking';
+                }}
+              />
+            </div>
+            <div className="flex items-center gap-0.5">
+              <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+                Speaking
+              </span>
+              <ChevronDown className="w-2.5 h-2.5 text-blue-300" />
+            </div>
+          </GameNavButton>
+
+          {/* Vocabulary Button */}
+          <GameNavButton variant="blue">
+            <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9">
+              <img 
+                src="/clone-assets/media/ic-vocab.1dd303ec.png" 
+                alt="Vocabulary" 
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://api.dicebear.com/7.x/bottts/svg?seed=vocab';
+                }}
+              />
+            </div>
+            <div className="flex items-center gap-0.5">
+              <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+                Vocab
+              </span>
+              <ChevronDown className="w-2.5 h-2.5 text-blue-300" />
+            </div>
+          </GameNavButton>
+
+          {/* Luyện Tập Button */}
+          <GameNavButton variant="yellow" badgeText="NEW" badgeColor="bg-gradient-to-r from-red-500 to-orange-500">
+            <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9">
+              <span className="text-xl md:text-2xl animate-pulse">⚡</span>
+            </div>
+            <span className="text-[#5C3A21] text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+              Luyện tập
+            </span>
+          </GameNavButton>
+
+          {/* Coin Indicator Box */}
+          <div className="bg-[#1e1f66]/80 border-2 border-blue-500/30 rounded-2xl px-3.5 py-1.5 h-[50px] md:h-[55px] flex items-center gap-2 shadow-inner min-w-[90px] md:min-w-[110px]">
+            <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-yellow-400 border border-yellow-200 flex items-center justify-center shadow-md animate-[spin_4s_linear_infinite] shrink-0">
+              <span className="text-yellow-950 font-black text-sm">C</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-blue-300 font-extrabold text-[8px] md:text-[9px] uppercase tracking-wider">COIN</span>
+              <span className="text-white font-black text-xs md:text-sm -mt-1">0</span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
-            {/* 3D Mini Login Button */}
+        </div>
+
+        {/* ================= CENTER SECTION ================= */}
+        {/* Beautiful 3D Auth Control Box */}
+        <div className="flex justify-center shrink-0 mx-auto lg:mx-0">
+          <div className="bg-[#05132d]/90 backdrop-blur-md border-3 border-[#1e3a8a] rounded-2xl p-2 w-[160px] md:w-[180px] flex flex-col gap-1.5 shadow-[0_8px_16px_rgba(0,0,0,0.5)] transform -translate-y-1">
+            {/* Đăng Nhập Button */}
             <button 
               onClick={handleLogin}
-              className="relative group active:translate-y-[2px] transition-all cursor-pointer"
+              className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
             >
-              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-full bg-[#1e40af] -z-10 group-active:bottom-0" />
-              <div className="bg-blue-600 hover:bg-blue-500 text-white font-black px-4 py-1.5 rounded-full text-xs uppercase tracking-wider border border-[#1d4ed8]">
+              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-[#1e40af] -z-10 group-active:bottom-0" />
+              <div className="bg-[#3b82f6] border border-[#1d4ed8] text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-blue-500">
                 Đăng Nhập
               </div>
             </button>
 
-            {/* 3D Mini Register Button */}
+            {/* Đăng Ký Button */}
             <button 
-              className="relative group active:translate-y-[2px] transition-all cursor-pointer"
+              className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
             >
-              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-full bg-[#991b1b] -z-10 group-active:bottom-0" />
-              <div className="bg-red-600 hover:bg-red-500 text-white font-black px-4 py-1.5 rounded-full text-xs uppercase tracking-wider border border-[#b91c1c]">
+              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-[#b91c1c] -z-10 group-active:bottom-0" />
+              <div className="bg-[#ef4444] border border-[#991b1b] text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-red-500">
                 Đăng Ký
               </div>
             </button>
+          </div>
+        </div>
 
-            <button 
-              onClick={() => setShowWarning(false)}
-              className="ml-2 text-amber-800 hover:text-amber-950 bg-transparent hover:bg-amber-300/40 p-1.5 rounded-full transition-colors cursor-pointer"
-              aria-label="Tắt thông báo"
-            >
-              <X className="w-4 h-4" />
+        {/* ================= RIGHT SECTION ================= */}
+        <div className="flex flex-wrap items-center gap-1.5 md:gap-2 justify-end">
+          
+          {/* Diamond Indicator Box with Add Button */}
+          <div className="bg-[#1e1f66]/80 border-2 border-blue-500/30 rounded-2xl px-3.5 py-1.5 h-[50px] md:h-[55px] flex items-center gap-2 shadow-inner min-w-[100px] md:min-w-[125px]">
+            <div className="w-7 h-7 md:w-8 md:h-8 shrink-0">
+              <img 
+                src="/clone-assets/media/icon-diamonds.580d8a36.png" 
+                alt="Kim Cương" 
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://api.dicebear.com/7.x/bottts/svg?seed=diamond';
+                }}
+              />
+            </div>
+            <div className="flex flex-col flex-1">
+              <span className="text-blue-300 font-extrabold text-[8px] md:text-[9px] uppercase tracking-wider">KIM CƯƠNG</span>
+              <span className="text-white font-black text-xs md:text-sm -mt-1">0</span>
+            </div>
+            <button className="w-5 h-5 rounded-md bg-green-500 hover:bg-green-400 border border-green-600 flex items-center justify-center cursor-pointer text-white font-black text-xs active:scale-90 transition-transform">
+              <Plus className="w-3.5 h-3.5" />
             </button>
           </div>
 
+          {/* Xếp Hạng Button */}
+          <GameNavButton 
+            variant="blue" 
+            onClick={handleRanking} 
+            className={cn(pathname === "/ranking" && "bg-white/10 border-yellow-400")}
+          >
+            <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-yellow-400 shrink-0">
+              <Trophy className="w-6 h-6 md:w-7 md:h-7" />
+            </div>
+            <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+              Xếp hạng
+            </span>
+          </GameNavButton>
+
+          {/* Lịch Sử Button */}
+          <GameNavButton variant="blue">
+            <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-violet-400 shrink-0">
+              <BookOpen className="w-6 h-6 md:w-7 md:h-7" />
+            </div>
+            <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+              Lịch sử
+            </span>
+          </GameNavButton>
+
+          {/* Trường Của Tôi Button */}
+          <GameNavButton variant="blue">
+            <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-emerald-400 shrink-0">
+              <School className="w-6 h-6 md:w-7 md:h-7" />
+            </div>
+            <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+              Trường học
+            </span>
+          </GameNavButton>
+
+          {/* Nhiệm Vụ Button */}
+          <GameNavButton variant="blue">
+            <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-orange-400 shrink-0">
+              <ClipboardList className="w-6 h-6 md:w-7 md:h-7" />
+            </div>
+            <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+              Nhiệm vụ
+            </span>
+          </GameNavButton>
+
+          {/* Thông Báo Button */}
+          <GameNavButton variant="blue">
+            <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center shrink-0">
+              <img 
+                src="/clone-assets/media/ic_bell.19fd4917.png" 
+                alt="Thông báo" 
+                className="w-6 h-6 md:w-7 md:h-7 object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://api.dicebear.com/7.x/bottts/svg?seed=bell';
+                }}
+              />
+            </div>
+            <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+              Thông báo
+            </span>
+          </GameNavButton>
+
+          {/* Vietnam Flag / Language Selector (Red circle with yellow star) */}
+          <button className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-red-600 border-2 border-yellow-400 flex items-center justify-center cursor-pointer shadow-[0_3px_6px_rgba(0,0,0,0.4)] active:translate-y-[2px] transition-all overflow-hidden relative group shrink-0">
+            {/* Red background & Yellow Star representing Vietnam Flag */}
+            <div className="absolute inset-0 bg-[#DA251D] flex items-center justify-center">
+              <svg viewBox="0 0 30 20" className="w-6.5 h-6.5">
+                <polygon 
+                  fill="#FFFF00" 
+                  points="15,4 16.2,8.8 21.2,8.8 17.2,11.8 18.7,16.6 15,13.6 11.3,16.6 12.8,11.8 8.8,8.8 13.8,8.8"
+                />
+              </svg>
+            </div>
+          </button>
+
         </div>
-      )}
 
-      {/* 3D Challenge Box */}
-      {showChallenge && (
-        <div className="mt-4 ml-4 md:ml-8 transition-all duration-300 animate-in fade-in slide-in-from-left-2">
-          <div className="relative inline-flex items-center bg-[#0a1a3a]/90 backdrop-blur-md border-2 border-blue-500/40 rounded-2xl p-1.5 shadow-[0_10px_20px_rgba(0,0,0,0.4)]">
-            
-            <input 
-              type="text" 
-              placeholder="Mã thách đấu..." 
-              value={challengeCode}
-              onChange={(e) => setChallengeCode(e.target.value)}
-              className="bg-[#052b61] text-white placeholder-blue-300/40 px-4 py-2.5 rounded-xl outline-none w-[150px] md:w-[190px] text-xs font-black border border-blue-500/20 shadow-inner tracking-widest uppercase"
-            />
-            
-            {/* 3D Join Button */}
-            <button 
-              className="ml-2 relative group active:translate-y-[2px] transition-all cursor-pointer"
-            >
-              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-xl bg-[#991b1b] -z-10 group-active:bottom-0" />
-              <div className="bg-red-600 hover:bg-red-500 text-white font-black px-4 py-2.5 rounded-xl text-xs uppercase tracking-widest border border-[#b91c1c] flex items-center gap-1">
-                <Play className="w-3 h-3 fill-white" />
-                Tham Gia
-              </div>
-            </button>
-
-            {/* Close Button */}
-            <button 
-              onClick={() => setShowChallenge(false)}
-              className="absolute -top-2.5 -right-2.5 bg-white text-gray-800 hover:bg-gray-100 hover:text-red-500 rounded-full p-1 shadow-md transition-all z-10 border border-gray-200 cursor-pointer"
-              aria-label="Tắt thách đấu"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-      )}
-
+      </div>
+      
     </header>
   );
 }

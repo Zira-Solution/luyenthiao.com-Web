@@ -36,18 +36,17 @@ export default function DashboardPage() {
         }}
       />
 
-      {/* Custom Prev Button with Claymorphic Glow */}
+      {/* Custom Prev Button with Claymorphic Gold Border Arrow Style */}
       <button 
-        className="absolute left-4 md:left-12 z-30 transform hover:scale-110 active:scale-95 transition-transform cursor-pointer drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] focus:outline-none"
+        className="absolute left-6 md:left-14 z-30 transform hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none"
         onClick={() => swiperRef.current?.slidePrev()}
       >
-        <Image 
-          src="/clone-assets/media/pre.f526b4d4.png" 
-          alt="Prev" 
-          width={70} 
-          height={70} 
-          className="w-12 h-12 md:w-16 md:h-16 object-contain" 
-        />
+        <div className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-b from-[#8B5CF6] to-[#6D28D9] border-3 border-[#FBBF24] shadow-[0_6px_0_#9F1239,0_8px_16px_rgba(0,0,0,0.5)] active:translate-y-[2px] active:border-b-2">
+          {/* Arrow Left Symbol */}
+          <span className="text-white font-black text-xl md:text-3xl transform -translate-x-[2px] select-none">
+            ◀
+          </span>
+        </div>
       </button>
 
       {/* Swiper Container */}
@@ -67,13 +66,13 @@ export default function DashboardPage() {
           }}
           coverflowEffect={{
             rotate: 0,
-            stretch: 80,
-            depth: 220,
+            stretch: 60,
+            depth: 200,
             modifier: 1,
             slideShadows: false,
           }}
           modules={[EffectCoverflow]}
-          className="w-full h-full !py-16 md:!py-24"
+          className="w-full h-full !py-12 md:!py-20"
           onSlideChange={(swiper) => setActivePlanetIndex(swiper.activeIndex)}
         >
           {planetsData.map((planet, idx) => {
@@ -84,16 +83,16 @@ export default function DashboardPage() {
               <SwiperSlide key={planet.id} className="flex justify-center items-center">
                 <div 
                   className={`relative transition-all duration-700 ease-out cursor-pointer flex flex-col items-center
-                    ${isActive ? "scale-100 z-30" : "scale-75 opacity-40 hover:opacity-60"}
+                    ${isActive ? "scale-100 z-30" : "scale-75 opacity-30 hover:opacity-50"}
                   `}
                 >
                   {/* Planet Image Layer with high-end glow and smooth float */}
-                  <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[420px] md:h-[420px] flex items-center justify-center">
+                  <div className="relative w-60 h-60 sm:w-76 sm:h-76 md:w-[380px] md:h-[380px] flex items-center justify-center">
                     
                     {/* Behind planet aura glow (only for active planet) */}
                     {isActive && (
                       <div 
-                        className="absolute inset-4 rounded-full -z-10 animate-pulse opacity-40 blur-2xl"
+                        className="absolute inset-4 rounded-full -z-10 animate-pulse opacity-45 blur-2xl"
                         style={{
                           background: `radial-gradient(circle, ${planet.shadowColor} 0%, transparent 70%)`
                         }}
@@ -113,43 +112,43 @@ export default function DashboardPage() {
 
                   {/* 3D Ribbon & Details underneath */}
                   <div className={cn(
-                    "absolute bottom-[-30px] md:bottom-[-50px] flex flex-col items-center transition-all duration-500 w-[250px] md:w-[320px]",
+                    "absolute bottom-[-45px] md:bottom-[-65px] flex flex-col items-center transition-all duration-500 w-[240px] md:w-[300px]",
                     isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-6 scale-95 pointer-events-none"
                   )}>
                     
                     {/* Ribbon Title */}
-                    <div className="relative w-full h-[65px] md:h-[80px] flex items-center justify-center filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.4)]">
+                    <div className="relative w-full h-[60px] md:h-[75px] flex items-center justify-center filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.4)]">
                       
                       {/* Bubbly 3D Claymorphic Banner */}
                       <div className={cn(
                         "absolute inset-x-2 inset-y-0 bg-gradient-to-b rounded-2xl border-b-4 border-r border-t border-l flex flex-col items-center justify-center pt-2 pb-3 px-4 z-10",
                         planet.id === "ioe" && "from-blue-400 to-indigo-600 border-indigo-800 border-t-blue-300 border-x-blue-500 shadow-[0_4px_10px_rgba(59,130,246,0.3)]",
-                        planet.id === "starters" && "from-pink-400 to-rose-600 border-rose-800 border-t-pink-300 border-x-pink-500 shadow-[0_4px_10px_rgba(236,72,153,0.3)]",
-                        planet.id === "movers" && "from-cyan-400 to-blue-600 border-blue-800 border-t-cyan-300 border-x-cyan-500 shadow-[0_4px_10px_rgba(6,182,212,0.3)]",
+                        planet.id === "starters" && "from-[#22c55e] to-[#15803d] border-[#14532d] border-t-[#4ade80] border-x-[#16a34a] shadow-[0_4px_10px_rgba(34,197,94,0.3)]",
+                        planet.id === "movers" && "from-[#b91c1c] to-[#7f1d1d] border-[#450a0a] border-t-[#ef4444] border-x-[#dc2626] shadow-[0_4px_10px_rgba(185,28,28,0.3)]",
                         planet.id === "flyers" && "from-violet-400 to-purple-650 border-purple-900 border-t-violet-300 border-x-violet-500 shadow-[0_4px_10px_rgba(139,92,246,0.3)]",
-                        planet.id === "toefl_primary" && "from-amber-400 to-orange-600 border-orange-800 border-t-amber-300 border-x-amber-500 shadow-[0_4px_10px_rgba(245,158,11,0.3)]"
+                        planet.id === "toefl_primary" && "from-amber-400 to-orange-650 border-orange-850 border-t-amber-300 border-x-amber-500 shadow-[0_4px_10px_rgba(245,158,11,0.3)]"
                       )}>
                         
                         {/* 3D Banner Side Wings */}
                         <div className={cn(
-                          "absolute -left-2 top-2 bottom-2 w-5 -z-10 clip-path-ribbon-left border-y border-l border-black/20",
+                          "absolute -left-2.5 top-2.5 bottom-2.5 w-6 -z-10 clip-path-ribbon-left border-y border-l border-black/20",
                           planet.id === "ioe" && "bg-indigo-900",
-                          planet.id === "starters" && "bg-rose-900",
-                          planet.id === "movers" && "bg-blue-900",
+                          planet.id === "starters" && "bg-[#14532d]",
+                          planet.id === "movers" && "bg-[#450a0a]",
                           planet.id === "flyers" && "bg-purple-950",
                           planet.id === "toefl_primary" && "bg-orange-950"
                         )}></div>
                         
                         <div className={cn(
-                          "absolute -right-2 top-2 bottom-2 w-5 -z-10 clip-path-ribbon-right border-y border-r border-black/20",
+                          "absolute -right-2.5 top-2.5 bottom-2.5 w-6 -z-10 clip-path-ribbon-right border-y border-r border-black/20",
                           planet.id === "ioe" && "bg-indigo-900",
-                          planet.id === "starters" && "bg-rose-900",
-                          planet.id === "movers" && "bg-blue-900",
+                          planet.id === "starters" && "bg-[#14532d]",
+                          planet.id === "movers" && "bg-[#450a0a]",
                           planet.id === "flyers" && "bg-purple-950",
                           planet.id === "toefl_primary" && "bg-orange-950"
                         )}></div>
                         
-                        <h2 className="text-white font-black text-lg md:text-2xl tracking-widest drop-shadow-[0_2px_3px_rgba(0,0,0,0.6)] text-center uppercase leading-tight font-heading">
+                        <h2 className="text-white font-black text-lg md:text-2xl tracking-wider drop-shadow-[0_2px_3px_rgba(0,0,0,0.6)] text-center uppercase leading-tight font-heading">
                           {planet.name}
                         </h2>
                         <p className="text-white/95 font-bold text-[9px] md:text-xs tracking-wider text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)] mt-0.5 uppercase">
@@ -164,17 +163,42 @@ export default function DashboardPage() {
                         <div 
                           key={i} 
                           className={cn(
-                            "text-white font-black text-[9px] md:text-xs px-3 py-1 rounded-full shadow-[0_2px_0_rgba(0,0,0,0.4)] border border-black/20 uppercase tracking-widest transition-transform hover:scale-105 active:scale-95 cursor-pointer",
-                            (tag.text.includes("PRE") || tag.text.includes("LỚP")) && "bg-gradient-to-b from-emerald-400 to-green-600 border-green-800",
+                            "text-white font-black text-[9px] md:text-xs px-3.5 py-1 rounded-full shadow-[0_2px_0_rgba(0,0,0,0.4)] border border-black/20 uppercase tracking-widest transition-transform hover:scale-105 active:scale-95 cursor-pointer",
+                            (tag.text.includes("PRE") || tag.text.includes("LỚP")) && "bg-gradient-to-b from-emerald-450 to-green-600 border-green-800",
                             tag.text === "A1" && "bg-gradient-to-b from-amber-400 to-orange-500 border-orange-700",
-                            tag.text === "A2" && "bg-gradient-to-b from-rose-450 to-red-600 border-red-800",
+                            tag.text === "A2" && "bg-gradient-to-b from-rose-450 to-red-650 border-red-800",
                             tag.text === "B1" && "bg-gradient-to-b from-sky-400 to-blue-600 border-blue-800",
-                            !["PRE", "A1", "A2", "B1", "LỚP"].some(term => tag.text.includes(term)) && "bg-gradient-to-b from-violet-400 to-purple-600 border-purple-800"
+                            !["PRE", "A1", "A2", "B1", "LỚP"].some(term => tag.text.includes(term)) && "bg-gradient-to-b from-violet-400 to-purple-650 border-purple-800"
                           )}
                         >
                           {tag.text}
                         </div>
                       ))}
+                    </div>
+
+                    {/* Mascot peaking out with 3D action circle buttons on left/right */}
+                    <div className="flex items-center justify-center gap-4.5 mt-4 z-20 w-full">
+                      {/* Red Mask Face button */}
+                      <button className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-b from-[#ff5d24] to-[#c43605] border-2 border-[#ff723f] hover:from-[#ff723f] hover:to-[#c43605] flex items-center justify-center cursor-pointer shadow-lg active:scale-90 active:translate-y-[2px] transition-all">
+                        <span className="text-white text-lg md:text-xl">🎭</span>
+                      </button>
+
+                      {/* Mascot bunny peaking out */}
+                      <div className="relative w-16 h-16 md:w-20 md:h-20 -mt-3 animate-[floating_4s_ease-in-out_infinite] filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
+                        <img 
+                          src="https://statics.flyer.vn/avatar/de905412fc63465bb5ccebb2c0561ac9" 
+                          alt="Mascot peaking" 
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/clone-assets/media/ic-challenge.9b2229cb.png'; // fallback
+                          }}
+                        />
+                      </div>
+
+                      {/* Blue Phone button */}
+                      <button className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-b from-[#3B82F6] to-[#1D4ED8] border-2 border-[#60A5FA] hover:from-[#60A5FA] hover:to-[#1D4ED8] flex items-center justify-center cursor-pointer shadow-lg active:scale-90 active:translate-y-[2px] transition-all">
+                        <span className="text-white text-lg md:text-xl">📞</span>
+                      </button>
                     </div>
 
                   </div>
@@ -185,18 +209,17 @@ export default function DashboardPage() {
         </Swiper>
       </div>
 
-      {/* Custom Next Button with Claymorphic Glow */}
+      {/* Custom Next Button with Claymorphic Gold Border Arrow Style */}
       <button 
-        className="absolute right-4 md:right-12 z-30 transform hover:scale-110 active:scale-95 transition-transform cursor-pointer drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] focus:outline-none"
+        className="absolute right-6 md:right-14 z-30 transform hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none"
         onClick={() => swiperRef.current?.slideNext()}
       >
-        <Image 
-          src="/clone-assets/media/next.410b4d3b.png" 
-          alt="Next" 
-          width={70} 
-          height={70} 
-          className="w-12 h-12 md:w-16 md:h-16 object-contain" 
-        />
+        <div className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-b from-[#8B5CF6] to-[#6D28D9] border-3 border-[#FBBF24] shadow-[0_6px_0_#9F1239,0_8px_16px_rgba(0,0,0,0.5)] active:translate-y-[2px] active:border-b-2">
+          {/* Arrow Right Symbol */}
+          <span className="text-white font-black text-xl md:text-3xl transform translate-x-[2px] select-none">
+            ▶
+          </span>
+        </div>
       </button>
 
     </div>
