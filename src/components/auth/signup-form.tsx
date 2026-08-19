@@ -40,7 +40,7 @@ export function SignupForm() {
   return (
     <div className="w-full max-w-[500px] flex flex-col items-center text-shadow-game-title">
       {/* Premium Glassmorphic / Claymorphic Signup Card */}
-      <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md border-3 border-ranking-table-border rounded-[2rem] p-8 md:p-10 shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
+      <div className="w-full bg-ranking-table-bg backdrop-blur-md border-3 border-ranking-table-border rounded-[2rem] p-8 md:p-10 shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
         
         {/* Title */}
         <h1 

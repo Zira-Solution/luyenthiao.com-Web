@@ -107,7 +107,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Filters Panel */}
-      <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col gap-4 text-shadow-game-title">
+      <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col gap-4 text-shadow-game-title">
         <div className="flex items-center gap-2 text-white/80 font-black text-sm uppercase tracking-wider border-b border-white/10 pb-3 text-shadow-game-title">
           <Filter className="w-4 h-4 text-orange-400 text-shadow-game-title" />
           <span>Bộ lọc lịch sử</span>
@@ -133,12 +133,12 @@ export default function HistoryPage() {
               onChange={(e) => setSelectedLevel(e.target.value)}
               className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
             >
-              <option value="all" className="bg-ranking-table-bg text-white text-shadow-game-title">Tất cả cấp độ</option>
-              <option value="ioe" className="bg-ranking-table-bg text-white text-shadow-game-title">IOE</option>
-              <option value="starters" className="bg-ranking-table-bg text-white text-shadow-game-title">Starters (Pre A1)</option>
-              <option value="movers" className="bg-ranking-table-bg text-white text-shadow-game-title">Movers (A1)</option>
-              <option value="flyers" className="bg-ranking-table-bg text-white text-shadow-game-title">Flyers (A2)</option>
-              <option value="toefl" className="bg-ranking-table-bg text-white text-shadow-game-title">TOEFL Primary</option>
+              <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả cấp độ</option>
+              <option value="ioe" className="bg-dropdown-bg text-white text-shadow-game-title">IOE</option>
+              <option value="starters" className="bg-dropdown-bg text-white text-shadow-game-title">Starters (Pre A1)</option>
+              <option value="movers" className="bg-dropdown-bg text-white text-shadow-game-title">Movers (A1)</option>
+              <option value="flyers" className="bg-dropdown-bg text-white text-shadow-game-title">Flyers (A2)</option>
+              <option value="toefl" className="bg-dropdown-bg text-white text-shadow-game-title">TOEFL Primary</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-blue-300 text-shadow-game-title">
               <Award className="w-4 h-4 text-shadow-game-title" />
@@ -152,11 +152,11 @@ export default function HistoryPage() {
               onChange={(e) => setSelectedSkill(e.target.value)}
               className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
             >
-              <option value="all" className="bg-ranking-table-bg text-white text-shadow-game-title">Tất cả kĩ năng</option>
-              <option value="listening" className="bg-ranking-table-bg text-white text-shadow-game-title">Listening (Nghe)</option>
-              <option value="reading" className="bg-ranking-table-bg text-white text-shadow-game-title">Reading & Writing (Đọc & Viết)</option>
-              <option value="speaking" className="bg-ranking-table-bg text-white text-shadow-game-title">Speaking (Nói)</option>
-              <option value="writing" className="bg-ranking-table-bg text-white text-shadow-game-title">Writing (Viết)</option>
+              <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả kĩ năng</option>
+              <option value="listening" className="bg-dropdown-bg text-white text-shadow-game-title">Listening (Nghe)</option>
+              <option value="reading" className="bg-dropdown-bg text-white text-shadow-game-title">Reading & Writing (Đọc & Viết)</option>
+              <option value="speaking" className="bg-dropdown-bg text-white text-shadow-game-title">Speaking (Nói)</option>
+              <option value="writing" className="bg-dropdown-bg text-white text-shadow-game-title">Writing (Viết)</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-blue-300 text-shadow-game-title">
               <BookOpen className="w-4 h-4 text-shadow-game-title" />
@@ -170,9 +170,9 @@ export default function HistoryPage() {
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
             >
-              <option value="all" className="bg-ranking-table-bg text-white text-shadow-game-title">Tất cả trạng thái</option>
-              <option value="Hoàn thành" className="bg-ranking-table-bg text-white text-shadow-game-title">Hoàn thành</option>
-              <option value="Đang làm" className="bg-ranking-table-bg text-white text-shadow-game-title">Đang làm</option>
+              <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả trạng thái</option>
+              <option value="Hoàn thành" className="bg-dropdown-bg text-white text-shadow-game-title">Hoàn thành</option>
+              <option value="Đang làm" className="bg-dropdown-bg text-white text-shadow-game-title">Đang làm</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-blue-300 text-shadow-game-title">
               <CheckCircle className="w-4 h-4 text-shadow-game-title" />
@@ -205,7 +205,7 @@ export default function HistoryPage() {
       )}
 
       {/* History Content */}
-      <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2.2rem] border-3 border-ranking-table-border p-4 md:p-6 shadow-[0_15px_30px_rgba(0,0,0,0.5)] overflow-hidden text-shadow-game-title">
+      <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] border-3 border-ranking-table-border p-4 md:p-6 shadow-[0_15px_30px_rgba(0,0,0,0.5)] overflow-hidden text-shadow-game-title">
         {isTrialMode || filteredHistory.length === 0 ? (
           /* Empty State */
           <div className="w-full py-10 flex flex-col items-center justify-center text-center text-shadow-game-title">

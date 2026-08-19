@@ -160,7 +160,7 @@ export default function DashboardPage() {
                     </div>
                     
                     {/* Level Pill Badges */}
-                    <div className="flex items-center gap-2 mt-3 bg-slate-950/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-lg transform -translate-y-1 z-0">
+                    <div className="flex items-center gap-2 mt-3 bg-slate-950/80 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10 shadow-lg transform -translate-y-1 z-0">
                       {tags.map((tag, i) => (
                         <div 
                           key={i} 

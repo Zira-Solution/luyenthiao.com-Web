@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export function RankingTable() {
   return (
-    <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] border-3 border-ranking-table-border overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
+    <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2rem] border-3 border-ranking-table-border overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>

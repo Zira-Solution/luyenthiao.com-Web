@@ -99,12 +99,12 @@
   --color-game-danger-hover-from: #FCA5A5;
   --color-game-danger-hover-to: #B91C1C;
 
-  --color-game-input-bg: #072450;
-  --color-game-input-hover-bg: #092e62;
-  --color-game-input-focus-bg: #0a397a;
+  --color-game-input-bg: rgba(7, 36, 80, 0.1);
+  --color-game-input-hover-bg: rgba(9, 46, 98, 0.14);
+  --color-game-input-focus-bg: rgba(10, 57, 122, 0.18);
   --color-game-input-border: #1E3A8A;
   --color-game-input-focus-border: #3B82F6;
-  --color-game-input-focus-shadow: #072450;
+  --color-game-input-focus-shadow: rgba(7, 36, 80, 0.1);
   --color-game-input-placeholder: #7BFAFC;
 
   --color-topbar-blue-bg: #1E1F66;
@@ -140,7 +140,7 @@
   --color-flag-red: #DA251D;
 
   --color-yellow-350: #fde047;
-  --color-bottom-nav-bg: #3b1275;
+  --color-bottom-nav-bg: rgba(59, 18, 117, 0.25);
   --color-nav-badge-green-from: #22c55e;
   --color-nav-badge-green-to: #15803d;
 
@@ -151,8 +151,10 @@
   --color-onboarding-btn-shadow: #0048ff;
   --color-onboarding-card-shadow: #5eccf7;
 
-  --color-ranking-table-bg: #0a1a3a;
+  --color-ranking-table-bg: rgba(10, 26, 58, 0.06);
   --color-ranking-table-border: #1e3a8a;
+  /* Solid background for native <option> elements (rendered on white dropdown) */
+  --color-dropdown-bg: #0a1a3a;
 
   --color-facebook-shadow: #0e4b9c;
   --color-facebook-bg: #1877F2;

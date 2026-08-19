@@ -234,7 +234,7 @@ export default function PlacementTestPage() {
               <div 
                 key={test.id}
                 onClick={() => startTest(test)}
-                className="bg-ranking-table-bg/80 hover:bg-placement-hover-bg border-3 border-ranking-table-border hover:border-yellow-400 rounded-3xl p-6 shadow-[0_8px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_24px_rgba(234,179,8,0.2)] transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex gap-4 group text-shadow-game-title"
+                className="bg-ranking-table-bg hover:bg-placement-hover-bg border-3 border-ranking-table-border hover:border-yellow-400 rounded-3xl p-6 shadow-[0_8px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_24px_rgba(234,179,8,0.2)] transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex gap-4 group text-shadow-game-title"
               >
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-blue-500/20 flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform text-shadow-game-title">
                   {test.icon}
@@ -284,7 +284,7 @@ export default function PlacementTestPage() {
           </div>
 
           {/* Question Card */}
-          <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2.2rem] p-6 md:p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
+          <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] p-6 md:p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
             <span className="px-3 py-1 bg-yellow-450/15 border border-yellow-400/30 text-yellow-400 font-black text-[10px] uppercase tracking-widest rounded-lg text-shadow-game-title">
               {selectedLevel.name} Test
             </span>
@@ -376,7 +376,7 @@ export default function PlacementTestPage() {
       {gameState === "result" && selectedLevel && (
         /* RESULT VIEW - Test finished details */
         <div className="w-full max-w-md flex flex-col items-center text-shadow-game-title">
-          <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2.2rem] p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] flex flex-col items-center text-center text-shadow-game-title">
+          <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] flex flex-col items-center text-center text-shadow-game-title">
             
             {/* Trophy Icon */}
             <div className="w-24 h-24 bg-gradient-to-b from-yellow-400 to-amber-500 rounded-3xl border-3 border-white flex items-center justify-center text-5xl shadow-lg mb-6 animate-bounce text-shadow-game-title">

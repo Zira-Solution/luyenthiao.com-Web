@@ -156,7 +156,7 @@ export default function NotebookPage() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex gap-2 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-md rounded-full border-2 border-ranking-table-border shadow-lg mb-6 max-w-md w-full justify-between text-shadow-game-title">
+      <div className="flex gap-2 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-sm rounded-full border-2 border-ranking-table-border shadow-lg mb-6 max-w-md w-full justify-between text-shadow-game-title">
         <button 
           onClick={() => setActiveCategory("vocab")}
           className={cn(
@@ -188,7 +188,7 @@ export default function NotebookPage() {
 
       {activeCategory === "grammar" ? (
         /* GRAMMAR VIEW */
-        <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2.2rem] p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] max-w-4xl text-shadow-game-title">
+        <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] max-w-4xl text-shadow-game-title">
           <h2 className="text-white font-black text-xl md:text-2xl font-heading mb-6 border-b border-white/10 pb-3 flex items-center gap-2 text-shadow-game-title">
             <span>📝 Cấu trúc câu quan trọng</span>
           </h2>
@@ -219,7 +219,7 @@ export default function NotebookPage() {
         <div className="w-full flex flex-col items-center text-shadow-game-title">
           
           {/* Search and level filter panel */}
-          <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col sm:flex-row gap-4 items-center max-w-4xl text-shadow-game-title">
+          <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col sm:flex-row gap-4 items-center max-w-4xl text-shadow-game-title">
             {/* Search Box */}
             <div className="flex flex-1 items-center bg-game-input-focus-shadow rounded-xl px-4 py-3 border-2 border-ranking-table-border focus-within:border-blue-400 transition-all shadow-inner w-full text-shadow-game-title">
               <Search className="w-5 h-5 text-blue-300 mr-2 shrink-0 text-shadow-game-title" />
@@ -239,18 +239,18 @@ export default function NotebookPage() {
                 onChange={(e) => setLevelFilter(e.target.value)}
                 className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
               >
-                <option value="all" className="bg-ranking-table-bg text-white text-shadow-game-title">Tất cả cấp độ</option>
-                <option value="Starters" className="bg-ranking-table-bg text-white text-shadow-game-title">Starters (Pre A1)</option>
-                <option value="Movers" className="bg-ranking-table-bg text-white text-shadow-game-title">Movers (A1)</option>
-                <option value="Flyers" className="bg-ranking-table-bg text-white text-shadow-game-title">Flyers (A2)</option>
-                <option value="TOEFL" className="bg-ranking-table-bg text-white text-shadow-game-title">TOEFL Primary/Junior</option>
+                <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả cấp độ</option>
+                <option value="Starters" className="bg-dropdown-bg text-white text-shadow-game-title">Starters (Pre A1)</option>
+                <option value="Movers" className="bg-dropdown-bg text-white text-shadow-game-title">Movers (A1)</option>
+                <option value="Flyers" className="bg-dropdown-bg text-white text-shadow-game-title">Flyers (A2)</option>
+                <option value="TOEFL" className="bg-dropdown-bg text-white text-shadow-game-title">TOEFL Primary/Junior</option>
               </select>
             </div>
           </div>
 
           {/* Cards Grid */}
           {filteredWords.length === 0 ? (
-            <div className="w-full max-w-md py-16 text-center bg-ranking-table-bg/80 backdrop-blur-md rounded-[2.2rem] border-3 border-ranking-table-border p-8 shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
+            <div className="w-full max-w-md py-16 text-center bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] border-3 border-ranking-table-border p-8 shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
               <HelpCircle className="w-16 h-16 text-blue-300 mx-auto mb-4 animate-bounce text-shadow-game-title" />
               <h3 className="text-white font-black text-xl font-heading mb-2 text-shadow-game-title">Không tìm thấy từ vựng</h3>
               <p className="text-blue-300 font-semibold text-xs uppercase tracking-wider text-shadow-game-title">Vui lòng điều chỉnh bộ lọc hoặc từ khoá tìm kiếm</p>
