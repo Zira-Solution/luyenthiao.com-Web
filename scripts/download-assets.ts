@@ -1,7 +1,8 @@
-import { readFileSync, mkdirSync, createWriteStream } from "fs";
-import { join } from "path";
-import * as cheerio from "cheerio";
+import { createWriteStream, mkdirSync, readFileSync } from "fs";
 import https from "https";
+import { join } from "path";
+
+import * as cheerio from "cheerio";
 
 const html = readFileSync(join(process.cwd(), "_webclone/captures/dashboard/desktop.html"), "utf8");
 const $ = cheerio.load(html);

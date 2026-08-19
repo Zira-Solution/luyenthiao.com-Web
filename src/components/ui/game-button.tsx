@@ -13,28 +13,28 @@ export const GameButton = React.forwardRef<HTMLButtonElement, GameButtonProps>(
     // 3D Claymorphic game design colors matching Flyer's vibrant theme
     const themeStyles = {
       primary: {
-        shadow: "bg-[#BF381C]", // Dark brick-red base
-        bg: "bg-gradient-to-b from-[#F48E77] to-[#E36245]", // Soft orange/coral to medium orange
-        border: "border-[#9C230C]", // Thick dark red outline
-        hoverBg: "hover:from-[#F69E8A] hover:to-[#E86D53]",
+        shadow: "bg-game-primary-shadow", // Dark brick-red base
+        bg: "bg-gradient-to-b from-game-primary-from to-game-primary-to", // Soft orange/coral to medium orange
+        border: "border-game-primary-border", // Thick dark red outline
+        hoverBg: "hover:from-game-primary-hover-from hover:to-game-primary-hover-to",
       },
       secondary: {
-        shadow: "bg-[#0b3b7a]", // Dark indigo base
-        bg: "bg-gradient-to-b from-[#3B82F6] to-[#1D4ED8]", // Royal blue to indigo
-        border: "border-[#1E3A8A]", // Indigo outline
-        hoverBg: "hover:from-[#60A5FA] hover:to-[#2563EB]",
+        shadow: "bg-game-secondary-shadow", // Dark indigo base
+        bg: "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border", // Royal blue to indigo
+        border: "border-ranking-table-border", // Indigo outline
+        hoverBg: "hover:from-game-secondary-hover-from hover:to-game-secondary-hover-to",
       },
       cta: {
-        shadow: "bg-[#166534]", // Dark green base
-        bg: "bg-gradient-to-b from-[#4ADE80] to-[#16A34A]", // Emerald green to forest green
-        border: "border-[#14532D]", // Deep green outline
-        hoverBg: "hover:from-[#86EFAC] hover:to-[#15803D]",
+        shadow: "bg-game-cta-shadow", // Dark green base
+        bg: "bg-gradient-to-b from-game-cta-from to-game-cta-to", // Emerald green to forest green
+        border: "border-game-cta-border", // Deep green outline
+        hoverBg: "hover:from-game-cta-hover-from hover:to-nav-badge-green-to",
       },
       danger: {
-        shadow: "bg-[#7F1D1D]", // Dark crimson base
-        bg: "bg-gradient-to-b from-[#F87171] to-[#DC2626]", // Rose red to dark red
-        border: "border-[#7F1D1D]", // Deep crimson outline
-        hoverBg: "hover:from-[#FCA5A5] hover:to-[#B91C1C]",
+        shadow: "bg-game-danger-border", // Dark crimson base
+        bg: "bg-gradient-to-b from-game-danger-from to-game-danger-to", // Rose red to dark red
+        border: "border-game-danger-border", // Deep crimson outline
+        hoverBg: "hover:from-game-danger-hover-from hover:to-topbar-signup-shadow",
       }
     }[variant];
 

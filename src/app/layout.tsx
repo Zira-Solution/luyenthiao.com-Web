@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { ThemeProvider } from '@/components/common'
 import { APP_DESCRIPTION, APP_NAME } from '@/constants'
 import { env } from '@/lib/env'
-import { QueryProvider } from '@/providers/query-provider'
 import { baloo2, nunito } from '@/lib/fonts'
+import { QueryProvider } from '@/providers/query-provider'
 
 import './globals.css'
 

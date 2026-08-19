@@ -1,6 +1,7 @@
-import { Topbar } from "@/components/layout/topbar";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import Image from "next/image";
+
+import { BottomNav } from "@/components/layout/bottom-nav";
+import { Topbar } from "@/components/layout/topbar";
 
 export default function DashboardLayout({
   children,
@@ -36,7 +37,7 @@ export default function DashboardLayout({
       </div>
 
       {/* Report Bug Button on Right Edge */}
-      <div className="absolute right-0 bottom-24 z-50 hidden md:flex">
+      <div className="absolute right-0 bottom-44 z-50 hidden md:flex">
         <button className="bg-bug-btn text-bug-btn-text px-1.5 py-4 rounded-l-lg font-bold text-[10px] tracking-widest flex flex-col items-center gap-2 border-y-2 border-l-2 border-bug-btn-border shadow-[-4px_0_10px_rgba(0,0,0,0.3)] uppercase hover:bg-yellow-300 transition-colors writing-vertical-rl">
           <span>BÁO CÁO LỖI</span>
           <span className="text-sm mt-1 transform rotate-90">🚀</span>

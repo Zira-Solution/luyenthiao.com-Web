@@ -4,7 +4,7 @@ import { LoginForm } from "@/components/auth/login-form";
 
 export default function LoginPage() {
   return (
-    <main className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[#16143c]">
+    <main className="min-h-screen relative flex items-center justify-center overflow-hidden bg-page-bg">
       
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">

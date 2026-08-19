@@ -1,8 +1,57 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown, Plus, Trophy, BookOpen, School, ClipboardList } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+
 import { cn } from "@/lib/utils";
+
+// Topbar Button Component (3D Game Style)
+const GameNavButton = ({ 
+  onClick, 
+  className, 
+  children, 
+  variant = "blue",
+  badgeText,
+  badgeColor = "bg-green-500"
+}: { 
+  onClick?: () => void; 
+  className?: string; 
+  children: React.ReactNode; 
+  variant?: "blue" | "orange" | "yellow" | "purple";
+  badgeText?: string;
+  badgeColor?: string;
+}) => {
+  const styles = {
+    blue: "bg-topbar-blue-bg border-topbar-blue-border hover:bg-topbar-blue-hover active:bg-topbar-blue-active",
+    orange: "bg-topbar-orange-bg border-topbar-orange-border hover:bg-topbar-orange-hover active:bg-topbar-orange-active",
+    yellow: "bg-topbar-yellow-bg border-topbar-yellow-border hover:bg-topbar-yellow-hover active:bg-topbar-yellow-active",
+    purple: "bg-topbar-purple-bg border-topbar-purple-border hover:bg-topbar-purple-hover active:bg-topbar-purple-active"
+  }[variant];
+
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "relative group active:translate-y-[2px] active:border-b-[2px] transition-all duration-100 cursor-pointer rounded-2xl px-3 py-1.5 md:py-2 border-b-4 flex flex-col items-center justify-center min-w-[70px] md:min-w-[85px] h-[65px] md:h-[75px] shadow-[0_4px_6px_rgba(0,0,0,0.3)]",
+        styles,
+        className
+      )}
+    >
+      {/* Cute badge on top-left of the button */}
+      {badgeText && (
+        <span className={cn(
+          "absolute -top-1.5 -left-1.5 text-[8px] md:text-[9px] font-black text-white px-1.5 py-0.5 rounded-md border border-white/20 transform -rotate-6 tracking-wider uppercase animate-pulse shadow-md z-20",
+          badgeColor
+        )}>
+          {badgeText}
+        </span>
+      )}
+      <div className="flex flex-col items-center justify-between h-full w-full">
+        {children}
+      </div>
+    </button>
+  );
+};
 
 export function Topbar() {
   const router = useRouter();
@@ -14,54 +63,6 @@ export function Topbar() {
 
   const handleRanking = () => {
     router.push("/ranking");
-  };
-
-  // Topbar Button Component (3D Game Style)
-  const GameNavButton = ({ 
-    onClick, 
-    className, 
-    children, 
-    variant = "blue",
-    badgeText,
-    badgeColor = "bg-green-500"
-  }: { 
-    onClick?: () => void; 
-    className?: string; 
-    children: React.ReactNode; 
-    variant?: "blue" | "orange" | "yellow" | "purple";
-    badgeText?: string;
-    badgeColor?: string;
-  }) => {
-    const styles = {
-      blue: "bg-[#1E1F66] border-[#0F103F] hover:bg-[#2A2B85] active:bg-[#15164B]",
-      orange: "bg-[#FF5D24] border-[#B83E14] hover:bg-[#FF723F] active:bg-[#D64614]",
-      yellow: "bg-[#F59E0B] border-[#B45309] hover:bg-[#FBBF24] active:bg-[#D97706]",
-      purple: "bg-[#7C3AED] border-[#5B21B6] hover:bg-[#8B5CF6] active:bg-[#6D28D9]"
-    }[variant];
-
-    return (
-      <button
-        onClick={onClick}
-        className={cn(
-          "relative group active:translate-y-[2px] active:border-b-[2px] transition-all duration-100 cursor-pointer rounded-2xl px-3 py-1.5 md:py-2 border-b-4 flex flex-col items-center justify-center min-w-[70px] md:min-w-[85px] h-[65px] md:h-[75px] shadow-[0_4px_6px_rgba(0,0,0,0.3)]",
-          styles,
-          className
-        )}
-      >
-        {/* Cute badge on top-left of the button */}
-        {badgeText && (
-          <span className={cn(
-            "absolute -top-1.5 -left-1.5 text-[8px] md:text-[9px] font-black text-white px-1.5 py-0.5 rounded-md border border-white/20 transform -rotate-6 tracking-wider uppercase animate-pulse shadow-md z-20",
-            badgeColor
-          )}>
-            {badgeText}
-          </span>
-        )}
-        <div className="flex flex-col items-center justify-between h-full w-full">
-          {children}
-        </div>
-      </button>
-    );
   };
 
   return (
@@ -153,13 +154,13 @@ export function Topbar() {
             <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9">
               <span className="text-xl md:text-2xl animate-pulse">⚡</span>
             </div>
-            <span className="text-[#5C3A21] text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+            <span className="text-topbar-yellow-text text-[9px] md:text-[10px] font-black uppercase tracking-wider">
               Luyện tập
             </span>
           </GameNavButton>
 
           {/* Coin Indicator Box */}
-          <div className="bg-[#1e1f66]/80 border-2 border-blue-500/30 rounded-2xl px-3.5 py-1.5 h-[50px] md:h-[55px] flex items-center gap-2 shadow-inner min-w-[90px] md:min-w-[110px]">
+          <div className="bg-topbar-blue-bg/80 border-2 border-blue-500/30 rounded-2xl px-3.5 py-1.5 h-[50px] md:h-[55px] flex items-center gap-2 shadow-inner min-w-[90px] md:min-w-[110px]">
             <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-yellow-400 border border-yellow-200 flex items-center justify-center shadow-md animate-[spin_4s_linear_infinite] shrink-0">
               <span className="text-yellow-950 font-black text-sm">C</span>
             </div>
@@ -174,14 +175,14 @@ export function Topbar() {
         {/* ================= CENTER SECTION ================= */}
         {/* Beautiful 3D Auth Control Box */}
         <div className="flex justify-center shrink-0 mx-auto lg:mx-0">
-          <div className="bg-[#05132d]/90 backdrop-blur-md border-3 border-[#1e3a8a] rounded-2xl p-2 w-[160px] md:w-[180px] flex flex-col gap-1.5 shadow-[0_8px_16px_rgba(0,0,0,0.5)] transform -translate-y-1">
+          <div className="bg-topbar-auth-bg/90 backdrop-blur-md border-3 border-ranking-table-border rounded-2xl p-2 w-[160px] md:w-[180px] flex flex-col gap-1.5 shadow-[0_8px_16px_rgba(0,0,0,0.5)] transform -translate-y-1">
             {/* Đăng Nhập Button */}
             <button 
               onClick={handleLogin}
               className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
             >
-              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-[#1e40af] -z-10 group-active:bottom-0" />
-              <div className="bg-[#3b82f6] border border-[#1d4ed8] text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-blue-500">
+              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-topbar-login-shadow -z-10 group-active:bottom-0" />
+              <div className="bg-topbar-login-bg border border-topbar-login-border text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-blue-500">
                 Đăng Nhập
               </div>
             </button>
@@ -190,8 +191,8 @@ export function Topbar() {
             <button 
               className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
             >
-              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-[#b91c1c] -z-10 group-active:bottom-0" />
-              <div className="bg-[#ef4444] border border-[#991b1b] text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-red-500">
+              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-topbar-signup-shadow -z-10 group-active:bottom-0" />
+              <div className="bg-topbar-signup-bg border border-topbar-signup-border text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-red-500">
                 Đăng Ký
               </div>
             </button>
@@ -202,7 +203,7 @@ export function Topbar() {
         <div className="flex flex-wrap items-center gap-1.5 md:gap-2 justify-end">
           
           {/* Diamond Indicator Box with Add Button */}
-          <div className="bg-[#1e1f66]/80 border-2 border-blue-500/30 rounded-2xl px-3.5 py-1.5 h-[50px] md:h-[55px] flex items-center gap-2 shadow-inner min-w-[100px] md:min-w-[125px]">
+          <div className="bg-topbar-blue-bg/80 border-2 border-blue-500/30 rounded-2xl px-3.5 py-1.5 h-[50px] md:h-[55px] flex items-center gap-2 shadow-inner min-w-[100px] md:min-w-[125px]">
             <div className="w-7 h-7 md:w-8 md:h-8 shrink-0">
               <img 
                 src="/clone-assets/media/icon-diamonds.580d8a36.png" 
@@ -237,7 +238,11 @@ export function Topbar() {
           </GameNavButton>
 
           {/* Lịch Sử Button */}
-          <GameNavButton variant="blue">
+          <GameNavButton 
+            variant="blue"
+            onClick={() => router.push("/history")}
+            className={cn(pathname === "/history" && "bg-white/10 border-yellow-400")}
+          >
             <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-violet-400 shrink-0">
               <BookOpen className="w-6 h-6 md:w-7 md:h-7" />
             </div>
@@ -286,7 +291,7 @@ export function Topbar() {
           {/* Vietnam Flag / Language Selector (Red circle with yellow star) */}
           <button className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-red-600 border-2 border-yellow-400 flex items-center justify-center cursor-pointer shadow-[0_3px_6px_rgba(0,0,0,0.4)] active:translate-y-[2px] transition-all overflow-hidden relative group shrink-0">
             {/* Red background & Yellow Star representing Vietnam Flag */}
-            <div className="absolute inset-0 bg-[#DA251D] flex items-center justify-center">
+            <div className="absolute inset-0 bg-flag-red flex items-center justify-center">
               <svg viewBox="0 0 30 20" className="w-6.5 h-6.5">
                 <polygon 
                   fill="#FFFF00" 

@@ -59,12 +59,12 @@ export function BingoOnboarding() {
           {/* Bubble Tail */}
           <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[15px] border-y-transparent border-r-[20px] border-r-white hidden md:block" />
           
-          <Card className="p-6 md:p-8 bg-white rounded-2xl shadow-[0_8px_0_0_#5eccf7] border-none">
-            <h1 className="text-4xl md:text-[40px] font-extrabold text-[#323131] uppercase mb-4 tracking-wide" style={{ textShadow: "0px 2px 0px rgba(0,0,0,0.1)" }}>
+          <Card className="p-6 md:p-8 bg-white rounded-2xl shadow-[0_8px_0_0_var(--color-onboarding-card-shadow)] border-none">
+            <h1 className="text-4xl md:text-[40px] font-extrabold text-game-text-dark uppercase mb-4 tracking-wide text-shadow-game-title" >
               BINGO
             </h1>
             
-            <div className="text-lg md:text-[24px] leading-relaxed font-bold text-[#323131] space-y-4">
+            <div className="text-lg md:text-[24px] leading-relaxed font-bold text-game-text-dark space-y-4">
               <p>Xin chào! Mình là Bingo đến từ Hành tinh FLYER.</p>
               <p>Một con quái vật đã lấy mất những Viên Đá Tri Thức của chúng mình. Không có chúng, hành tinh của mình trở nên tăm tối!</p>
               <p>Mình không thể lấy lại chúng một mình…</p>
@@ -76,8 +76,8 @@ export function BingoOnboarding() {
               <Button 
                 onClick={() => setIsVisible(false)}
                 className="w-[200px] h-14 rounded-2xl text-lg font-black text-white uppercase tracking-wider
-                         bg-gradient-to-b from-[#00c8ff] to-[#0075fb] hover:opacity-95 hover:scale-105 active:scale-95 transition-all
-                         border-2 border-[#006cd2] shadow-[0_4px_0_0_#0048ff]"
+                         bg-gradient-to-b from-onboarding-btn-from to-onboarding-btn-to hover:opacity-95 hover:scale-105 active:scale-95 transition-all
+                         border-2 border-onboarding-btn-border shadow-[0_4px_0_0_var(--color-onboarding-btn-shadow)]"
               >
                 Đi thôi!
               </Button>

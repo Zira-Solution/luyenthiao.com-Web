@@ -1,8 +1,9 @@
-import { chromium, Page } from "playwright";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 
-const TARGET = "https://exam.flyer.us";
+import { chromium, Page } from "playwright";
+
+const TARGET = process.env.CLONE_TARGET_URL || "https://exam.flyer.us";
 const OUT_DIR = join(process.cwd(), "_webclone/captures");
 
 const VIEWPORTS = [
@@ -20,10 +21,25 @@ async function settle(page: Page) {
 }
 
 async function loginOnce(page: Page) {
+  // Load credentials from git-ignored .env — never hardcode them in source
+  try {
+    process.loadEnvFile?.();
+  } catch {
+    // .env missing — rely on process.env already set
+  }
+
+  const phone = process.env.CLONE_LOGIN_PHONE;
+  const password = process.env.CLONE_LOGIN_PASSWORD;
+  if (!phone || !password) {
+    throw new Error(
+      "Missing CLONE_LOGIN_PHONE / CLONE_LOGIN_PASSWORD in .env — cannot log in to capture authed screens",
+    );
+  }
+
   console.log("Logging in...");
   await page.goto(`${TARGET}/login`, { waitUntil: "load" });
-  await page.fill('input[name="identifier"]', "0932720343");
-  await page.fill('input[name="password"]', "Phuc2006");
+  await page.fill('input[name="identifier"]', phone);
+  await page.fill('input[name="password"]', password);
   await page.click('button[type="submit"]');
   await page.waitForLoadState("networkidle", { timeout: 15_000 });
   await page.waitForTimeout(2000);

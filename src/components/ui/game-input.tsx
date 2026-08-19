@@ -24,7 +24,7 @@ export const GameInput = forwardRef<HTMLInputElement, GameInputProps>(
               <input
                 type={actualType}
                 className={cn(
-                  "w-full bg-transparent focus:outline-none text-[12px] xl:text-[14px] font-semibold text-white placeholder:text-[#7BFAFC]",
+                  "w-full bg-transparent focus:outline-none text-[12px] xl:text-[14px] font-semibold text-white placeholder:text-game-input-placeholder",
                   className
                 )}
                 ref={ref}
@@ -79,10 +79,10 @@ export const GameInput = forwardRef<HTMLInputElement, GameInputProps>(
     return (
       <div className="relative w-full group">
         {/* Shadow depth effect */}
-        <div className="absolute inset-x-0 -bottom-1 h-full rounded-2xl bg-[#0b3b7a] -z-10 group-focus-within:bg-[#072450] transition-colors" />
+        <div className="absolute inset-x-0 -bottom-1 h-full rounded-2xl bg-game-secondary-shadow -z-10 group-focus-within:bg-game-input-focus-shadow transition-colors" />
         
         {/* Input border and background container */}
-        <div className="relative flex w-full items-center bg-[#072450] group-hover:bg-[#092e62] group-focus-within:bg-[#0a397a] border-2 border-[#1E3A8A] group-focus-within:border-[#3B82F6] rounded-2xl px-5 py-4 transition-all duration-200 shadow-inner">
+        <div className="relative flex w-full items-center bg-game-input-focus-shadow group-hover:bg-game-input-hover-bg group-focus-within:bg-game-input-focus-bg border-2 border-ranking-table-border group-focus-within:border-topbar-login-bg rounded-2xl px-5 py-4 transition-all duration-200 shadow-inner">
           <input
             type={actualType}
             className={cn(

@@ -1,16 +1,18 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import rankingData from "../../../_webclone/design-model/mocks/ranking.json";
 import { Trophy } from "lucide-react";
+
+import rankingData from "../../../_webclone/design-model/mocks/ranking.json";
+
+import { cn } from "@/lib/utils";
 
 export function RankingTable() {
   return (
-    <div className="w-full bg-[#0a1a3a]/80 backdrop-blur-md rounded-[2rem] border-3 border-[#1e3a8a] overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
+    <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] border-3 border-ranking-table-border overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b-2 border-[#1e3a8a] bg-[#072450]">
+            <tr className="border-b-2 border-ranking-table-border bg-game-input-focus-shadow">
               <th className="py-4.5 px-6 text-blue-200 font-black uppercase text-xs md:text-sm tracking-widest w-24 text-center font-heading">
                 Hạng
               </th>
@@ -38,7 +40,7 @@ export function RankingTable() {
                 <tr
                   key={user.rank}
                   className={cn(
-                    "border-b border-white/5 transition-colors hover:bg-[#072450]/40 group",
+                    "border-b border-white/5 transition-colors hover:bg-game-input-focus-shadow/40 group",
                     isTop1 && "bg-gradient-to-r from-yellow-500/10 via-yellow-500/5 to-transparent border-l-4 border-yellow-400",
                     isTop2 && "bg-gradient-to-r from-slate-400/10 via-slate-400/5 to-transparent border-l-4 border-slate-400",
                     isTop3 && "bg-gradient-to-r from-amber-700/15 via-amber-750/5 to-transparent border-l-4 border-amber-600"
@@ -68,7 +70,7 @@ export function RankingTable() {
                     <div className="flex items-center gap-4">
                       {/* Avatar container with dynamic gradient border */}
                       <div className={cn(
-                        "rounded-full overflow-hidden border-2 shrink-0 bg-[#072450] shadow-md",
+                        "rounded-full overflow-hidden border-2 shrink-0 bg-game-input-focus-shadow shadow-md",
                         isTop1 ? "w-12 h-12 border-yellow-400 ring-2 ring-yellow-400/20" : 
                         isTop2 ? "w-11 h-11 border-slate-300 ring-2 ring-slate-350/20" : 
                         isTop3 ? "w-11 h-11 border-amber-600 ring-2 ring-amber-600/20" : 
@@ -125,7 +127,7 @@ export function RankingTable() {
       </div>
       
       {/* Table Footer with custom game design */}
-      <div className="p-4.5 bg-[#072450] border-t-2 border-[#1e3a8a] text-center shadow-inner">
+      <div className="p-4.5 bg-game-input-focus-shadow border-t-2 border-ranking-table-border text-center shadow-inner">
         <p className="text-yellow-400 font-black text-xs md:text-sm tracking-wider uppercase font-heading flex items-center justify-center gap-2">
           <span>✨</span>
           <span>Bảng Xếp Hạng “nhà Du Hành” Xuất Sắc Của Cuộc Thi Phá Đảo Cùng Flyer</span>
