@@ -6,6 +6,17 @@ import { useRouter } from "next/navigation";
 import { Play, Pause, ArrowLeft, ArrowRight, Volume2, Clock, AlertTriangle, X, CheckCircle } from "lucide-react";
 import examData from "../../../_webclone/design-model/mocks/exam-7778495e.json";
 
+// Reading-Writing Part 4 (Teeth): the 3 word options per blank, from the original paper.
+// Single source for BOTH the visible options table and the inline dropdowns.
+const PART4_WORD_ROWS: { label: string; words: string[] }[] = [
+  { label: "Example", words: ["your", "their", "its"] },
+  { label: "1", words: ["from", "at", "to"] },
+  { label: "2", words: ["because", "when", "or"] },
+  { label: "3", words: ["than", "so", "much"] },
+  { label: "4", words: ["on", "in", "between"] },
+  { label: "5", words: ["work", "works", "working"] },
+];
+
 interface ExamPlayerProps {
   id: string;
   onExit: () => void;
@@ -362,10 +373,17 @@ export function ExamPlayer({ id, onExit }: ExamPlayerProps) {
             style={{ width: `${progressPercent}%` }}
           />
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-[#FFE03B] rounded-full border-2 border-white flex items-center justify-center text-xs font-black text-slate-800 shadow-md transition-all duration-500"
-            style={{ left: `calc(${progressPercent}% - 12px)` }}
+            className="absolute top-1/2 -translate-y-1/2 w-24 h-24 flex items-center justify-center transition-all duration-500 pointer-events-none"
+            style={{ left: `calc(${progressPercent}% - 48px)` }}
           >
-            🦕
+            <div className="relative w-full h-full">
+              <Image
+                src="/clone-assets/rocket_flyer.png"
+                alt="Rocket progress"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
         </div>
 
@@ -683,7 +701,7 @@ export function ExamPlayer({ id, onExit }: ExamPlayerProps) {
                                 src={img.imageId}
                                 alt=""
                                 fill
-                                className="object-cover"
+                                className="object-contain p-1"
                               />
                             </div>
                             <span className="w-5 h-5 rounded-full bg-[#1985F6] text-white text-[10px] font-black flex items-center justify-center shadow">
@@ -722,11 +740,11 @@ export function ExamPlayer({ id, onExit }: ExamPlayerProps) {
 
                     return (
                       <div key={q.id} className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex flex-col gap-3">
-                        <div className="flex items-center gap-2">
-                          <span className="w-5 h-5 rounded-full bg-[#1985F6] text-white font-extrabold flex items-center justify-center text-[10px]">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-6 h-6 rounded-full bg-[#1985F6] text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-sm">
                             {idx}
                           </span>
-                          <h4 className="font-extrabold text-xs text-slate-700">{q.title}</h4>
+                          <h4 className="font-black text-sm md:text-[15px] text-slate-800 leading-snug">{q.title}</h4>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -744,13 +762,13 @@ export function ExamPlayer({ id, onExit }: ExamPlayerProps) {
                                     : "border-slate-200"
                                 }`}
                               >
-                                <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-slate-100 bg-slate-50">
+                                <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-slate-100 bg-slate-50 p-2">
                                   {d.detail?.formattedText?.text && (
                                     <Image
                                       src={d.detail.formattedText.text}
                                       alt=""
                                       fill
-                                      className="object-cover"
+                                      className="object-contain p-1.5"
                                     />
                                   )}
                                 </div>
@@ -775,187 +793,626 @@ export function ExamPlayer({ id, onExit }: ExamPlayerProps) {
               {activeStructIdx === 1 && activePartIdx === 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-full overflow-hidden">
                   {/* Left Page: Word Pool */}
-                  <div className="md:col-span-4 bg-slate-50 border border-slate-200 p-4 rounded-2xl h-full overflow-y-auto">
+                  <div className="md:col-span-5 bg-slate-50 border border-slate-200 p-4 rounded-2xl h-full overflow-y-auto">
                     <h4 className="font-extrabold text-[10px] text-slate-500 uppercase tracking-wide border-b pb-2 mb-3">
                       Hộp từ vựng
                     </h4>
-                    <div className="flex flex-col gap-2">
-                      {currentPart.node.questions[1]?.choices?.map((c: any) => (
-                        <span key={c.text} className="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black text-slate-700 text-center shadow-sm">
-                          {c.text}
-                        </span>
-                      ))}
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {(() => {
+                        const imageContent = currentPart.node.contents?.find((c: any) => c.body?.images);
+                        return imageContent?.body?.images?.map((img: any) => (
+                          <div key={img.label} className="bg-white p-2 rounded-xl border border-slate-200 flex flex-col items-center gap-1.5 shadow-sm">
+                            <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-slate-100 bg-slate-50 p-1">
+                              <Image
+                                src={img.imageId}
+                                alt=""
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
+                            <span className="text-[10px] font-black text-slate-700 text-center leading-tight">
+                              {img.label}
+                            </span>
+                          </div>
+                        ));
+                      })()}
                     </div>
                   </div>
 
-                  {/* Right Page: Definitions list */}
-                  <div className="md:col-span-8 flex flex-col gap-3 overflow-y-auto pr-1">
-                    {currentPart.node.questions.map((q: any) => {
-                      if (q.isExample) {
-                        return (
-                          <div key={q.id} className="p-3 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold text-slate-500">
-                            <strong>Ví dụ:</strong> <span dangerouslySetInnerHTML={{ __html: q.content?.text }} />
-                          </div>
-                        );
-                      }
+                  {/* Right Page: Definitions list inline */}
+                  <div className="md:col-span-7 flex flex-col gap-3 overflow-y-auto pr-1">
+                    {(() => {
+                      const exampleQuestion = currentPart.node.questions.find((q: any) => q.isExample);
+                      const mainQuestion = currentPart.node.questions.find((q: any) => !q.isExample);
+                      const imageContent = currentPart.node.contents?.find((c: any) => c.body?.images);
+                      const vocabList = imageContent?.body?.images || [];
 
                       return (
-                        <div key={q.id} className="flex flex-col gap-3">
-                          {q.details?.map((d: any) => {
-                            const partAnswers = answers[currentPart.node.examPartId] || {};
-                            const userVal = partAnswers[d.id] || "";
-                            const cleanText = q.content?.text?.replace(/<[^>]*>/g, "") || "";
+                        <>
+                          {/* Example */}
+                          {exampleQuestion && (
+                            <div className="p-3.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600 font-semibold mb-2">
+                              <span className="px-1.5 py-0.5 bg-slate-400 text-white rounded font-bold text-[9px] mr-2">Ví dụ</span>
+                              <span dangerouslySetInnerHTML={{ __html: exampleQuestion.content?.text || "" }} />
+                            </div>
+                          )}
+
+                          {/* Main passage paragraph with inline selectors */}
+                          {mainQuestion && (() => {
+                            const htmlText = mainQuestion.content?.text || "";
+                            const parts = htmlText.split(/(\{\{\d+\}\})/g);
 
                             return (
-                              <div key={d.id} className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                                <p className="text-xs font-bold text-slate-700 flex-1 leading-normal">
-                                  {cleanText.replace(`{{${d.labelOrder}}}`, "______")}
-                                </p>
-                                <select
-                                  value={userVal}
-                                  onChange={(e) => updateAnswer(currentPart.node.examPartId, d.id, e.target.value)}
-                                  className="w-40 px-3 py-1.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-[#1985F6] font-black text-xs bg-slate-50"
-                                >
-                                  <option value="">Chọn từ...</option>
-                                  {currentPart.node.questions[1]?.choices?.map((c: any) => (
-                                    <option key={c.text} value={c.text}>{c.text}</option>
-                                  ))}
-                                </select>
+                              <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs font-semibold text-slate-700 leading-loose">
+                                {parts.map((part: string, pIdx: number) => {
+                                  const match = part.match(/^\{\{(\d+)\}\}$/);
+                                  if (match) {
+                                    const num = parseInt(match[1] || "0");
+                                    const detail = mainQuestion.details?.find((d: any) => d.detail?.formattedText?.text === String(num));
+                                    if (!detail) return part;
+
+                                    const partAnswers = answers[currentPart.node.examPartId] || {};
+                                    const userVal = partAnswers[detail.id] || "";
+
+                                    return (
+                                      <select
+                                        key={detail.id}
+                                        value={userVal}
+                                        onChange={(e) => updateAnswer(currentPart.node.examPartId, detail.id, e.target.value)}
+                                        className="inline-block mx-1.5 px-2.5 py-1 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-[#1985F6] font-black text-xs bg-slate-50 text-slate-800 cursor-pointer align-middle max-w-[130px] shadow-sm"
+                                      >
+                                        <option value="">Chọn từ...</option>
+                                        {vocabList.map((img: any) => (
+                                          <option key={img.label} value={img.label}>{img.label}</option>
+                                        ))}
+                                      </select>
+                                    );
+                                  }
+
+                                  return (
+                                    <span key={pIdx} dangerouslySetInnerHTML={{ __html: part }} />
+                                  );
+                                })}
                               </div>
                             );
-                          })}
-                        </div>
+                          })()}
+                        </>
                       );
-                    })}
+                    })()}
                   </div>
                 </div>
               )}
 
               {/* Reading-Writing Part 2: Daisy / Paul dialogue MC */}
               {activeStructIdx === 1 && activePartIdx === 1 && (
-                <div className="flex flex-col gap-4 h-full overflow-y-auto pr-1">
-                  {currentPart.node.questions.map((q: any, idx: number) => {
-                    const partAnswers = answers[currentPart.node.examPartId] || {};
-                    const userVal = partAnswers[q.id];
-
-                    if (q.isExample) {
-                      return (
-                        <div key={q.id} className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 font-semibold">
-                          <strong>Ví dụ:</strong> Daisy: "{q.title}" <br />
-                          <span className="italic text-slate-400">Paul: Yes, they are!</span>
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <div key={q.id} className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col gap-2.5">
-                        <div className="flex items-center gap-2">
-                          <span className="w-5 h-5 rounded-full bg-[#1985F6] text-white font-extrabold flex items-center justify-center text-[10px]">
-                            {idx}
-                          </span>
-                          <h4 className="font-extrabold text-xs text-slate-700">Daisy: "{q.title}"</h4>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          {["A", "B", "C"].map((opt) => (
-                            <button
-                              key={opt}
-                              onClick={() => updateAnswer(currentPart.node.examPartId, q.id, opt)}
-                              className={`px-3 py-2 rounded-lg border-2 text-left flex items-center gap-2.5 cursor-pointer transition-colors ${
-                                userVal === opt
-                                  ? "border-[#1985F6] bg-[#1985F6]/5 font-black text-[#1985F6]"
-                                  : "border-slate-200 bg-white text-slate-600 font-semibold"
-                              }`}
-                            >
-                              <div className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] font-black ${
-                                userVal === opt ? "bg-[#1985F6] text-white" : "bg-slate-100"
-                              }`}>
-                                {opt}
-                              </div>
-                              <span className="text-xs">Lựa chọn {opt}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Reading-Writing Parts 3, 4, 5, 6: Story, Teeth, Map, Pictures */}
-              {activeStructIdx === 1 && activePartIdx >= 2 && (
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-full overflow-hidden">
-                  
-                  {/* Left Page (The Article / Story Passage) */}
-                  <div className="md:col-span-6 bg-slate-50 border border-slate-200 p-5 rounded-2xl h-full overflow-y-auto leading-relaxed text-slate-700 text-xs font-semibold">
-                    {/* Image banner if present */}
-                    {currentPart.node.questions[0]?.content?.format === "IMAGE_ID" && currentPart.node.questions[0]?.content?.text && (
-                      <div className="relative w-full h-[150px] rounded-xl overflow-hidden mb-4 border bg-white">
+                  {/* Left Page: Instructions & Illustration Image */}
+                  <div className="md:col-span-5 flex flex-col justify-between bg-slate-50 border border-slate-200/80 p-5 rounded-2xl h-full overflow-y-auto">
+                    <div className="flex flex-col gap-3">
+                      <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-sm">
+                        <span className="px-2.5 py-1 bg-violet-600 text-white font-extrabold text-[10px] uppercase rounded-md tracking-wider">
+                          Reading & Writing
+                        </span>
+                        <h3 className="text-slate-700 text-xs font-black mt-2 leading-relaxed">
+                          {currentPart.node.title}
+                        </h3>
+                      </div>
+                      
+                      {/* Content Image */}
+                      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-sm mt-2">
                         <Image
-                          src={currentPart.node.questions[0].content.text}
-                          alt="Exam Banner"
+                          src="/clone-assets/exam-media/read2_cau_ca.webp"
+                          alt="Fishing illustration"
                           fill
-                          className="object-contain"
+                          className="object-contain p-2"
                         />
                       </div>
-                    )}
+                    </div>
+                  </div>
 
-                    {currentPart.node.questions.map((q: any) => {
-                      if (q.content?.format === "HTML" || q.content?.format === "TEXT") {
+                  {/* Right Page: Conversational choices list */}
+                  <div className="md:col-span-7 flex flex-col gap-4 h-full overflow-y-auto pr-1">
+                    {currentPart.node.questions.map((q: any, idx: number) => {
+                      const partAnswers = answers[currentPart.node.examPartId] || {};
+                      const userVal = partAnswers[q.id];
+
+                      if (q.isExample) {
                         return (
-                          <div key={q.id} className="flex flex-col gap-3">
-                            {q.title && <h3 className="font-black text-slate-800 text-sm text-center mb-2">{q.title}</h3>}
-                            <div dangerouslySetInnerHTML={{ __html: q.content.text.replace(/\{\{\d\}\}/g, "______") }} />
+                          <div key={q.id} className="p-4 bg-slate-100 border border-slate-200 rounded-2xl flex flex-col gap-2.5 mb-1">
+                            <div className="flex items-center gap-2">
+                              <span className="px-1.5 py-0.5 bg-slate-400 text-white rounded font-bold text-[9px]">Ví dụ</span>
+                              <h4 className="font-black text-xs text-slate-800">Paul: "{q.title}"</h4>
+                            </div>
+                            <div className="flex flex-col gap-1.5 pl-6 border-l-2 border-slate-200">
+                              <span className="text-slate-500 text-[10px] font-black uppercase tracking-wider">Daisy:</span>
+                              {q.details?.map((d: any) => (
+                                <div key={d.id} className="flex items-center gap-2 text-xs">
+                                  <span className={`font-black ${d.result?.isSelected ? "text-[#1985F6]" : "text-slate-500"}`}>
+                                    {d.labelOrder}. {d.detail?.formattedText?.text}
+                                  </span>
+                                  {d.result?.isSelected && (
+                                    <span className="text-[#1985F6] font-black">✔</span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         );
                       }
-                      return null;
+
+                      return (
+                        <div key={q.id} className="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex flex-col gap-3 shadow-sm">
+                          <div className="flex items-center gap-2.5">
+                            <span className="w-6 h-6 rounded-full bg-[#1985F6] text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-sm">
+                              {idx}
+                            </span>
+                            <h4 className="font-black text-xs text-slate-700">Daisy: "{q.title}"</h4>
+                          </div>
+
+                          <div className="flex flex-col gap-2 pl-8 border-l-2 border-slate-200/50">
+                            <span className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-1">Paul:</span>
+                            {q.details?.map((d: any) => {
+                              const isSelected = userVal === d.labelOrder;
+                              return (
+                                <button
+                                  key={d.id}
+                                  onClick={() => updateAnswer(currentPart.node.examPartId, q.id, d.labelOrder)}
+                                  className={`px-3 py-2.5 rounded-xl border-2 text-left flex items-start gap-2.5 cursor-pointer transition-all hover:border-[#4DA7FF]/50 ${
+                                    isSelected
+                                      ? "border-[#1985F6] bg-[#1985F6]/5 font-black text-[#1985F6] shadow-sm scale-[1.01]"
+                                      : "border-slate-200 bg-white text-slate-600 font-semibold"
+                                  }`}
+                                >
+                                  <span className="font-extrabold text-xs">{d.labelOrder}.</span>
+                                  <span className="text-xs">{d.detail?.formattedText?.text}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
                     })}
                   </div>
+                </div>
+              )}
 
-                  {/* Right Page (The Questions & Fillings) */}
-                  <div className="md:col-span-6 bg-slate-100/40 border border-slate-200/50 p-5 rounded-2xl h-full overflow-y-auto flex flex-col gap-3">
-                    <h4 className="font-extrabold text-[10px] text-slate-500 uppercase tracking-wide border-b pb-2 mb-1">
-                      Bản trả lời
-                    </h4>
+              {/* Reading-Writing Part 3: Story passage with inline dropdowns */}
+              {activeStructIdx === 1 && activePartIdx === 2 && (
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-full overflow-hidden">
+                  
+                  {/* Left Page: Story Passage with Inline Dropdowns */}
+                  <div className="md:col-span-7 flex flex-col gap-3 overflow-y-auto pr-1">
+                    <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl mb-1 shadow-sm shrink-0">
+                      <span className="px-2.5 py-1 bg-violet-600 text-white font-extrabold text-[10px] uppercase rounded-md tracking-wider">
+                        Reading & Writing
+                      </span>
+                      <h3 className="text-slate-700 text-xs font-black mt-2 leading-relaxed">
+                        {currentPart.node.title}
+                      </h3>
+                    </div>
+
+                    {(() => {
+                      const mainQuestion = currentPart.node.questions[0];
+                      const imageContent = currentPart.node.contents?.find((c: any) => c.body?.images);
+                      const vocabList = imageContent?.body?.images || [];
+
+                      if (!mainQuestion) return null;
+
+                      const htmlText = mainQuestion.content?.text || "";
+                      const parts = htmlText.split(/(\{\{[1-5]\}\})/g);
+
+                      return (
+                        <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs font-semibold text-slate-700 leading-loose">
+                          {parts.map((part: string, pIdx: number) => {
+                            const match = part.match(/^\{\{(\d+)\}\}$/);
+                            if (match) {
+                              const num = parseInt(match[1] || "0");
+                              const detail = mainQuestion.details?.find((d: any) => d.detail?.formattedText?.text === String(num));
+                              if (!detail) return part;
+
+                              const partAnswers = answers[currentPart.node.examPartId] || {};
+                              const userVal = partAnswers[detail.id] || "";
+
+                              return (
+                                <select
+                                  key={detail.id}
+                                  value={userVal}
+                                  onChange={(e) => updateAnswer(currentPart.node.examPartId, detail.id, e.target.value)}
+                                  className="inline-block mx-1.5 px-2.5 py-1 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-[#1985F6] font-black text-xs bg-slate-50 text-slate-800 cursor-pointer align-middle max-w-[130px] shadow-sm"
+                                >
+                                  <option value="">Chọn từ...</option>
+                                  {vocabList.map((img: any) => (
+                                    <option key={img.label} value={img.label}>{img.label}</option>
+                                  ))}
+                                </select>
+                              );
+                            }
+
+                            return (
+                              <span key={pIdx} dangerouslySetInnerHTML={{ __html: part || "" }} />
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Right Page: Vocabulary Box & Story Title Question */}
+                  <div className="md:col-span-5 flex flex-col gap-4 h-full overflow-y-auto pr-1">
                     
-                    {currentPart.node.questions.map((q: any) => {
-                      return q.details?.map((d: any) => {
-                        const partAnswers = answers[currentPart.node.examPartId] || {};
-                        const userVal = partAnswers[d.id] || "";
-                        const label = d.labelOrder || d.detail?.formattedText?.text || "Answer";
+                    {/* Vocabulary Box */}
+                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm">
+                      <h4 className="font-extrabold text-[10px] text-slate-500 uppercase tracking-wide border-b pb-2 mb-3">
+                        Hộp từ gợi ý
+                      </h4>
+                      <div className="grid grid-cols-3 gap-2">
+                        {(() => {
+                          const imageContent = currentPart.node.contents?.find((c: any) => c.body?.images);
+                          return imageContent?.body?.images?.map((img: any) => (
+                            <div key={img.label} className="bg-white p-1.5 rounded-xl border border-slate-200 flex flex-col items-center gap-1 shadow-sm">
+                              <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-slate-100 bg-slate-50 p-1">
+                                <Image
+                                  src={img.imageId}
+                                  alt=""
+                                  fill
+                                  className="object-contain"
+                                />
+                              </div>
+                              <span className="text-[9px] font-black text-slate-700 text-center leading-tight">
+                                {img.label}
+                              </span>
+                            </div>
+                          ));
+                        })()}
+                      </div>
+                    </div>
 
-                        return (
-                          <div key={d.id} className="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm shrink-0">
-                            <span className="w-7 h-7 rounded-full bg-[#1985F6] text-white font-extrabold flex items-center justify-center text-xs shrink-0">
-                              {label}
-                            </span>
-                            
-                            {/* If multiple choices are available on details level (like drop-downs) */}
-                            {q.choices && q.choices.length > 0 ? (
-                              <select
-                                value={userVal}
-                                onChange={(e) => updateAnswer(currentPart.node.examPartId, d.id, e.target.value)}
-                                className="flex-1 px-3 py-1.5 border-2 border-slate-200 bg-slate-50 rounded-lg focus:outline-none focus:border-[#1985F6] font-black text-xs"
-                              >
-                                <option value="">Chọn từ...</option>
-                                {q.choices.map((c: any) => (
-                                  <option key={c.text} value={c.text}>{c.text}</option>
-                                ))}
-                              </select>
-                            ) : (
-                              <input
-                                type="text"
-                                value={userVal}
-                                onChange={(e) => updateAnswer(currentPart.node.examPartId, d.id, e.target.value)}
-                                placeholder="Nhập câu trả lời..."
-                                className="flex-1 px-3 py-1.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-[#1985F6] text-xs font-black bg-slate-50/50"
-                              />
-                            )}
+                    {/* Story Title Selection */}
+                    {(() => {
+                      const mainQuestion = currentPart.node.questions[0];
+                      if (!mainQuestion) return null;
+
+                      // Detail F is for {{6}}
+                      const detail6 = mainQuestion.details?.find((d: any) => d.detail?.formattedText?.text === "6");
+                      if (!detail6) return null;
+
+                      const partAnswers = answers[currentPart.node.examPartId] || {};
+                      const userVal = partAnswers[detail6.id] || "";
+
+                      const titleChoices = [
+                        { key: "A", text: "Jim had a weird dream" },
+                        { key: "B", text: "Jim’s dad visits the castle" },
+                        { key: "C", text: "Jim fights a monster" }
+                      ];
+
+                      return (
+                        <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm flex flex-col gap-3">
+                          <h4 className="font-black text-xs text-slate-700">
+                            (6) Choose the best name for the story:
+                          </h4>
+                          <div className="flex flex-col gap-2">
+                            {titleChoices.map(c => {
+                              const isSelected = userVal === c.key;
+                              return (
+                                <button
+                                  key={c.key}
+                                  onClick={() => updateAnswer(currentPart.node.examPartId, detail6.id, c.key)}
+                                  className={`px-3 py-2 rounded-xl border-2 text-left flex items-start gap-2.5 cursor-pointer transition-all hover:border-[#4DA7FF]/50 ${
+                                    isSelected
+                                      ? "border-[#1985F6] bg-[#1985F6]/5 font-black text-[#1985F6] scale-[1.01] shadow-sm"
+                                      : "border-slate-200 bg-white text-slate-600 font-semibold"
+                                  }`}
+                                >
+                                  <span className="font-extrabold text-xs">{c.key}.</span>
+                                  <span className="text-xs">{c.text}</span>
+                                </button>
+                              );
+                            })}
                           </div>
-                        );
-                      });
-                    })}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              {/* Reading-Writing Part 4: Teeth passage with inline dropdowns */}
+              {activeStructIdx === 1 && activePartIdx === 3 && (
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-full overflow-hidden">
+                  
+                  {/* Left Page: Instructions & Illustration Image */}
+                  <div className="md:col-span-5 flex flex-col justify-between bg-slate-50 border border-slate-200/80 p-5 rounded-2xl h-full overflow-y-auto">
+                    <div className="flex flex-col gap-3">
+                      <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-sm">
+                        <span className="px-2.5 py-1 bg-violet-600 text-white font-extrabold text-[10px] uppercase rounded-md tracking-wider">
+                          Reading & Writing
+                        </span>
+                        <h3 className="text-slate-700 text-xs font-black mt-2 leading-relaxed">
+                          READ THE TEXT. CHOOSE THE RIGHT WORDS AND WRITE THEM ON THE LINES.
+                        </h3>
+                      </div>
+                      
+                      {/* Content Image */}
+                      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-sm mt-2">
+                        <Image
+                          src="/clone-assets/exam-media/smile.webp"
+                          alt="Teeth illustration"
+                          fill
+                          className="object-contain p-2"
+                        />
+                      </div>
+
+                      {/* Word options table (Example + blanks 1-5, mirrors the original paper) */}
+                      <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                        <h4 className="font-extrabold text-[10px] text-slate-500 uppercase tracking-wide border-b pb-2 mb-3">
+                          Các từ chọn
+                        </h4>
+                        <div className="flex flex-col gap-1.5">
+                          {PART4_WORD_ROWS.map((row) => (
+                            <div key={row.label} className="grid grid-cols-[64px_1fr_1fr_1fr] gap-1.5 items-center">
+                              <span className="text-[10px] font-black text-slate-500">{row.label}</span>
+                              {row.words.map((word) => (
+                                <span
+                                  key={word}
+                                  className="text-center text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-lg py-1"
+                                >
+                                  {word}
+                                </span>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Page: Text Passage with Inline Dropdowns */}
+                  <div className="md:col-span-7 flex flex-col gap-3 overflow-y-auto pr-1">
+                    {(() => {
+                      const mainQuestion = currentPart.node.questions[0];
+                      if (!mainQuestion) return null;
+
+                      const htmlText = mainQuestion.content?.text || "";
+                      const parts = htmlText.split(/(\{\{[1-5]\}\})/g);
+
+                      return (
+                        <>
+                          {/* Example Box */}
+                          <div className="p-3.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600 font-semibold mb-1">
+                            <span className="px-1.5 py-0.5 bg-slate-400 text-white rounded font-bold text-[9px] mr-2">Ví dụ</span>
+                            <span>Teeth are a very important part of <strong>your</strong> body. (your / their / its)</span>
+                          </div>
+
+                          {/* Main passage paragraph with inline selectors */}
+                          <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs font-semibold text-slate-700 leading-loose">
+                            {parts.map((part: string, pIdx: number) => {
+                              const match = part.match(/^\{\{(\d+)\}\}$/);
+                              if (match) {
+                                const num = parseInt(match[1] || "0");
+                                const detail = mainQuestion.details?.find((d: any) => d.detail?.formattedText?.text === String(num));
+                                if (!detail) return part;
+
+                                const partAnswers = answers[currentPart.node.examPartId] || {};
+                                const userVal = partAnswers[detail.id] || "";
+                                const choices = PART4_WORD_ROWS.find((row) => row.label === String(num))?.words ?? [];
+
+                                return (
+                                  <select
+                                    key={detail.id}
+                                    value={userVal}
+                                    onChange={(e) => updateAnswer(currentPart.node.examPartId, detail.id, e.target.value)}
+                                    className="inline-block mx-1.5 px-2.5 py-1 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-[#1985F6] font-black text-xs bg-slate-50 text-slate-800 cursor-pointer align-middle max-w-[130px] shadow-sm"
+                                  >
+                                    <option value="">Chọn...</option>
+                                    {choices.map((c: string) => (
+                                      <option key={c} value={c}>{c}</option>
+                                    ))}
+                                  </select>
+                                );
+                              }
+
+                              return (
+                                <span key={pIdx} dangerouslySetInnerHTML={{ __html: part || "" }} />
+                              );
+                            })}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              {/* Reading-Writing Part 5: Picture story passage with inline text inputs */}
+              {activeStructIdx === 1 && activePartIdx === 4 && (
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-full overflow-hidden">
+                  
+                  {/* Left Page: Instructions & Cover Illustration */}
+                  <div className="md:col-span-5 flex flex-col justify-between bg-slate-50 border border-slate-200/80 p-5 rounded-2xl h-full overflow-y-auto">
+                    <div className="flex flex-col gap-3">
+                      <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-sm">
+                        <span className="px-2.5 py-1 bg-violet-600 text-white font-extrabold text-[10px] uppercase rounded-md tracking-wider">
+                          Reading & Writing
+                        </span>
+                        <h3 className="text-slate-700 text-xs font-black mt-2 leading-relaxed">
+                          LOOK AT THE PICTURES AND READ THE STORY. WRITE SOME WORDS TO COMPLETE THE SENTENCES ABOUT THE STORY. YOU CAN USE 1, 2 OR 3 WORDS.
+                        </h3>
+                      </div>
+                      
+                      {/* Content Image */}
+                      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-sm mt-2">
+                        <Image
+                          src="/clone-assets/exam-media/read5_di_boi.webp"
+                          alt="Swimming cover illustration"
+                          fill
+                          className="object-contain p-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Page: Text Passage with Inline Inputs & Section Images */}
+                  <div className="md:col-span-7 flex flex-col gap-3 overflow-y-auto pr-1">
+                    {(() => {
+                      const exampleQuestion = currentPart.node.questions.find((q: any) => q.isExample);
+                      const mainQuestion = currentPart.node.questions.find((q: any) => !q.isExample);
+
+                      return (
+                        <>
+                          {/* Example Box */}
+                          {exampleQuestion && (
+                            <div className="p-3.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600 font-semibold mb-1">
+                              <span className="px-1.5 py-0.5 bg-slate-400 text-white rounded font-bold text-[9px] mr-2">Ví dụ</span>
+                              <div 
+                                className="inline-block"
+                                dangerouslySetInnerHTML={{ __html: exampleQuestion.content?.text || "" }} 
+                              />
+                            </div>
+                          )}
+
+                          {/* Main passage content with inline text inputs */}
+                          {mainQuestion && (() => {
+                            let htmlText = mainQuestion.content?.text || "";
+                            
+                            // Rewrite /image/hash URLs to local PNG files
+                            htmlText = htmlText.replace(/\/image\/9f7d55216cb248e3ab1d3eb51d626daa/g, "/clone-assets/exam-media/read5_pic1.png");
+                            htmlText = htmlText.replace(/\/image\/208ecb080ede4876aa4e45e773cd9554/g, "/clone-assets/exam-media/read5_pic2.png");
+                            htmlText = htmlText.replace(/\/image\/70895b324fe54794893ff503411a5775/g, "/clone-assets/exam-media/read5_pic3.png");
+                            
+                            // Strip <p> and </p> tags to keep sentences inline
+                            htmlText = htmlText.replace(/<\/?p>/g, "");
+                            
+                            const parts = htmlText.split(/(\{\{[1-7]\}\})/g);
+
+                            return (
+                              <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs font-semibold text-slate-700 leading-loose">
+                                {parts.map((part: string, pIdx: number) => {
+                                  const match = part.match(/^\{\{(\d+)\}\}$/);
+                                  if (match) {
+                                    const num = parseInt(match[1] || "0");
+                                    const detail = mainQuestion.details?.find((d: any) => d.detail?.formattedText?.text === String(num));
+                                    if (!detail) return part;
+
+                                    const partAnswers = answers[currentPart.node.examPartId] || {};
+                                    const userVal = partAnswers[detail.id] || "";
+
+                                    return (
+                                      <input
+                                        key={detail.id}
+                                        type="text"
+                                        value={userVal}
+                                        onChange={(e) => updateAnswer(currentPart.node.examPartId, detail.id, e.target.value)}
+                                        placeholder="..."
+                                        className="inline-block mx-1.5 px-3 py-0.5 border-b-2 border-slate-350 focus:outline-none focus:border-[#1985F6] font-black text-xs text-slate-800 text-center w-36 bg-slate-50 rounded align-middle"
+                                      />
+                                    );
+                                  }
+
+                                  return (
+                                    <span key={pIdx} dangerouslySetInnerHTML={{ __html: part || "" }} />
+                                  );
+                                })}
+                              </div>
+                            );
+                          })()}
+                        </>
+                      );
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              {/* Reading-Writing Part 6: Look and read and write with inline inputs */}
+              {activeStructIdx === 1 && activePartIdx === 5 && (
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-full overflow-hidden">
+                  
+                  {/* Left Page: Instructions & Illustration Image */}
+                  <div className="md:col-span-5 flex flex-col justify-between bg-slate-50 border border-slate-200/80 p-5 rounded-2xl h-full overflow-y-auto">
+                    <div className="flex flex-col gap-3">
+                      <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-sm">
+                        <span className="px-2.5 py-1 bg-violet-600 text-white font-extrabold text-[10px] uppercase rounded-md tracking-wider">
+                          Reading & Writing
+                        </span>
+                        <h3 className="text-slate-700 text-xs font-black mt-2 leading-relaxed">
+                          LOOK AND READ AND WRITE.
+                        </h3>
+                      </div>
+                      
+                      {/* Content Image */}
+                      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-sm mt-2">
+                        <Image
+                          src="/clone-assets/exam-media/read6.png"
+                          alt="Family picnic illustration"
+                          fill
+                          className="object-contain p-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Page: Questions with Inline Inputs */}
+                  <div className="md:col-span-7 flex flex-col gap-3 overflow-y-auto pr-1">
+                    {(() => {
+                      const exampleQuestion = currentPart.node.questions.find((q: any) => q.isExample);
+                      const mainQuestion = currentPart.node.questions.find((q: any) => !q.isExample);
+
+                      return (
+                        <>
+                          {/* Example Box */}
+                          {exampleQuestion && (
+                            <div className="p-3.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600 font-semibold mb-1 flex flex-col gap-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="px-1.5 py-0.5 bg-slate-400 text-white rounded font-bold text-[9px]">Ví dụ</span>
+                              </div>
+                              <div 
+                                className="flex flex-col gap-1.5 pl-2 border-l-2 border-slate-300"
+                                dangerouslySetInnerHTML={{ __html: exampleQuestion.content?.text || "" }} 
+                              />
+                            </div>
+                          )}
+
+                          {/* Questions content with inline inputs */}
+                          {mainQuestion && (() => {
+                            let htmlText = mainQuestion.content?.text || "";
+                            // Strip <p> and </p> tags to keep sentences inline
+                            htmlText = htmlText.replace(/<\/?p>/g, "");
+                            
+                            const parts = htmlText.split(/(\{\{[1-6]\}\})/g);
+
+                            return (
+                              <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs font-semibold text-slate-700 leading-loose">
+                                {parts.map((part: string, pIdx: number) => {
+                                  const match = part.match(/^\{\{(\d+)\}\}$/);
+                                  if (match) {
+                                    const num = parseInt(match[1] || "0");
+                                    const detail = mainQuestion.details?.find((d: any) => d.detail?.formattedText?.text === String(num));
+                                    if (!detail) return part;
+
+                                    const partAnswers = answers[currentPart.node.examPartId] || {};
+                                    const userVal = partAnswers[detail.id] || "";
+
+                                    return (
+                                      <input
+                                        key={detail.id}
+                                        type="text"
+                                        value={userVal}
+                                        onChange={(e) => updateAnswer(currentPart.node.examPartId, detail.id, e.target.value)}
+                                        placeholder="..."
+                                        className="inline-block mx-1.5 px-3 py-0.5 border-b-2 border-slate-350 focus:outline-none focus:border-[#1985F6] font-black text-xs text-slate-800 text-center w-36 bg-slate-50 rounded align-middle"
+                                      />
+                                    );
+                                  }
+
+                                  return (
+                                    <span key={pIdx} dangerouslySetInnerHTML={{ __html: part || "" }} />
+                                  );
+                                })}
+                              </div>
+                            );
+                          })()}
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
               )}

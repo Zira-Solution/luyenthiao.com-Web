@@ -101,38 +101,31 @@ async function run() {
     // Click next button function
     async function clickNext() {
       console.log("Clicking next button...");
-      const clicked = await page.evaluate(() => {
-        // Find buttons containing icons or words like "tiếp"
-        const btns = Array.from(document.querySelectorAll("button, div[role='button'], span[role='button']"));
-        for (const btn of btns) {
-          const html = btn.innerHTML.toLowerCase();
-          const text = btn.innerText.toLowerCase();
-          
-          // Next button detection
-          if (html.includes("arrow-right") || html.includes("right-arrow") || html.includes("next") || text.includes("tiếp theo") || text.includes("câu sau")) {
-            btn.click();
-            return true;
+      try {
+        const nextImg = page.locator("img[alt='btn next']").first();
+        if (await nextImg.isVisible()) {
+          await nextImg.click();
+          console.log("Next button clicked successfully via selector!");
+        } else {
+          console.log("Next button selector not visible, using page evaluate fallback...");
+          const clicked = await page.evaluate(() => {
+            const img = document.querySelector("img[alt='btn next']");
+            if (img) {
+              const parent = img.closest("button") || img.closest("div") || img;
+              parent.click();
+              return true;
+            }
+            return false;
+          });
+          if (clicked) {
+            console.log("Clicked via fallback evaluate!");
+          } else {
+            console.log("Fallback evaluate failed, pressing ArrowRight key...");
+            await page.keyboard.press("ArrowRight");
           }
         }
-        
-        // Try SVG detection
-        const svgs = Array.from(document.querySelectorAll("svg"));
-        for (const svg of svgs) {
-          const html = svg.innerHTML.toLowerCase();
-          if (html.includes("right") || html.includes("next")) {
-            const clickable = svg.closest("button") || svg.closest("div[role='button']") || svg;
-            clickable.click();
-            return true;
-          }
-        }
-        return false;
-      });
-
-      if (clicked) {
-        console.log("Next button clicked successfully");
-      } else {
-        console.log("Could not find next button via custom click, trying keyboard ArrowRight...");
-        await page.keyboard.press("ArrowRight");
+      } catch (e) {
+        console.error("Error clicking next button:", e);
       }
       await page.waitForTimeout(5000);
     }
@@ -158,9 +151,9 @@ async function run() {
     await captureState("modal_listening_complete");
 
     // Step 8: Click "Làm tiếp"
-    console.log("Looking for 'Làm tiếp' button...");
-    const lamTiepBtn = page.locator("button:has-text('Làm tiếp'), button:has-text('Tiếp tục'), div:has-text('Làm tiếp')").first();
-    await lamTiepBtn.click();
+    console.log("Looking for 'Làm tiếp' / 'LÀM TIẾP' button...");
+    const lamTiepBtn = page.locator("button:has-text('Làm tiếp'), button:has-text('LÀM TIẾP'), button:has-text('Tiếp tục'), div:has-text('Làm tiếp'), div:has-text('LÀM TIẾP')").first();
+    await lamTiepBtn.click({ force: true });
     await page.waitForTimeout(5000);
     
     // State 9: Reading & Writing Part 1
@@ -191,9 +184,9 @@ async function run() {
     await captureState("modal_rw_complete");
 
     // Step 16: Click "Nộp bài"
-    console.log("Looking for 'Nộp bài' button...");
-    const nopBaiBtn = page.locator("button:has-text('Nộp bài'), button:has-text('Xác nhận'), div:has-text('Nộp bài')").first();
-    await nopBaiBtn.click();
+    console.log("Looking for 'Nộp bài' / 'NỘP BÀI' button...");
+    const nopBaiBtn = page.locator("button:has-text('Nộp bài'), button:has-text('NỘP BÀI'), button:has-text('Xác nhận'), div:has-text('Nộp bài'), div:has-text('NỘP BÀI')").first();
+    await nopBaiBtn.click({ force: true });
     
     // Wait for loading screen
     console.log("Waiting for submit loading...");

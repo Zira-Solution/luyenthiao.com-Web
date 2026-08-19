@@ -19,7 +19,7 @@ Check whether a Playwright/Chrome DevTools MCP is connected. If not:
 claude mcp add playwright -- npx @playwright/mcp@latest
 ```
 
-then restart the session. If MCP genuinely cannot be added, Phase 1 still works via `scripts/capture.ts` alone + `WebFetch` for text exploration — flag the degraded mode to the user and proceed.
+then restart the session. If MCP genuinely cannot be added, Phase 1 still works via `scripts/orchestrator.mjs` alone + `WebFetch` for text exploration — flag the degraded mode to the user and proceed.
 
 ## Codegraph
 
@@ -40,13 +40,14 @@ Rules: never echo these values into logs, specs, commits, or chat. Ask the user 
 ## Work directories
 
 ```bash
-mkdir -p _webclone/captures _webclone/design-model _webclone/album
+mkdir -p _webclone/captures _webclone/staging _webclone/design-model _webclone/album
 ```
 
 Append to `.gitignore`:
 
 ```
 _webclone/captures/
+_webclone/staging/
 _webclone/album/
 ```
 

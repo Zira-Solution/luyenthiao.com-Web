@@ -4,6 +4,7 @@
 > A spec missing any REQUIRED block is REJECTED (failure class B) — see `references/failure-gates.md`.
 
 - **Route(s):** /…
+- **Fidelity target:** 90 (route default from `screen-inventory.md`; the Phase 5 ascent loop pushes visual-diff toward it — never past a gate or the budget)
 - **Screenshots:** `_webclone/captures/<slug>/desktop.png` (+ tablet/mobile when responsive differs)
 - **Chunk owns:** files this chunk may create (must match `chunks.md`)
 
@@ -46,6 +47,17 @@ Declare each animated interaction's **effect type** — the matrix picks the tec
 
 Any not-yet-installed library goes in **Budget request** with its weight — the dispatcher approves it against the route's remaining 300 KB gzip. transform/opacity only (gate A6) · reduced-motion handled (gate A7).
 
+## Media slots (REQUIRED when the section renders any media)
+
+Each row maps a visual surface to a slot in `_webclone/design-model/media-selections.json` (Phase 2c). Missing asset ⇒ declared TODO — never a fabricated substitute (failure class D).
+
+| Surface | Slot (route/slot) | Variant note | Evidence |
+|---|---|---|---|
+| Hero illustration | home/hero-main | webp 1440w (index row 3) | media-index.md + desktop.png |
+| Card thumbnail × 8 | practice/practice-card-thumb | srcset 2×/3x — promote 2x | media-index.md + states/tab-missions.png |
+| Reward animation | missions/lottie-reward | network-only (no DOM box) | media-index.md network section |
+| Footer logo | TODO — media: footer-logo | not harvested (lazy below fold miss?) | — |
+
 ## Mock data (REQUIRED)
 
 - Zod schema: `<Name>` in `src/types/…` · Hook: `use<X>` in `src/hooks/…` · Example: `_webclone/design-model/mocks/<name>.json`
@@ -62,6 +74,8 @@ Any not-yet-installed library goes in **Budget request** with its weight — the
 
 - [ ] renders at 3 viewports per layout intent
 - [ ] all declared interactions work
+- [ ] every media slot promoted & rendering, or a marked TODO placeholder (class D)
 - [ ] animation matches the matrix tech; respects reduced-motion; ≥ 30 fps on mid-range Android
 - [ ] Vietnamese copy matches capture `.txt` verbatim
 - [ ] gates green on this chunk's files
+- [ ] Phase 5: visual-diff fidelity ≥ route target, or remaining clusters explained as accepted gaps
