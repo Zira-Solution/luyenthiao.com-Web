@@ -1,0 +1,12 @@
+{
+  "data": {
+    "viewerCreateLearnerProfile": {
+      "learnerProfile": {
+        "id": 1791922,
+        "__typename": "LearnerProfile"
+      },
+      "userErrors": [],
+      "__typename": "ViewerCreateLearnerProfilePayload"
+    }
+  }
+}

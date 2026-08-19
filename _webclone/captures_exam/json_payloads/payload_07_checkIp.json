@@ -1,0 +1,11 @@
+{
+  "data": {
+    "checkIp": {
+      "ip": "2405:4802:9196:2ab0:9009:66db:72f7:b540",
+      "country": "Vietnam",
+      "countryCode": "VN",
+      "timezone": "",
+      "__typename": "IpData"
+    }
+  }
+}

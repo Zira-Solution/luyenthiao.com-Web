@@ -1,0 +1,19 @@
+{
+  "data": {
+    "examStartAttempt": {
+      "attemptId": "2cadaaea-ef24-457f-bb63-4cf9f03dfda3",
+      "resumableAttempt": {
+        "currentSectionExpiresAt": "2026-08-19T15:15:54.661321Z",
+        "currentStructure": "listening",
+        "currentExamPart": {
+          "id": "ExamPart/4ce7d507-39f0-4e0a-bac5-2552e0c525bd",
+          "examPartId": "4ce7d507-39f0-4e0a-bac5-2552e0c525bd",
+          "__typename": "ExamPart"
+        },
+        "__typename": "ResumableExamUserAttempt"
+      },
+      "userErrors": [],
+      "__typename": "ExamStartAttemptPayload"
+    }
+  }
+}

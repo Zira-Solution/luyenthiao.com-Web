@@ -1,0 +1,31 @@
+{
+  "entries": {
+    "apiSlack": "https://hooks.slack.com/services/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",
+    "cdnApiUrl": "https://api.flyer.vn",
+    "currentAppVersion": "1.5.0",
+    "disabledAnimationHome": "false",
+    "disabledSubmitQuestionExtend": "false",
+    "enableActiveCode": "false",
+    "enableCheckout": "true",
+    "enableDebug": "true",
+    "enableFullTestLevels": "true",
+    "enableReport": "false",
+    "enableShare": "false",
+    "enableSpeaking": "true",
+    "enableUpdate": "false",
+    "enabledNotiNetworkSlow": "false",
+    "enabledPartnerBilling": "true",
+    "flyerPackage": "{\"timeStartCountdown\":\"2026-07-28T00:00:00\",\"timeEndCountdown\":\"2026-07-31T23:59:00\",\"title\":{\"en\":\"EXCLUSIVE OFFERS FOR SUMMER SUCCESS!\",\"vi\":\"ƯU ĐÃI MÙA RINH CHỨNG CHỈ!\"},\"description_2\":{\"en\":\"Tiết kiệm đến 290.000đ cho mùa hè chinh phục 15 khiên Cambridge cùng FLYER\",\"vi\":\"Save up to 290.000 VND this summer to get 15 Cambridge shields with FLYER\"},\"priceList\":{\"FlyerMaxSixMonths\":{\"active\":false,\"order\":4,\"id\":\"6-month\",\"isMostEconomical\":false,\"titleTab\":{\"en\":\"6 Months\",\"vi\":\"6 Tháng\"},\"newPriceCountdown\":\"938.000\",\"oldPriceCountdown\":\"1.140.000\",\"newPriceNormal\":\"990.000\",\"oldPriceNormal\":\"1.140.000\",\"descriptionPrice\":{\"en\":\"\",\"vi\":\"\"}},\"FlyerMaxThreeYears\":{\"active\":false,\"order\":5,\"id\":\"3-year\",\"isMostEconomical\":true,\"titleTab\":{\"en\":\"3 Years\",\"vi\":\"3 Năm\"},\"newPriceCountdown\":\"2.338.000\",\"oldPriceCountdown\":\"3.770.000\",\"newPriceNormal\":\"2.590.000\",\"oldPriceNormal\":\"3.770.000\",\"descriptionPrice\":{\"en\":\"\",\"vi\":\"\"}},\"FlyerMaxOneYear\":{\"active\":true,\"order\":1,\"id\":\"1-year\",\"isMostEconomical\":false,\"titleTab\":{\"en\":\"1 Year\",\"vi\":\"1 Năm\"},\"newPriceCountdown\":\"1.200.000\",\"oldPriceCountdown\":\"1.290.000\",\"newPriceNormal\":\"1.290.000\",\"oldPriceNormal\":\"1.290.000\",\"descriptionPrice\":{\"en\":\"\",\"vi\":\"\"}},\"FlyerMaxTwoYears\":{\"active\":true,\"order\":3,\"id\":\"2-year\",\"isMostEconomical\":false,\"titleTab\":{\"en\":\"2 Years\",\"vi\":\"2 Năm\"},\"newPriceCountdown\":\"2.100.000\",\"oldPriceCountdown\":\"2.290.000\",\"newPriceNormal\":\"2.290.000\",\"oldPriceNormal\":\"2.290.000\",\"descriptionPrice\":{\"en\":\"\",\"vi\":\"\"}},\"FlyerMaxFourYears\":{\"active\":true,\"order\":2,\"id\":\"4-year\",\"isMostEconomical\":true,\"titleTab\":{\"en\":\"4 Years\",\"vi\":\"4 Năm\"},\"newPriceCountdown\":\"2.700.000\",\"oldPriceCountdown\":\"2.990.000\",\"newPriceNormal\":\"2.990.000\",\"oldPriceNormal\":\"2.990.000\",\"descriptionPrice\":{\"en\":\"\",\"vi\":\"\"}}}}",
+    "ieltsCurrentAppVersion": "1.0.0",
+    "ieltsDefaultCheckAi": "false",
+    "isMaintenance": "false",
+    "listInHouse": "92909-116737-192040-166295-122610-106456-208969-75204-79114-115802-113397-122610",
+    "localTest": "{\"+84988776655\":{\"classCode\":\"CL64981\",\"placementTestIndex\":0}}",
+    "mediaUrl": "https://statics.flyer.us",
+    "partnerEnableRecap2023": "false",
+    "partnerIsMaintenance": "false",
+    "requestReviewSpeaking": "ai"
+  },
+  "state": "UPDATE",
+  "templateVersion": "143"
+}
