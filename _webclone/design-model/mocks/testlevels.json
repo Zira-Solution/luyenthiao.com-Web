@@ -1,0 +1,30 @@
+{
+  "movers": {
+    "name": "MOVERS",
+    "total": 200,
+    "unlocked": 3,
+    "mapBackground": "/clone-assets/exam/bg-map.73c46437.jpg",
+    "mobileBackground": "/clone-assets/exam/bg-back-m.1d28391b.png"
+  },
+  "starters": {
+    "name": "STARTERS",
+    "total": 200,
+    "unlocked": 0,
+    "mapBackground": "/clone-assets/exam/bg-map.73c46437.jpg",
+    "mobileBackground": "/clone-assets/exam/bg-back-m.1d28391b.png"
+  },
+  "flyers": {
+    "name": "FLYERS",
+    "total": 200,
+    "unlocked": 0,
+    "mapBackground": "/clone-assets/exam/bg-map.73c46437.jpg",
+    "mobileBackground": "/clone-assets/exam/bg-back-m.1d28391b.png"
+  },
+  "toefl_primary": {
+    "name": "TOEFL PRIMARY",
+    "total": 200,
+    "unlocked": 0,
+    "mapBackground": "/clone-assets/exam/bg-map.73c46437.jpg",
+    "mobileBackground": "/clone-assets/exam/bg-back-m.1d28391b.png"
+  }
+}

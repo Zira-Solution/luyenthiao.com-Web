@@ -156,6 +156,19 @@
   /* Solid background for native <option> elements (rendered on white dropdown) */
   --color-dropdown-bg: #0a1a3a;
 
+  /* Checkpoint / exam modal tokens (SOURCE from exam.flyer.us) */
+  --color-cp-modal-bg-top: rgba(255, 99, 0, 0.9);
+  --color-cp-modal-bg-bottom: rgba(150, 18, 0, 0.9);
+  --color-cp-tab-track: rgb(131, 20, 5);
+  --color-cp-tab-active: rgb(205, 93, 77);
+  --color-cp-tab-muted: rgb(195, 71, 54);
+  --color-cp-card-bg: rgb(167, 53, 38);
+  --color-cp-card-border: rgb(131, 20, 5);
+  --color-cp-accent-yellow: rgb(255, 244, 130);
+  --color-cp-start-from: #E66549;
+  --color-cp-start-to: #CB300E;
+  --color-cp-start-border: #7a1a00;
+
   --color-facebook-shadow: #0e4b9c;
   --color-facebook-bg: #1877F2;
   --color-facebook-hover: #2081ff;

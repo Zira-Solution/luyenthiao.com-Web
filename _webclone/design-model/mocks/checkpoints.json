@@ -1,0 +1,12 @@
+{
+  "7778495e-531b-4039-a3ea-321874ba1a7a": {
+    "level": "movers",
+    "levelName": "MOVERS",
+    "challengeNumber": 1,
+    "totalMinutes": 65,
+    "parts": [
+      { "name": "Listening", "maxScore": 25, "minutes": 35 },
+      { "name": "Reading - Writing", "maxScore": 35, "minutes": 30 }
+    ]
+  }
+}
