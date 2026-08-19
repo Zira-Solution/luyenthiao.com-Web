@@ -183,10 +183,10 @@ export default function PlacementTestPage() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10 pb-28 flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 pb-[120px] flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
       
       {/* Header section */}
-      <div className="w-full flex items-center justify-between mb-8 text-shadow-game-title">
+      <div className="w-full flex items-center justify-between mb-5 text-shadow-game-title">
         <button 
           onClick={() => {
             playBeep("click");
@@ -220,7 +220,7 @@ export default function PlacementTestPage() {
       {gameState === "lobby" && (
         /* LOBBY VIEW - Test Selection */
         <div className="w-full flex flex-col items-center text-shadow-game-title">
-          <div className="text-center max-w-2xl mb-10 text-shadow-game-title">
+          <div className="text-center max-w-2xl mb-6 text-shadow-game-title">
             <h2 className="text-white font-black text-xl md:text-3xl mb-3 uppercase font-heading tracking-wider text-shadow-game-title">
               Chọn cấp độ của bạn
             </h2>

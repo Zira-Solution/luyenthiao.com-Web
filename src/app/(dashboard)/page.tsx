@@ -27,7 +27,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+    <div className="relative w-full min-h-full flex flex-col justify-center items-center overflow-hidden">
       
       {/* Dynamic Background Glow based on active planet - Creates an immersive atmosphere */}
       <div 
@@ -188,7 +188,7 @@ export default function DashboardPage() {
                       {/* Mascot bunny peaking out */}
                       <div className="relative w-16 h-16 md:w-20 md:h-20 -mt-3 animate-[floating_4s_ease-in-out_infinite] filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
                         <img 
-                          src="https://statics.flyer.vn/avatar/de905412fc63465bb5ccebb2c0561ac9" 
+                          src="/clone-assets/logo.46df16c4.png" 
                           alt="Mascot peaking" 
                           className="w-full h-full object-contain"
                           onError={(e) => {

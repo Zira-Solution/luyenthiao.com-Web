@@ -30,10 +30,10 @@ export default function HistoryPage() {
   });
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10 pb-28 flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 pb-[120px] flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
       
       {/* Top Navigation & Action Header */}
-      <div className="w-full flex items-center justify-between mb-8 gap-4 text-shadow-game-title">
+      <div className="w-full flex items-center justify-between mb-5 gap-4 text-shadow-game-title">
         <button 
           onClick={() => router.push("/")}
           className="flex items-center gap-1.5 md:gap-2 px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-xs md:text-sm tracking-wider uppercase cursor-pointer text-shadow-game-title"
@@ -78,7 +78,7 @@ export default function HistoryPage() {
 
       {/* Main Title */}
       <h1 
-        className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider mb-8 drop-shadow-lg text-center font-heading text-shadow-game-title"
+        className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider mb-5 drop-shadow-lg text-center font-heading text-shadow-game-title"
         
       >
         LỊCH SỬ LÀM BÀI
@@ -107,7 +107,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Filters Panel */}
-      <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-6 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-8 flex flex-col gap-5 text-shadow-game-title">
+      <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col gap-4 text-shadow-game-title">
         <div className="flex items-center gap-2 text-white/80 font-black text-sm uppercase tracking-wider border-b border-white/10 pb-3 text-shadow-game-title">
           <Filter className="w-4 h-4 text-orange-400 text-shadow-game-title" />
           <span>Bộ lọc lịch sử</span>
@@ -183,7 +183,7 @@ export default function HistoryPage() {
 
       {/* Trial Notification Banner */}
       {isTrialMode && (
-        <div className="w-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-2 border-orange-500/40 rounded-3xl p-5 text-center mb-8 shadow-inner animate-pulse text-shadow-game-title">
+        <div className="w-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-2 border-orange-500/40 rounded-3xl p-4 text-center mb-6 shadow-inner animate-pulse text-shadow-game-title">
           <p className="text-yellow-250 font-black text-xs md:text-sm tracking-wider uppercase drop-shadow text-shadow-game-title">
             📢 THÔNG BÁO: Hiện bạn đang ở trạng thái dùng thử. Vui lòng đăng nhập để lưu trữ lịch sử, xem lại bài làm, đáp án và sử dụng trọn vẹn các tính năng của FLYER.
           </p>
@@ -208,10 +208,10 @@ export default function HistoryPage() {
       <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2.2rem] border-3 border-ranking-table-border p-4 md:p-6 shadow-[0_15px_30px_rgba(0,0,0,0.5)] overflow-hidden text-shadow-game-title">
         {isTrialMode || filteredHistory.length === 0 ? (
           /* Empty State */
-          <div className="w-full py-16 flex flex-col items-center justify-center text-center text-shadow-game-title">
+          <div className="w-full py-10 flex flex-col items-center justify-center text-center text-shadow-game-title">
             <div className="relative w-36 h-36 md:w-44 md:h-44 mb-6 animate-[floating_4s_ease-in-out_infinite] text-shadow-game-title">
               <img 
-                src="https://statics.flyer.vn/avatar/de905412fc63465bb5ccebb2c0561ac9" 
+                src="/clone-assets/logo.46df16c4.png" 
                 alt="Mascot sleeping" 
                 className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.4)] opacity-80 text-shadow-game-title"
                 onError={(e) => {
@@ -309,7 +309,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Footer Info / Parents QR Code */}
-      <div className="w-full bg-topbar-blue-bg/40 backdrop-blur-sm border-2 border-blue-500/20 rounded-[2rem] p-6 mt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-shadow-game-title">
+      <div className="w-full bg-topbar-blue-bg/40 backdrop-blur-sm border-2 border-blue-500/20 rounded-[2rem] p-5 mt-6 flex flex-col md:flex-row items-center justify-between gap-5 text-shadow-game-title">
         <div className="flex items-center gap-4 text-shadow-game-title">
           <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-1.5 shrink-0 shadow-md text-shadow-game-title">
             {/* Simple Mock QR Code */}

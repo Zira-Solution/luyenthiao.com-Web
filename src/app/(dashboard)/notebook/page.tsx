@@ -130,10 +130,10 @@ export default function NotebookPage() {
   });
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10 pb-28 flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 pb-[120px] flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
       
       {/* Header Section */}
-      <div className="w-full flex items-center justify-between mb-8 text-shadow-game-title">
+      <div className="w-full flex items-center justify-between mb-5 text-shadow-game-title">
         <button 
           onClick={() => router.push("/")}
           className="flex items-center gap-1.5 md:gap-2 px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-xs md:text-sm tracking-wider uppercase cursor-pointer text-shadow-game-title"
@@ -156,7 +156,7 @@ export default function NotebookPage() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex gap-2 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-md rounded-full border-2 border-ranking-table-border shadow-lg mb-8 max-w-md w-full justify-between text-shadow-game-title">
+      <div className="flex gap-2 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-md rounded-full border-2 border-ranking-table-border shadow-lg mb-6 max-w-md w-full justify-between text-shadow-game-title">
         <button 
           onClick={() => setActiveCategory("vocab")}
           className={cn(
@@ -219,7 +219,7 @@ export default function NotebookPage() {
         <div className="w-full flex flex-col items-center text-shadow-game-title">
           
           {/* Search and level filter panel */}
-          <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-6 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-8 flex flex-col sm:flex-row gap-4 items-center max-w-4xl text-shadow-game-title">
+          <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col sm:flex-row gap-4 items-center max-w-4xl text-shadow-game-title">
             {/* Search Box */}
             <div className="flex flex-1 items-center bg-game-input-focus-shadow rounded-xl px-4 py-3 border-2 border-ranking-table-border focus-within:border-blue-400 transition-all shadow-inner w-full text-shadow-game-title">
               <Search className="w-5 h-5 text-blue-300 mr-2 shrink-0 text-shadow-game-title" />

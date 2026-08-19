@@ -274,3 +274,26 @@
 .writing-vertical-rl {
   writing-mode: vertical-rl;
 }
+
+/* Slim, theme-matched scrollbar for the dashboard content area */
+.scrollbar-game {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 58, 237, 0.5) transparent;
+}
+
+.scrollbar-game::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-game::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-game::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.5);
+  border-radius: 9999px;
+}
+
+.scrollbar-game::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.7);
+}

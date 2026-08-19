@@ -120,7 +120,7 @@ export function BottomNav() {
             <div className="relative w-24 h-24 md:w-34 md:h-34 transform group-hover:scale-110 group-hover:-translate-y-2 group-active:scale-95 transition-all duration-300">
               {/* Mascot bunny with 3D drop shadow */}
               <img 
-                src="https://statics.flyer.vn/avatar/de905412fc63465bb5ccebb2c0561ac9" 
+                src="/clone-assets/logo.46df16c4.png" 
                 alt="FLYER Mascot"
                 className="w-full h-full object-contain filter drop-shadow-[0_12px_15px_rgba(0,0,0,0.6)]"
                 onError={(e) => {

@@ -26,7 +26,7 @@ export default function DashboardLayout({
 
       <div className="flex flex-col h-full relative z-10 pt-[140px] pb-[120px]">
         {/* Main Content (Swiper Planets or Pages) */}
-        <main className="flex-1 w-full overflow-hidden flex flex-col justify-center items-center">
+        <main className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center scrollbar-game">
           {children}
         </main>
       </div>

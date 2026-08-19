@@ -12,18 +12,18 @@ export default function RankingPage() {
   const [entityTab, setEntityTab] = useState<"student" | "school">("student");
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10 pb-28 flex flex-col items-center z-10 text-shadow-game-title">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 pb-[120px] flex flex-col items-center z-10 text-shadow-game-title">
       
       {/* Title with beautiful 3D text shadow */}
       <h1 
-        className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider mb-8 drop-shadow-lg text-center font-heading text-shadow-game-title"
+        className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider mb-5 drop-shadow-lg text-center font-heading text-shadow-game-title"
         
       >
         BẢNG XẾP HẠNG
       </h1>
 
       {/* Gamified Filters Panel */}
-      <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-6 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-8 flex flex-col gap-5 text-shadow-game-title">
+      <div className="w-full bg-ranking-table-bg/80 backdrop-blur-md rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col gap-4 text-shadow-game-title">
         
         <div className="flex items-center gap-2 text-white/80 font-black text-sm uppercase tracking-wider border-b border-white/10 pb-3 text-shadow-game-title">
           <Filter className="w-4 h-4 text-orange-400 text-shadow-game-title" />
@@ -84,7 +84,7 @@ export default function RankingPage() {
       </div>
 
       {/* Tabs Layout */}
-      <div className="w-full flex flex-col md:flex-row gap-6 justify-between items-center mb-8 text-shadow-game-title">
+      <div className="w-full flex flex-col md:flex-row gap-5 justify-between items-center mb-6 text-shadow-game-title">
         
         {/* Time Tabs (Bubbly Pill style) */}
         <div className="flex gap-1 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-md rounded-full border-2 border-ranking-table-border shadow-lg text-shadow-game-title">
