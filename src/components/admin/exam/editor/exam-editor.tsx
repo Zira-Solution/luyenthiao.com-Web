@@ -1,28 +1,20 @@
 "use client"
 
-import { ArrowLeft, Code2, Plus, Save, Trash2 } from "lucide-react"
+import { ArrowLeft, Plus, Save, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState, type ChangeEvent, type ReactElement } from "react"
+import { useEffect, useState, type ReactElement } from "react"
 
-import { PART_RENDERERS } from "@/components/exam/parts"
+import { Field, NumberInput, TextInput } from "./editor-field"
+import { PartCard } from "./part-card"
+import { ValidationPanel } from "./validation-panel"
+
 import { ROUTES } from "@/constants"
-import {
-  examSchema,
-  type Exam,
-  type ExamPart,
-  type ExamQuestion,
-  type ExamStructure,
-  type PartKind,
-} from "@/lib/exam"
-import {
-  blankExam,
-  blankPart,
-  blankStructure,
-  PART_KIND_LABEL,
-  PART_KINDS,
-  structurePartCount,
-} from "@/lib/exam/blank"
+import { clearDraft, loadDraft, saveDraft } from "@/lib/admin/draft"
+import { examSchema, type Exam, type ExamPart, type ExamStructure } from "@/lib/exam"
+import { blankExam, blankPart, blankStructure, structurePartCount } from "@/lib/exam/blank"
+import { selectDirty, useExamEditorStore } from "@/store/exam-editor-store"
 import { useExamStore } from "@/store/exam-store"
+
 
 interface ExamEditorProps {
   examId: string
@@ -36,30 +28,59 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
   const addExam = useExamStore((s) => s.add)
   const updateExam = useExamStore((s) => s.update)
 
-  const [draft, setDraft] = useState<Exam | null>(null)
-  const [questionJsons, setQuestionJsons] = useState<Record<string, string>>({})
+  const draft = useExamEditorStore((s) => s.draft)
+  const init = useExamEditorStore((s) => s.init)
+  const reset = useExamEditorStore((s) => s.reset)
+  const patchExam = useExamEditorStore((s) => s.patchExam)
+  const patchStruct = useExamEditorStore((s) => s.patchStruct)
+  const dirty = useExamEditorStore(selectDirty)
+
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [draftMeta, setDraftMeta] = useState<{ savedAt: number } | null>(null)
+
+  const draftKey = isNew ? "new" : examId
+  const draftSnapshot = useExamEditorStore((s) => s.draft)
+
+  // Autosave — ghi bản nháp sau 400ms im lặng
+  useEffect(() => {
+    if (!draftSnapshot) return
+    const t = setTimeout(() => {
+      saveDraft(draftKey, draftSnapshot)
+    }, 400)
+    return () => clearTimeout(t)
+  }, [draftSnapshot, draftKey])
 
   useEffect(() => {
     hydrate()
+    const existing = loadDraft(draftKey)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- restore banner cần biết trạng thái nháp ở lúc mount
+    if (existing) setDraftMeta({ savedAt: existing.savedAt })
     let initial: Exam | null = null
     if (isNew) {
       initial = blankExam()
     } else {
       const found = useExamStore.getState().exams.find((e) => e.id === examId)
-      if (found) initial = JSON.parse(JSON.stringify(found))
+      if (found) initial = JSON.parse(JSON.stringify(found)) as Exam
     }
-    if (initial) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- Nạp draft ban đầu từ params / localStorage khi mở editor
-      setDraft(initial)
-      const jsons: Record<string, string> = {}
-      initial.structures.forEach((s) => s.parts.forEach((p) => {
-        jsons[p.id] = JSON.stringify(p.questions ?? [], null, 2)
-      }))
-      setQuestionJsons(jsons)
+    if (initial) init(initial)
+    return () => {
+      reset()
+      setDraftMeta(null)
     }
-     
-  }, [examId, isNew, hydrate])
+  }, [examId, isNew, hydrate, init, reset, draftKey])
+
+  const restoreDraft = () => {
+    const existing = loadDraft(draftKey)
+    if (existing) {
+      init(existing.exam)
+      setDraftMeta(null)
+    }
+  }
+
+  const discardDraft = () => {
+    clearDraft(draftKey)
+    setDraftMeta(null)
+  }
 
   if (!draft) {
     return (
@@ -69,26 +90,11 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
     )
   }
 
-  const patchExam = (fn: (d: Exam) => Exam) => setDraft((prev) => (prev ? fn(prev) : prev))
-
-  const patchStruct = (structIdx: number, fn: (s: ExamStructure) => ExamStructure) =>
+  const addStructure = () =>
     patchExam((d) => ({
       ...d,
-      structures: d.structures.map((s, i) => (i === structIdx ? fn(s) : s)),
+      structures: [...d.structures, blankStructure(d.structures.length)],
     }))
-
-  const patchPart = (
-    structIdx: number,
-    partIdx: number,
-    fn: (p: ExamPart) => ExamPart,
-  ) =>
-    patchStruct(structIdx, (s) => ({
-      ...s,
-      parts: s.parts.map((p, i) => (i === partIdx ? fn(p) : p)),
-    }))
-
-  const addStructure = () =>
-    patchExam((d) => ({ ...d, structures: [...d.structures, blankStructure(d.structures.length)] }))
 
   const removeStructure = (idx: number) =>
     patchExam((d) => ({ ...d, structures: d.structures.filter((_, i) => i !== idx) }))
@@ -96,40 +102,26 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
   const addPart = (structIdx: number) =>
     patchStruct(structIdx, (s) => ({ ...s, parts: [...s.parts, blankPart("gapfill")] }))
 
-  const removePart = (structIdx: number, part: ExamPart) =>
-    patchStruct(structIdx, (s) => ({ ...s, parts: s.parts.filter((p) => p.id !== part.id) }))
-
-  const changePartKind = (structIdx: number, partIdx: number, kind: PartKind) => {
-    const current = draft.structures[structIdx]?.parts?.[partIdx]
-    if (!current || current.kind === kind) return
-    if (!window.confirm("Đổi loại phần sẽ xóa câu hỏi hiện tại. Tiếp tục?")) return
-    const newPart = { ...blankPart(kind), id: current.id, title: current.title }
-    patchExam((d) => ({
-      ...d,
-      structures: d.structures.map((s, i) =>
-        i === structIdx
-          ? { ...s, parts: s.parts.map((p, pi) => (pi === partIdx ? newPart : p)) }
-          : s,
-      ),
-    }))
-    const nextParts = newPart.questions ?? []
-    setQuestionJsons((prev) => ({ ...prev, [newPart.id]: JSON.stringify(nextParts, null, 2) }))
-  }
-
   const save = () => {
     setSaveError(null)
     if (!draft) return
 
+    const st = useExamEditorStore.getState()
+    const jsonTexts = st.jsonTexts
+    const jsonMode = st.jsonMode
+
     let parseError: string | null = null
     const finalPartsPerStruct: ExamStructure[] = draft.structures.map((s) => {
       const parts: ExamPart[] = s.parts.map((p) => {
-        const raw = questionJsons[p.id]?.trim()
+        // Chỉ áp dụng buffer JSON cho phần đang bật "chế độ nâng cao"
+        if (!jsonMode[p.id]) return p
+        const raw = jsonTexts[p.id]?.trim()
         if (!raw) {
           parseError = `Phần "${p.title || p.id}" chưa có dữ liệu câu hỏi.`
           return p
         }
         try {
-          return { ...p, questions: JSON.parse(raw) as ExamQuestion[] }
+          return { ...p, questions: JSON.parse(raw) as ExamPart["questions"] }
         } catch {
           parseError = `JSON câu hỏi của phần "${p.title || p.id}" không hợp lệ.`
           return p
@@ -147,16 +139,17 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
     const result = examSchema.safeParse(final)
     if (!result.success) {
       const first = result.error.issues[0]
-      setSaveError(`Dữ liệu không hợp lệ: ${first?.path.join(".")} ${first?.message}`)
+      setSaveError(
+        `Dữ liệu không hợp lệ: ${first?.path.join(".")} ${first?.message}`,
+      )
       return
     }
     if (isNew) addExam(final)
     else updateExam(final)
+    clearDraft(draftKey)
+    setDraftMeta(null)
     router.push(ROUTES.ADMIN_EXAM)
   }
-
-  const setQuestionJson = (partId: string, value: string) =>
-    setQuestionJsons((prev) => ({ ...prev, [partId]: value }))
 
   return (
     <div className="min-h-screen bg-dashboard-bg font-sans">
@@ -169,7 +162,13 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
             <ArrowLeft className="w-4 h-4" />
             {isNew ? "Tạo đề mới" : "Sửa đề thi"}
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            {dirty && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-primary/20 border border-brand-primary/40 px-3 py-1 text-brand-primary text-xs font-black uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+                Chưa lưu
+              </span>
+            )}
             <span className="text-white/40 text-xs font-mono hidden sm:inline">
               {isNew ? "(mới)" : draft.id}
             </span>
@@ -188,6 +187,26 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
         {saveError && (
           <div className="bg-game-danger-to/20 border border-game-danger-from rounded-2xl px-4 py-3 text-white font-bold text-sm">
             {saveError}
+          </div>
+        )}
+
+        {draftMeta && (
+          <div className="flex flex-wrap items-center gap-3 bg-brand-primary/15 border border-brand-primary/40 rounded-2xl px-4 py-3">
+            <p className="text-brand-primary text-sm font-bold flex-1 min-w-[200px]">
+              Bạn có một bản nháp chưa lưu ({new Date(draftMeta.savedAt).toLocaleTimeString("vi-VN")}).
+            </p>
+            <button
+              onClick={restoreDraft}
+              className="px-4 py-2 rounded-xl bg-brand-primary text-white font-black text-xs uppercase transition-colors cursor-pointer hover:opacity-90"
+            >
+              Khôi phục
+            </button>
+            <button
+              onClick={discardDraft}
+              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase transition-colors cursor-pointer"
+            >
+              Bỏ nháp
+            </button>
           </div>
         )}
 
@@ -220,6 +239,10 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
         </section>
 
         {/* Structures */}
+        <section className="bg-white/5 border border-white/10 rounded-3xl p-6">
+          <ValidationPanel exam={draft} />
+        </section>
+
         <section className="flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <h2 className="text-white font-black uppercase tracking-wide text-sm">
@@ -263,16 +286,7 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
               </div>
 
               {structure.parts.map((part, pi) => (
-                <div key={part.id} className="flex-1">
-                  <PartCard
-                    part={part}
-                    json={questionJsons[part.id] ?? ""}
-                    onJsonChange={(v) => setQuestionJson(part.id, v)}
-                    onTitleChange={(v) => patchPart(si, pi, (p) => ({ ...p, title: v }))}
-                    onKindChange={(k) => changePartKind(si, pi, k)}
-                    onRemove={() => removePart(si, part)}
-                  />
-                </div>
+                <PartCard key={part.id} structIdx={si} partIdx={pi} />
               ))}
 
               <button
@@ -286,159 +300,5 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
         </section>
       </main>
     </div>
-  )
-}
-
-function PartCard({
-  part,
-  json,
-  onJsonChange,
-  onTitleChange,
-  onKindChange,
-  onRemove,
-}: {
-  part: ExamPart
-  json: string
-  onJsonChange: (v: string) => void
-  onTitleChange: (v: string) => void
-  onKindChange: (k: PartKind) => void
-  onRemove: () => void
-}): ReactElement {
-  const [expanded, setExpanded] = useState(false)
-  return (
-    <div className="mt-3 rounded-2xl border border-white/10 bg-black/10 overflow-hidden">
-      <div className="flex flex-wrap items-center gap-3 px-4 py-3">
-        <span className="px-2.5 py-1 rounded-lg bg-brand-primary text-white font-black text-[11px] uppercase">
-          Phần
-        </span>
-        <select
-          value={part.kind}
-          onChange={(e) => onKindChange(e.target.value as PartKind)}
-          className="bg-white/10 text-white font-bold text-sm rounded-lg px-3 py-1.5 focus:outline-none border border-white/10"
-        >
-          {PART_KINDS.map((k) => (
-            <option key={k} value={k} className="text-slate-900">
-              {PART_KIND_LABEL[k]}
-            </option>
-          ))}
-        </select>
-        <input
-          value={part.title}
-          onChange={(e) => onTitleChange(e.target.value)}
-          placeholder="Tiêu đề phần (VD: Nghe & nối tên)"
-          className="flex-1 min-w-[180px] bg-transparent border-b border-white/20 focus:border-brand-primary focus:outline-none text-white font-semibold text-sm py-1.5 placeholder:text-white/30"
-        />
-        <button
-          onClick={() => setExpanded((e) => !e)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase transition-colors cursor-pointer"
-        >
-          <Code2 className="w-3.5 h-3.5" />
-          {expanded ? "Ẩn" : "Câu hỏi"}
-        </button>
-        <button
-          onClick={onRemove}
-          className="p-1.5 rounded-lg bg-white/5 hover:bg-game-danger-to text-white/60 hover:text-white transition-colors cursor-pointer"
-          title="Xóa phần"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-        </button>
-      </div>
-
-      {expanded && (
-        <div className="px-4 pb-4 space-y-3">
-          <p className="text-white/40 text-xs font-semibold">
-            Mảng <code>questions</code> dạng JSON — mỗi phần tử:{" "}
-            <code className="text-white/70">{"{ id, isExample, title, details[ { id, label, correctAnswers, ... } ] }"}</code>
-          </p>
-          <textarea
-            value={json}
-            onChange={(e) => onJsonChange(e.target.value)}
-            spellCheck={false}
-            className="w-full h-56 bg-slate-900/70 text-white/90 font-mono text-xs rounded-xl border border-white/10 p-3 focus:border-brand-primary focus:outline-none resize-y"
-          />
-          <PreviewPart part={part} json={json} />
-        </div>
-      )}
-    </div>
-  )
-}
-
-function PreviewPart({ part, json }: { part: ExamPart; json: string }): ReactElement {
-  const trimmed = json.trim()
-  let parsed: ExamQuestion[] | null = null
-  let error: string | null = null
-  if (!trimmed) {
-    error = "Thêm mảng questions để xem trước."
-  } else {
-    try {
-      const v = JSON.parse(trimmed) as unknown
-      if (Array.isArray(v)) parsed = v as ExamQuestion[]
-      else error = "questions phải là một mảng JSON."
-    } catch {
-      error = "JSON chưa hợp lệ — chỉnh đúng mới xem trước được."
-    }
-  }
-
-  const Renderer = PART_RENDERERS[part.kind]
-  if (parsed && Renderer) {
-    const previewPart: ExamPart = { ...part, questions: parsed }
-    return (
-      <div>
-        <p className="text-white/40 text-xs font-bold uppercase mb-2">Xem trước</p>
-        <div className="bg-white rounded-2xl p-4 max-h-[420px] overflow-auto text-slate-900">
-          <Renderer part={previewPart} structureName="Preview" answers={{}} onChange={() => {}} />
-        </div>
-      </div>
-    )
-  }
-
-  return <p className="text-amber-400 text-xs font-semibold">{error}</p>
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }): ReactElement {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-white/60 text-[11px] font-black uppercase tracking-wide">{label}</span>
-      {children}
-    </label>
-  )
-}
-
-function TextInput({
-  value,
-  onChange,
-  placeholder,
-}: {
-  value: string
-  onChange: (v: string) => void
-  placeholder?: string
-}): ReactElement {
-  return (
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="bg-white/10 text-white font-semibold text-sm rounded-xl px-3 py-2.5 focus:outline-none border border-transparent focus:border-brand-primary placeholder:text-white/30"
-    />
-  )
-}
-
-function NumberInput({
-  value,
-  onChange,
-}: {
-  value: number
-  onChange: (n: number) => void
-}): ReactElement {
-  return (
-    <input
-      type="number"
-      min={1}
-      value={value}
-      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        onChange(parseInt(e.target.value, 10) || 1)
-      }
-      className="bg-white/10 text-white font-semibold text-sm rounded-xl px-3 py-2.5 focus:outline-none border border-transparent focus:border-brand-primary"
-    />
   )
 }
