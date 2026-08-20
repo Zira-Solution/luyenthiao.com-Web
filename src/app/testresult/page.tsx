@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense } from "react";
+import { Trophy, Shield, Home, FileText } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Trophy, Shield, Home, FileText } from "lucide-react";
+import { Suspense } from "react";
+
 import { GameButton } from "@/components/ui/game-button";
 
 function TestResultContent() {
@@ -15,6 +16,7 @@ function TestResultContent() {
   const listening = parseInt(searchParams.get("listening") || "0", 10);
   const rw = parseInt(searchParams.get("rw") || "0", 10);
   const total = parseInt(searchParams.get("total") || "60", 10);
+  const examId = searchParams.get("examId") || "7778495e-531b-4039-a3ea-321874ba1a7a";
 
   // Calculate shields (out of 5)
   // Listening: max 25 -> 5 points per shield
@@ -174,7 +176,7 @@ function TestResultContent() {
 
               <GameButton
                 variant="cta"
-                onClick={() => router.push(`/check-point/7778495e-531b-4039-a3ea-321874ba1a7a`)}
+                onClick={() => router.push(`/check-point/${examId}?review=true`)}
               >
                 <div className="flex items-center gap-2">
                   <FileText className="w-5 h-5 text-white" />
