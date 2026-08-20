@@ -7,3 +7,11 @@ export interface BaseEntity {
 }
 
 export type Result<T, E = Error> = { success: true; data: T } | { success: false; error: E }
+
+export type {
+  WritingAttempt,
+  WritingFeedback,
+  WritingPrompt,
+  WritingStoryImage,
+  WritingTest,
+} from "./writing"
