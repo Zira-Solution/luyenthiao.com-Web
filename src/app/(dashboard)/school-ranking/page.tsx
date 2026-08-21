@@ -4,7 +4,6 @@ import { MapPin, School } from "lucide-react";
 import { useState } from "react";
 
 import { SchoolRankingTable } from "@/components/ranking/school-ranking-table";
-import { GameButton } from "@/components/ui/game-button";
 
 export default function SchoolRankingPage() {
   const [activeTab, setActiveTab] = useState<"day" | "week" | "month" | "year">("day");
@@ -83,13 +82,12 @@ export default function SchoolRankingPage() {
             const isSelected = activeTab === tab;
             
             return isSelected ? (
-              <GameButton 
-                key={tab} 
-                variant="primary" 
-                className="px-5 py-1.5 rounded-full min-h-[36px] text-xs font-black w-24"
+              <button
+                key={tab}
+                className="px-5 py-1.5 rounded-full min-h-[36px] text-xs font-black w-24 text-white bg-orange-500 border-b-3 border-orange-700 shadow-[0_3px_6px_rgba(0,0,0,0.35)]"
               >
                 {label}
-              </GameButton>
+              </button>
             ) : (
               <button 
                 key={tab} 
