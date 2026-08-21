@@ -260,8 +260,12 @@ export function Topbar() {
             </span>
           </GameNavButton>
 
-          {/* Trường Của Tôi Button */}
-          <GameNavButton variant="blue">
+          {/* Trường Học Button */}
+          <GameNavButton 
+            variant="blue"
+            onClick={() => router.push("/school-ranking")}
+            className={cn(pathname === "/school-ranking" && "bg-white/10 border-yellow-400")}
+          >
             <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-emerald-400 shrink-0">
               <School className="w-6 h-6 md:w-7 md:h-7" />
             </div>
