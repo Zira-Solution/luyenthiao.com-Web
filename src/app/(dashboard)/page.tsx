@@ -16,16 +16,6 @@ export default function DashboardPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const swiperRef = useRef<any>(null);
 
-  // Level badge tags
-  const getLevelTags = (levelStr: string) => {
-    if (levelStr === "Cấp 1 - 2") return [{ text: "LỚP 1", color: "bg-blue-600" }, { text: "LỚP 2", color: "bg-indigo-600" }];
-    if (levelStr === "A1-B1") return [{ text: "PRE A1", color: "bg-green-600" }, { text: "A1", color: "bg-orange-600" }, { text: "A2", color: "bg-red-600" }, { text: "B1", color: "bg-blue-600" }];
-    if (levelStr === "Pre A1") return [{ text: "PRE A1", color: "bg-green-600" }];
-    if (levelStr === "A1") return [{ text: "A1", color: "bg-orange-600" }];
-    if (levelStr === "A2") return [{ text: "A2", color: "bg-red-600" }];
-    return [{ text: levelStr, color: "bg-purple-600" }];
-  };
-
   return (
     <div className="relative w-full min-h-full flex flex-col justify-center items-center overflow-hidden">
       
@@ -79,7 +69,6 @@ export default function DashboardPage() {
         >
           {planetsData.map((planet, idx) => {
             const isActive = idx === activePlanetIndex;
-            const tags = getLevelTags(planet.level);
             
             return (
               <SwiperSlide key={planet.id} className="flex justify-center items-center">
@@ -114,7 +103,7 @@ export default function DashboardPage() {
 
                   {/* 3D Ribbon & Details underneath */}
                   <div className={cn(
-                    "absolute bottom-[-45px] md:bottom-[-65px] flex flex-col items-center transition-all duration-500 w-[240px] md:w-[300px]",
+                    "absolute bottom-[0px] md:bottom-[-15px] flex flex-col items-center transition-all duration-500 w-[240px] md:w-[300px]",
                     isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-6 scale-95 pointer-events-none"
                   )}>
                     
@@ -131,25 +120,6 @@ export default function DashboardPage() {
                         planet.id === "toefl_primary" && "from-amber-400 to-orange-650 border-orange-850 border-t-amber-300 border-x-amber-500 shadow-[0_4px_10px_rgba(245,158,11,0.3)]"
                       )}>
                         
-                        {/* 3D Banner Side Wings */}
-                        <div className={cn(
-                          "absolute -left-2.5 top-2.5 bottom-2.5 w-6 -z-10 clip-path-ribbon-left border-y border-l border-black/20",
-                          planet.id === "ioe" && "bg-indigo-900",
-                          planet.id === "starters" && "bg-game-cta-border",
-                          planet.id === "movers" && "bg-planet-movers-border",
-                          planet.id === "flyers" && "bg-purple-950",
-                          planet.id === "toefl_primary" && "bg-orange-950"
-                        )}></div>
-                        
-                        <div className={cn(
-                          "absolute -right-2.5 top-2.5 bottom-2.5 w-6 -z-10 clip-path-ribbon-right border-y border-r border-black/20",
-                          planet.id === "ioe" && "bg-indigo-900",
-                          planet.id === "starters" && "bg-game-cta-border",
-                          planet.id === "movers" && "bg-planet-movers-border",
-                          planet.id === "flyers" && "bg-purple-950",
-                          planet.id === "toefl_primary" && "bg-orange-950"
-                        )}></div>
-                        
                         <h2 className="text-white font-black text-lg md:text-2xl tracking-wider drop-shadow-[0_2px_3px_rgba(0,0,0,0.6)] text-center uppercase leading-tight font-heading">
                           {planet.name}
                         </h2>
@@ -157,50 +127,6 @@ export default function DashboardPage() {
                           {planet.description}
                         </p>
                       </div>
-                    </div>
-                    
-                    {/* Level Pill Badges */}
-                    <div className="flex items-center gap-2 mt-3 bg-slate-950/80 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10 shadow-lg transform -translate-y-1 z-0">
-                      {tags.map((tag, i) => (
-                        <div 
-                          key={i} 
-                          className={cn(
-                            "text-white font-black text-[9px] md:text-xs px-3.5 py-1 rounded-full shadow-[0_2px_0_rgba(0,0,0,0.4)] border border-black/20 uppercase tracking-widest transition-transform hover:scale-105 active:scale-95 cursor-pointer",
-                            (tag.text.includes("PRE") || tag.text.includes("LỚP")) && "bg-gradient-to-b from-emerald-450 to-green-600 border-green-800",
-                            tag.text === "A1" && "bg-gradient-to-b from-amber-400 to-orange-500 border-orange-700",
-                            tag.text === "A2" && "bg-gradient-to-b from-rose-450 to-red-650 border-red-800",
-                            tag.text === "B1" && "bg-gradient-to-b from-sky-400 to-blue-600 border-blue-800",
-                            !["PRE", "A1", "A2", "B1", "LỚP"].some(term => tag.text.includes(term)) && "bg-gradient-to-b from-violet-400 to-purple-650 border-purple-800"
-                          )}
-                        >
-                          {tag.text}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Mascot peaking out with 3D action circle buttons on left/right */}
-                    <div className="flex items-center justify-center gap-4.5 mt-4 z-20 w-full">
-                      {/* Red Mask Face button */}
-                      <button className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-b from-topbar-orange-bg to-placement-btn-to border-2 border-topbar-orange-hover hover:from-topbar-orange-hover hover:to-placement-btn-to flex items-center justify-center cursor-pointer shadow-lg active:scale-90 active:translate-y-[2px] transition-all">
-                        <span className="text-white text-lg md:text-xl">🎭</span>
-                      </button>
-
-                      {/* Mascot bunny peaking out */}
-                      <div className="relative w-16 h-16 md:w-20 md:h-20 -mt-3 animate-[floating_4s_ease-in-out_infinite] filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
-                        <img 
-                          src="/clone-assets/logo.46df16c4.png" 
-                          alt="Mascot peaking" 
-                          className="w-full h-full object-contain"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/clone-assets/media/ic-challenge.9b2229cb.png'; // fallback
-                          }}
-                        />
-                      </div>
-
-                      {/* Blue Phone button */}
-                      <button className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border-2 border-game-secondary-hover-from hover:from-game-secondary-hover-from hover:to-topbar-login-border flex items-center justify-center cursor-pointer shadow-lg active:scale-90 active:translate-y-[2px] transition-all">
-                        <span className="text-white text-lg md:text-xl">📞</span>
-                      </button>
                     </div>
 
                   </div>
