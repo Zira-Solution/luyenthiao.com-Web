@@ -9,7 +9,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden font-sans bg-dashboard-bg">
+    <div className="relative isolate h-[100dvh] w-full overflow-hidden font-sans bg-dashboard-bg">
       {/* Background Image */}
       <div className="absolute inset-0 -z-20">
         <Image
