@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
-import { EffectCoverflow } from "swiper/modules";
+import { EffectCoverflow, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import planetsData from "../../../_webclone/design-model/mocks/planets.json";
@@ -12,9 +13,36 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [activePlanetIndex, setActivePlanetIndex] = useState(2); // Start at index 2 (middle slide)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const swiperRef = useRef<any>(null);
+
+  // Điều hướng khi click vào hành tinh có trang cấp độ tương ứng
+  const CLICKABLE_PLANETS = ["starters", "movers", "flyers", "toefl_primary"];
+  const handlePlanetClick = (planetId: string | null | undefined) => {
+    if (planetId && CLICKABLE_PLANETS.includes(planetId)) {
+      router.push(`/testlevels/${planetId}`);
+    }
+  };
+
+  // Bắt click ở container Swiper. Do hiệu ứng 3D coverflow làm hit-test chuột
+  // bị lệch (click không chạm đúng phần tử thẻ), ta dựa vào bounding-rect của
+  // từng slide xem tọa độ click rơi vào slide nào rồi điều hướng.
+  const handleSwiperClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!e.clientX && !e.clientY) return;
+    const slides = Array.from(document.querySelectorAll(".swiper-slide"));
+    for (const slide of slides) {
+      const r = (slide as HTMLElement).getBoundingClientRect();
+      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+        const card = slide.querySelector<HTMLElement>("[data-planet-id]");
+        if (card) handlePlanetClick(card.dataset.planetId);
+        break;
+      }
+    }
+  };
+
+
 
   return (
     <div className="relative w-full min-h-full flex flex-col justify-center items-center overflow-hidden">
@@ -42,16 +70,23 @@ export default function DashboardPage() {
       </button>
 
       {/* Swiper Container */}
-      <div className="w-full max-w-[100vw] sm:max-w-[85vw] mx-auto flex items-center justify-center h-full z-10">
+      <div
+        onClick={handleSwiperClick}
+        className="w-full max-w-[100vw] sm:max-w-[85vw] mx-auto flex items-center justify-center h-full z-10 cursor-pointer"
+      >
         <Swiper
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}
           effect={"coverflow"}
-          grabCursor={true}
+          grabCursor={false}
+          simulateTouch={false}
+          preventClicks={false}
+          preventClicksPropagation={false}
           centeredSlides={true}
           slidesPerView={1.5}
           initialSlide={2}
+          mousewheel={true}
           breakpoints={{
             640: { slidesPerView: 2 },
             1024: { slidesPerView: 3 }
@@ -63,7 +98,7 @@ export default function DashboardPage() {
             modifier: 1,
             slideShadows: false,
           }}
-          modules={[EffectCoverflow]}
+          modules={[EffectCoverflow, Mousewheel]}
           className="w-full h-full !py-12 md:!py-20"
           onSlideChange={(swiper) => setActivePlanetIndex(swiper.activeIndex)}
         >
@@ -73,6 +108,7 @@ export default function DashboardPage() {
             return (
               <SwiperSlide key={planet.id} className="flex justify-center items-center">
                 <div 
+                  data-planet-id={planet.id}
                   className={`relative transition-all duration-700 ease-out cursor-pointer flex flex-col items-center
                     ${isActive ? "scale-100 z-30" : "scale-75 opacity-30 hover:opacity-50"}
                   `}

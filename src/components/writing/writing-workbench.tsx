@@ -143,10 +143,10 @@ export function WritingWorkbench({
         {/* Bên trái: đề & ảnh */}
         <section className="flex flex-col gap-4">
           <div className="rounded-2xl bg-white/95 p-5 text-slate-800 shadow">
-            <h2 className="font-black uppercase tracking-wide text-slate-900">
+            <h2 className="text-2xl font-black uppercase tracking-wide text-slate-900 md:text-3xl">
               {prompt.title}
             </h2>
-            <p className="mt-2 text-sm font-medium leading-relaxed text-slate-700">
+            <p className="mt-3 text-lg font-semibold leading-relaxed text-slate-700 md:text-xl">
               {prompt.instruction}
             </p>
           </div>
