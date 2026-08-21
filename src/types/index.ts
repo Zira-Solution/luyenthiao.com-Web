@@ -15,3 +15,18 @@ export type {
   WritingStoryImage,
   WritingTest,
 } from "./writing"
+
+export type {
+  SpeakingAnswer,
+  SpeakingAttempt,
+  SpeakingChoice,
+  SpeakingDraggable,
+  SpeakingPart,
+  SpeakingPointer,
+  SpeakingQuestion,
+  SpeakingQuestionKind,
+  SpeakingRecordKind,
+  SpeakingSceneSlot,
+  SpeakingSlideKind,
+  SpeakingTest,
+} from "./speaking"

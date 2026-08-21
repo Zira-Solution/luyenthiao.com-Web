@@ -3,6 +3,7 @@
 import { ChevronDown, Plus, Trophy, BookOpen, School, ClipboardList } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
+import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH } from "@/constants";
 import { cn } from "@/lib/utils";
 
 // Topbar Button Component (3D Game Style)
@@ -90,7 +91,12 @@ export function Topbar() {
           </GameNavButton>
 
           {/* Writing Button */}
-          <GameNavButton variant="blue" badgeText="FREE" badgeColor="bg-gradient-to-r from-emerald-400 to-green-600">
+          <GameNavButton
+            variant="blue"
+            badgeText="FREE"
+            badgeColor="bg-gradient-to-r from-emerald-400 to-green-600"
+            onClick={() => router.push(DEMO_WRITE_TEST_PATH)}
+          >
             <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9">
               <img 
                 src="/clone-assets/media/ic-writing.9b3fd4e6.png" 
@@ -110,7 +116,10 @@ export function Topbar() {
           </GameNavButton>
 
           {/* Speaking Button */}
-          <GameNavButton variant="blue">
+          <GameNavButton
+            variant="blue"
+            onClick={() => router.push(DEMO_SPEAKING_TEST_PATH)}
+          >
             <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9">
               <img 
                 src="/clone-assets/media/ic-speaking.3f0031fd.png" 
