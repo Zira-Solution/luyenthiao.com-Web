@@ -275,7 +275,11 @@ export function Topbar() {
           </GameNavButton>
 
           {/* Nhiệm Vụ Button */}
-          <GameNavButton variant="blue">
+          <GameNavButton 
+            variant="blue"
+            onClick={() => router.push("/tasks")}
+            className={cn(pathname === "/tasks" && "bg-white/10 border-yellow-400")}
+          >
             <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-orange-400 shrink-0">
               <ClipboardList className="w-6 h-6 md:w-7 md:h-7" />
             </div>
@@ -285,7 +289,11 @@ export function Topbar() {
           </GameNavButton>
 
           {/* Thông Báo Button */}
-          <GameNavButton variant="blue">
+          <GameNavButton 
+            variant="blue"
+            onClick={() => router.push("/notifications")}
+            className={cn(pathname === "/notifications" && "bg-white/10 border-yellow-400")}
+          >
             <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center shrink-0">
               <img 
                 src="/clone-assets/media/ic_bell.19fd4917.png" 
