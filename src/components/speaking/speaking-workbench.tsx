@@ -1,16 +1,17 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import { useMemo, useState } from "react"
+import { Send } from 'lucide-react'
+import Image from 'next/image'
+import { useMemo, useState } from 'react'
 
-import { SpeakingQuestion } from "./speaking-question"
+import { SpeakingQuestion } from './speaking-question'
 
-import type { SpeakingAnswer, SpeakingAttempt } from "@/types/speaking"
+import type { SpeakingAnswer, SpeakingAttempt } from '@/types/speaking'
 
 interface SpeakingWorkbenchProps {
   attempt: SpeakingAttempt
   answers: Record<string, SpeakingAnswer>
-  onAnswered: (id: string, partial: Omit<SpeakingAnswer, "questionId">) => void
+  onAnswered: (id: string, partial: Omit<SpeakingAnswer, 'questionId'>) => void
   onOpenSubmit: () => void
   onPrevious?: () => void
 }
@@ -19,7 +20,7 @@ interface FlatQuestion {
   partLabel: string
   partInstruction: string
   partTitle?: string
-  question: SpeakingAttempt["parts"][number]["questions"][number]
+  question: SpeakingAttempt['parts'][number]['questions'][number]
   qinpart: number
 }
 
@@ -92,30 +93,23 @@ export function SpeakingWorkbench({
             />
           </button>
 
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/clone-assets/speaking/bg-logo-speaking.2a909457.png"
-                alt="STARTERS"
-                width={120}
-                height={44}
-                className="h-11 w-auto object-contain"
-              />
-            </div>
-            <p className="mt-1 rounded-full bg-slate-800/80 px-3 py-0.5 text-sm font-black text-white">
+          <div className="flex flex-col items-center gap-0.5">
+            <span className="rounded-full bg-slate-800/80 px-3 py-1 text-sm font-black tracking-wide text-white uppercase shadow">
               {current.partLabel}
-            </p>
+            </span>
+            <span className="text-brand-primary rounded-full bg-white/90 px-3 py-0.5 text-xs font-bold shadow">
+              Câu {index + 1}/{flat.length}
+            </span>
           </div>
 
-          <div className="relative flex items-center gap-1">
-            <Image
-              src="/clone-assets/speaking/box-time.2ac9e25e.png"
-              alt=""
-              width={132}
-              height={48}
-              className="h-12 w-32 object-contain"
-            />
-          </div>
+          <button
+            type="button"
+            onClick={onOpenSubmit}
+            className="flex cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-b from-emerald-400 to-emerald-600 px-5 py-2.5 text-sm font-black tracking-wide text-white uppercase shadow-lg ring-4 ring-emerald-200/70 transition-transform hover:scale-105 active:scale-95"
+          >
+            <Send className="h-4 w-4 -scale-x-100" aria-hidden />
+            Nộp bài
+          </button>
         </header>
 
         {/* Tiêu đề phần */}
@@ -129,7 +123,7 @@ export function SpeakingWorkbench({
               sizes="100vw"
               className="h-[84px] w-full object-contain"
             />
-            <p className="absolute inset-0 flex items-center justify-center text-center text-base font-black uppercase tracking-wide text-white drop-shadow">
+            <p className="absolute inset-0 flex items-center justify-center text-center text-base font-black tracking-wide text-white uppercase drop-shadow">
               {current.partTitle}
             </p>
           </div>
@@ -169,7 +163,7 @@ export function SpeakingWorkbench({
             >
               <Image
                 src="/clone-assets/speaking/btn-next.776b1baf.png"
-                alt={isLast ? "Nộp bài" : "Câu tiếp theo"}
+                alt={isLast ? 'Nộp bài' : 'Câu tiếp theo'}
                 width={0}
                 height={0}
                 sizes="100vw"

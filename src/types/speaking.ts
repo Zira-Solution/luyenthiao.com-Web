@@ -6,12 +6,12 @@
 
 /** Dạng thao tác (phần tương tác không cần ghi âm). */
 export type SpeakingSlideKind =
-  | "scene-mark" // Phần 1a (find_object_1): bấm vào đúng vật trong bức tranh cảnh.
-  | "choose-object" // Phần 1b (find_object_2): chọn đúng ảnh trong các lựa chọn.
-  | "drag-object" // Phần 1c (move_object): kéo đồ vật thả vào đúng vị trí trong cảnh.
+  | 'scene-mark' // Phần 1a (find_object_1): bấm vào đúng vật trong bức tranh cảnh.
+  | 'choose-object' // Phần 1b (find_object_2): chọn đúng ảnh trong các lựa chọn.
+  | 'drag-object' // Phần 1c (move_object): kéo đồ vật thả vào đúng vị trí trong cảnh.
 
 /** Dạng trả lời bằng ghi âm giọng nói. */
-export type SpeakingRecordKind = "mic-answer" | "mic-zoom" | "mic-plain"
+export type SpeakingRecordKind = 'mic-answer' | 'mic-zoom' | 'mic-plain'
 
 export type SpeakingQuestionKind = SpeakingSlideKind | SpeakingRecordKind
 
@@ -37,8 +37,9 @@ export interface SpeakingSceneSlot {
   height: number
 }
 
-/** Đồ vật cần kéo (Phần 1c). */
+/** Đồ vật cần kéo / dự thi chọn (Phần 1c). */
 export interface SpeakingDraggable {
+  id: string
   src: string
   label: string
 }
@@ -71,8 +72,10 @@ export interface SpeakingQuestion {
   scene?: SpeakingSceneSlot[]
   /** Id vật đáp án đúng (scene-mark). */
   correctSlotId?: string
-  /** Phần 1c: đồ vật cần kéo. */
-  draggable?: SpeakingDraggable
+  /** Phần 1c: các đồ vật để thí sinh chọn (trong đó có vật đúng). */
+  palette?: SpeakingDraggable[]
+  /** Id vật đúng cần đặt (drag-object). */
+  correctDraggableId?: string
   /** Id ô đích đúng (drag-object). */
   correctTargetId?: string
   /** Phần 1b: các lựa chọn ảnh. */
@@ -118,4 +121,6 @@ export interface SpeakingAnswer {
   selected?: string
   recorded?: boolean
   duration?: number
+  /** Blob URL bản ghi âm thật — dùng để nghe lại trong preview. */
+  blobUrl?: string
 }
