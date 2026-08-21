@@ -33,7 +33,7 @@ export function LevelMap({ level }: LevelMapProps): ReactElement {
   const segments = Array.from({ length: totalSegments }, (_, i) => i);
 
   return (
-    <div className="w-full max-w-[1000px] mx-auto flex flex-col pt-12 md:pt-20">
+    <div className="w-full flex flex-col">
       {segments.map((segmentIndex) => {
         // Calculate which level IDs belong to this segment
         const startLevel = segmentIndex * segmentSize + 1;
