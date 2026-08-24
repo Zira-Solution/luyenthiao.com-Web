@@ -97,9 +97,10 @@ export function SpeakingScene({
                   aria-label={slot.label}
                 >
                   <title>{slot.label}</title>
-                  {slot.src ? (
+                  {/* Chế độ mark: chỉ giữ ảnh nền + vòng tròn chọn (bỏ ảnh vật ghép chồng bị lệch). */}
+                  {mode !== 'mark' && slot.src ? (
                     <image href={slot.src} x={bx} y={by} width={bw} height={bh} />
-                  ) : (
+                  ) : mode !== 'mark' ? (
                     <rect
                       x={bx}
                       y={by}
@@ -112,7 +113,7 @@ export function SpeakingScene({
                       strokeWidth={hint ? 4 : 2}
                       strokeDasharray="6 5"
                     />
-                  )}
+                  ) : null}
                   {mode === 'mark' ? (
                     <circle
                       cx={bx + bw / 2}
