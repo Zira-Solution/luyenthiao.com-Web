@@ -34,7 +34,27 @@ Each group separated by one blank line.
 
 - Use `cn()` from `@/lib/utils` for conditional classes.
 - No inline styles, no CSS modules — Tailwind only.
+- Colors only via `@theme` CSS-variable tokens in `globals.css` — no arbitrary values like `bg-[#fff]` (gate A8). Variable references `bg-(--brand)` are the correct form.
 - Prettier auto-sorts classes — run `npm run format` before committing.
+
+## State (3 layers)
+
+Every piece of state belongs to exactly one layer — pick by kind, not convenience:
+
+| Kind | Tool |
+|---|---|
+| Server data (anything the backend owns) | **TanStack Query** (`@tanstack/react-query`) — never mirrored into Zustand |
+| Client UI state, cross-component (theme, modals, session progress) | **Zustand** — install when first needed, never preinstall |
+| Local widget state (single component) | `useState` |
+
+Server payloads validate with `zod`. Forms: `react-hook-form` + `zod`.
+
+## Animation
+
+- Tech per effect type — CSS/SVG first, libraries only when CSS can't do it: see `.claude/skills/web-clone/references/animation-matrix.md`.
+- Animate only `transform` and `opacity` — never `width`/`height`/`top`/`left` (gate A6).
+- `prefers-reduced-motion` support is mandatory (gate A7).
+- `will-change`: apply selectively, remove when the animation ends — never leave it on.
 
 ## page.tsx
 

@@ -1,0 +1,9 @@
+{
+  "data": {
+    "viewerSession": {
+      "viewer": null,
+      "loginSession": null,
+      "__typename": "ViewerSessionPayload"
+    }
+  }
+}

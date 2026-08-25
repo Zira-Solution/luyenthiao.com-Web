@@ -5,13 +5,11 @@ One-time environment prep. Verify each item; do not "assume it's there".
 ## Dependencies
 
 ```bash
-bun install                                   # base
-bun add react-hook-form                       # forms architecture (Zod already installed)
-bun add -d playwright eslint-plugin-jsx-a11y  # capture + a11y gate
-bunx playwright install chromium              # headless browser binary
+npm install                       # base — react-hook-form, playwright, eslint-plugin-jsx-a11y, tsx already in deps
+npx playwright install chromium   # headless browser binary
 ```
 
-Register `eslint-plugin-jsx-a11y` in `eslint.config.mjs` (flat config). Confirm with `bun run lint` on a clean tree.
+Register `eslint-plugin-jsx-a11y` in `eslint.config.mjs` (flat config). Confirm with `npm run lint` on a clean tree.
 
 ## Browser MCP (the exploration eye)
 
@@ -21,7 +19,7 @@ Check whether a Playwright/Chrome DevTools MCP is connected. If not:
 claude mcp add playwright -- npx @playwright/mcp@latest
 ```
 
-then restart the session. If MCP genuinely cannot be added, Phase 1 still works via `scripts/capture.ts` alone + `WebFetch` for text exploration — flag the degraded mode to the user and proceed.
+then restart the session. If MCP genuinely cannot be added, Phase 1 still works via `scripts/orchestrator.mjs` alone + `WebFetch` for text exploration — flag the degraded mode to the user and proceed.
 
 ## Codegraph
 
@@ -42,13 +40,14 @@ Rules: never echo these values into logs, specs, commits, or chat. Ask the user 
 ## Work directories
 
 ```bash
-mkdir -p _webclone/captures _webclone/design-model _webclone/album
+mkdir -p _webclone/captures _webclone/staging _webclone/design-model _webclone/album
 ```
 
 Append to `.gitignore`:
 
 ```
 _webclone/captures/
+_webclone/staging/
 _webclone/album/
 ```
 
@@ -57,9 +56,10 @@ _webclone/album/
 ## Smoke test
 
 ```bash
-bun run dev        # boots on :3000 with the placeholder page
-bun run lint       # 0 errors
-bunx tsc --noEmit  # clean
+npm run dev        # boots on :3000 with the placeholder page
+npm run lint       # 0 errors
+npx tsc --noEmit   # clean
+npm run gates      # GATES GREEN
 ```
 
 All green → Phase 0 done. Any red → stop and fix before recon; every later phase assumes this baseline.

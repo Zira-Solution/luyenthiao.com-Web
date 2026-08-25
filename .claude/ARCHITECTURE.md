@@ -10,7 +10,23 @@ Next.js App Router project for **english-learning-app** — a web app to help us
 - **Project name:** english-learning-app
 - **Primary domain:** English learning / game — TODO, product scope not yet defined
 - **Target audience:** TODO
-- **Key technical constraints:** No backend/API decided yet; package manager is **Bun** (not npm, unlike Zoney.vn-Web)
+- **Key technical constraints:** No backend/API decided yet
+
+## Tech Stack — single source of truth
+
+Every skill, rule, and script in this repo reads its stack from THIS block. Do not restate the stack anywhere else — point here. (Source: Công nghệ đề xuất 15/08/2026.)
+
+| Layer | Choice |
+| --- | --- |
+| Runtime / runner | **Node** (`next dev`, `next build`, `next start`) — NOT Bun |
+| Framework | Next.js 16 App Router + React 19 |
+| Language | TypeScript strict |
+| Styling | Tailwind CSS v4 via `@theme` CSS variables (theme switching) + shadcn/ui |
+| Server data | TanStack Query (`@tanstack/react-query`) |
+| Client state | Zustand — install when first needed, never preinstall |
+| Validation | Zod (+ react-hook-form) |
+| Animation | Per effect type — see `.claude/skills/web-clone/references/animation-matrix.md`; CSS/SVG first |
+| Perf budget | < 300 KB gzip JS per route (beats visual fidelity) · LCP < 2.5s on 4G · ≥ 30 fps on mid-range Android 4 GB |
 
 ## src/ Structure
 
@@ -28,7 +44,7 @@ Currently only `/` (home placeholder, `HelloPlaceholder`) exists. Update this se
 
 ### `src/components/`
 
-- `ui/` — shadcn/ui primitives, reused across the whole project. Import: `@/components/ui`. Currently empty — run `bunx shadcn@latest add <component>` as needed.
+- `ui/` — shadcn/ui primitives, reused across the whole project. Import: `@/components/ui`. Currently empty — run `npx shadcn@latest add <component>` as needed.
 - `common/` — shared layout components (`ThemeProvider`, `HelloPlaceholder`). Import: `@/components/common`
 - `[route-name]/` — page-specific components, named with a route prefix. None yet.
 
@@ -70,12 +86,13 @@ Add project-specific domain types here once the data model is defined.
 
 ## Tooling
 
-- **Package manager** — Bun (`bun install`, `bun run dev`, etc.)
-- **Prettier** — `bun run format`. Config: `.prettierrc`
-- **ESLint** — `bun run lint`. Enforces import order and TypeScript strict rules
-- **TypeScript** — strict mode on, `bunx tsc --noEmit` to type-check
-- **Vitest + React Testing Library** — `bun run test` (single run) / `bun run test:watch`. Config: `vitest.config.mts`, setup: `vitest.setup.ts`. Tests are co-located next to the file they cover (`*.test.tsx`)
-- **shadcn/ui** — add component: `bunx shadcn@latest add <component-name>`
+- **Package manager** — npm on Node (see Tech Stack above; `bun.lock` was removed when the project moved off Bun)
+- **Prettier** — `npm run format`. Config: `.prettierrc`
+- **ESLint** — `npm run lint`. Enforces import order and TypeScript strict rules
+- **TypeScript** — strict mode on, `npx tsc --noEmit` to type-check
+- **Vitest + React Testing Library** — `npm run test` (single run) / `npm run test:watch`. Config: `vitest.config.mts`, setup: `vitest.setup.ts`. Tests are co-located next to the file they cover (`*.test.tsx`)
+- **web-clone gates** — `npm run gates` (runs `.claude/skills/web-clone/scripts/gates.ts` via tsx)
+- **shadcn/ui** — add component: `npx shadcn@latest add <component-name>`
 
 ## .claude/
 

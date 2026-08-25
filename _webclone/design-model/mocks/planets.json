@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ioe",
+    "name": "IOE",
+    "level": "Cấp 1 - 2",
+    "description": "Thách đấu Tiếng Anh",
+    "image": "/clone-assets/media/plannet_IOE.882aae1f.png",
+    "color": "from-blue-500 to-indigo-600",
+    "shadowColor": "#3b82f6"
+  },
+  {
+    "id": "starters",
+    "name": "STARTERS",
+    "level": "Pre A1",
+    "description": "Hành Tinh Kẹo Ngọt",
+    "image": "/clone-assets/media/plannet_KET.60d24f71.png",
+    "color": "from-pink-400 to-rose-500",
+    "shadowColor": "#ec4899"
+  },
+  {
+    "id": "movers",
+    "name": "MOVERS",
+    "level": "A1",
+    "description": "Hành Tinh Biển Xanh",
+    "image": "/clone-assets/media/plannet_TOEFL-JUNIOR.2f455b82.png",
+    "color": "from-cyan-400 to-blue-500",
+    "shadowColor": "#06b6d4"
+  },
+  {
+    "id": "flyers",
+    "name": "FLYERS",
+    "level": "A2",
+    "description": "Hành Tinh Băng Giá",
+    "image": "/clone-assets/media/plannet_KET.60d24f71.png",
+    "color": "from-violet-400 to-purple-600",
+    "shadowColor": "#8b5cf6"
+  },
+  {
+    "id": "toefl_primary",
+    "name": "TOEFL PRIMARY",
+    "level": "A1-B1",
+    "description": "Hành Tinh Robot",
+    "image": "/clone-assets/media/plannet_TOEFL-JUNIOR.2f455b82.png",
+    "color": "from-amber-400 to-orange-500",
+    "shadowColor": "#f59e0b"
+  }
+]

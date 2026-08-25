@@ -3,6 +3,8 @@
 @plugin '@tailwindcss/typography';
 
 @theme inline {
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-baloo), ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -41,6 +43,137 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  
+  /* Web Clone Tokens */
+  --color-brand-primary: #0075fb;
+  --color-brand-on-primary: #ffffff;
+  --color-semantic-success: #52c41a;
+  --color-semantic-warning: #faad14;
+  --color-semantic-danger: #f5222d;
+  --color-semantic-info: #1677ff;
+
+  /* Dashboard Theme Tokens */
+  --color-ribbon-bg: #065f21;
+  --color-ribbon-border: #033b14;
+  --color-ribbon-fold: #044a19;
+  
+  --color-nav-bg: #4a1c82;
+  --color-nav-border: #7c3aed;
+  
+  --color-banner-bg: #fcebb6;
+  --color-banner-text: #695107;
+  --color-challenge-bg: #0f4492;
+  --color-challenge-input-bg: #052b61;
+  
+  --color-dashboard-bg: #2b1055;
+  --color-bug-btn: #facc15;
+  --color-bug-btn-border: #ca8a04;
+  --color-bug-btn-text: #713f12;
+
+  /* Custom Theme Tokens for Web Clone */
+  --color-game-primary-shadow: #BF381C;
+  --color-game-primary-from: #F48E77;
+  --color-game-primary-to: #E36245;
+  --color-game-primary-border: #9C230C;
+  --color-game-primary-hover-from: #F69E8A;
+  --color-game-primary-hover-to: #E86D53;
+
+  --color-game-secondary-shadow: #0b3b7a;
+  --color-game-secondary-from: #3B82F6;
+  --color-game-secondary-to: #1D4ED8;
+  --color-game-secondary-border: #1E3A8A;
+  --color-game-secondary-hover-from: #60A5FA;
+  --color-game-secondary-hover-to: #2563EB;
+
+  --color-game-cta-shadow: #166534;
+  --color-game-cta-from: #4ADE80;
+  --color-game-cta-to: #16A34A;
+  --color-game-cta-border: #14532D;
+  --color-game-cta-hover-from: #86EFAC;
+  --color-game-cta-hover-to: #15803D;
+
+  --color-game-danger-shadow: #7F1D1D;
+  --color-game-danger-from: #F87171;
+  --color-game-danger-to: #DC2626;
+  --color-game-danger-border: #7F1D1D;
+  --color-game-danger-hover-from: #FCA5A5;
+  --color-game-danger-hover-to: #B91C1C;
+
+  --color-game-input-bg: rgba(7, 36, 80, 0.1);
+  --color-game-input-hover-bg: rgba(9, 46, 98, 0.14);
+  --color-game-input-focus-bg: rgba(10, 57, 122, 0.18);
+  --color-game-input-border: #1E3A8A;
+  --color-game-input-focus-border: #3B82F6;
+  --color-game-input-focus-shadow: rgba(7, 36, 80, 0.1);
+  --color-game-input-placeholder: #7BFAFC;
+
+  --color-topbar-blue-bg: #1E1F66;
+  --color-topbar-blue-border: #0F103F;
+  --color-topbar-blue-hover: #2A2B85;
+  --color-topbar-blue-active: #15164B;
+
+  --color-topbar-orange-bg: #FF5D24;
+  --color-topbar-orange-border: #B83E14;
+  --color-topbar-orange-hover: #FF723F;
+  --color-topbar-orange-active: #D64614;
+
+  --color-topbar-yellow-bg: #F59E0B;
+  --color-topbar-yellow-border: #B45309;
+  --color-topbar-yellow-hover: #FBBF24;
+  --color-topbar-yellow-active: #D97706;
+  --color-topbar-yellow-text: #5C3A21;
+
+  --color-topbar-purple-bg: #7C3AED;
+  --color-topbar-purple-border: #5B21B6;
+  --color-topbar-purple-hover: #8B5CF6;
+  --color-topbar-purple-active: #6D28D9;
+  --color-topbar-purple-shadow: #9F1239;
+
+  --color-topbar-auth-bg: #05132d;
+  --color-topbar-auth-border: #1e3a8a;
+  --color-topbar-login-shadow: #1e40af;
+  --color-topbar-login-bg: #3b82f6;
+  --color-topbar-login-border: #1d4ed8;
+  --color-topbar-signup-shadow: #b91c1c;
+  --color-topbar-signup-bg: #ef4444;
+  --color-topbar-signup-border: #991b1b;
+  --color-flag-red: #DA251D;
+
+  --color-yellow-350: #fde047;
+  --color-bottom-nav-bg: rgba(59, 18, 117, 0.25);
+  --color-nav-badge-green-from: #22c55e;
+  --color-nav-badge-green-to: #15803d;
+
+  --color-game-text-dark: #323131;
+  --color-onboarding-btn-from: #00c8ff;
+  --color-onboarding-btn-to: #0075fb;
+  --color-onboarding-btn-border: #006cd2;
+  --color-onboarding-btn-shadow: #0048ff;
+  --color-onboarding-card-shadow: #5eccf7;
+
+  --color-ranking-table-bg: rgba(10, 26, 58, 0.06);
+  --color-ranking-table-border: #1e3a8a;
+  /* Solid background for native <option> elements (rendered on white dropdown) */
+  --color-dropdown-bg: #0a1a3a;
+
+  /* Checkpoint / exam modal tokens (SOURCE from exam.flyer.us) */
+  --color-cp-modal-bg-top: rgba(255, 99, 0, 0.9);
+  --color-cp-modal-bg-bottom: rgba(150, 18, 0, 0.9);
+  --color-cp-tab-track: rgb(131, 20, 5);
+  --color-cp-tab-active: rgb(205, 93, 77);
+  --color-cp-tab-muted: rgb(195, 71, 54);
+  --color-cp-card-bg: rgb(167, 53, 38);
+  --color-cp-card-border: rgb(131, 20, 5);
+  --color-cp-accent-yellow: rgb(255, 244, 130);
+  --color-cp-start-from: #E66549;
+  --color-cp-start-to: #CB300E;
+  --color-cp-start-border: #7a1a00;
+
+  --color-facebook-shadow: #0e4b9c;
+  --color-facebook-bg: #1877F2;
+  --color-facebook-hover: #2081ff;
+
+  --color-page-bg: #16143c;
 }
 
 :root {
@@ -117,10 +250,65 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans tracking-wide;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-wider;
   }
   html {
     @apply font-sans;
     scroll-behavior: smooth;
   }
+}
+
+/* Honor prefers-reduced-motion — gate A7 (Công nghệ đề xuất 15/08/2026 §1.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-24px); }
+}
+
+.clip-path-ribbon-left {
+  clip-path: polygon(100% 0, 100% 100%, 0 100%, 25% 50%, 0 0);
+}
+
+.clip-path-ribbon-right {
+  clip-path: polygon(0 0, 0 100%, 100% 100%, 75% 50%, 100% 0);
+}
+
+.writing-vertical-rl {
+  writing-mode: vertical-rl;
+}
+
+/* Slim, theme-matched scrollbar for the dashboard content area */
+.scrollbar-game {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 58, 237, 0.5) transparent;
+}
+
+.scrollbar-game::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-game::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-game::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.5);
+  border-radius: 9999px;
+}
+
+.scrollbar-game::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.7);
 }
