@@ -2,9 +2,12 @@
 
 import { ChevronDown, Plus, Trophy, BookOpen, School, ClipboardList } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
+import { useState } from "react";
 
 import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH } from "@/constants";
+import { useLogout } from "@/hooks/auth";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth-store";
 
 // Topbar Button Component (3D Game Style)
 const GameNavButton = ({ 
@@ -57,9 +60,17 @@ const GameNavButton = ({
 export function Topbar() {
   const router = useRouter();
   const pathname = usePathname();
+  const status = useAuthStore((state) => state.status);
+  const user = useAuthStore((state) => state.user);
+  const logout = useLogout();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogin = () => {
     router.push("/login");
+  };
+
+  const handleSignup = () => {
+    router.push("/signup");
   };
 
   const handleRanking = () => {
@@ -184,28 +195,66 @@ export function Topbar() {
         {/* ================= CENTER SECTION ================= */}
         {/* Beautiful 3D Auth Control Box */}
         <div className="flex justify-center shrink-0 mx-auto lg:mx-0">
-          <div className="bg-topbar-auth-bg/90 backdrop-blur-md border-3 border-ranking-table-border rounded-2xl p-2 w-[160px] md:w-[180px] flex flex-col gap-1.5 shadow-[0_8px_16px_rgba(0,0,0,0.5)] transform -translate-y-1">
-            {/* Đăng Nhập Button */}
-            <button 
-              onClick={handleLogin}
-              className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
-            >
-              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-topbar-login-shadow -z-10 group-active:bottom-0" />
-              <div className="bg-topbar-login-bg border border-topbar-login-border text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-blue-500">
-                Đăng Nhập
-              </div>
-            </button>
+          {status === "authenticated" && user ? (
+            <div className="relative">
+              <button
+                onClick={() => setMenuOpen((open) => !open)}
+                className="bg-topbar-auth-bg/90 backdrop-blur-md border-3 border-ranking-table-border rounded-2xl px-4 py-2 flex items-center gap-2 shadow-[0_8px_16px_rgba(0,0,0,0.5)] transform -translate-y-1 cursor-pointer"
+              >
+                <span className="text-white font-black text-xs md:text-sm uppercase tracking-wide">
+                  {user.role}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-blue-300" />
+              </button>
 
-            {/* Đăng Ký Button */}
-            <button 
-              className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
-            >
-              <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-topbar-signup-shadow -z-10 group-active:bottom-0" />
-              <div className="bg-topbar-signup-bg border border-topbar-signup-border text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-red-500">
-                Đăng Ký
-              </div>
-            </button>
-          </div>
+              {menuOpen && (
+                <div className="absolute top-full mt-2 right-0 bg-topbar-auth-bg border-2 border-ranking-table-border rounded-xl overflow-hidden shadow-lg z-50 min-w-[160px]">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      router.push("/account/change-password");
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-white text-xs font-bold hover:bg-white/10 transition-colors cursor-pointer"
+                  >
+                    Đổi mật khẩu
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      logout.mutate(undefined, { onSuccess: () => router.push("/") });
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-white text-xs font-bold hover:bg-white/10 transition-colors cursor-pointer"
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="bg-topbar-auth-bg/90 backdrop-blur-md border-3 border-ranking-table-border rounded-2xl p-2 w-[160px] md:w-[180px] flex flex-col gap-1.5 shadow-[0_8px_16px_rgba(0,0,0,0.5)] transform -translate-y-1">
+              {/* Đăng Nhập Button */}
+              <button
+                onClick={handleLogin}
+                className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
+              >
+                <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-topbar-login-shadow -z-10 group-active:bottom-0" />
+                <div className="bg-topbar-login-bg border border-topbar-login-border text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-blue-500">
+                  Đăng Nhập
+                </div>
+              </button>
+
+              {/* Đăng Ký Button */}
+              <button
+                onClick={handleSignup}
+                className="relative group active:translate-y-[2px] transition-all cursor-pointer w-full text-center"
+              >
+                <div className="absolute inset-x-0 -bottom-0.5 h-full rounded-lg bg-topbar-signup-shadow -z-10 group-active:bottom-0" />
+                <div className="bg-topbar-signup-bg border border-topbar-signup-border text-white font-black text-[10px] md:text-xs py-1 px-3 rounded-lg uppercase tracking-wider hover:bg-red-500">
+                  Đăng Ký
+                </div>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* ================= RIGHT SECTION ================= */}

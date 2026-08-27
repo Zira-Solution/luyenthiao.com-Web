@@ -4,6 +4,11 @@ export const APP_DESCRIPTION =
 
 export const ROUTES = {
   HOME: '/',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
+  ACCOUNT_CHANGE_PASSWORD: '/account/change-password',
   ADMIN_EXAM: '/admin/exam',
   ADMIN_EXAM_DETAIL: '/admin/exam/[id]',
   WRITE_TEST: '/write/[slug]',
