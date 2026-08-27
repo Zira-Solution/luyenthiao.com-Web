@@ -11,5 +11,9 @@ export const env = {
     process.env.NODE_ENV === 'production'
       ? getEnvVar('NEXT_PUBLIC_APP_URL')
       : (process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
+  API_URL:
+    process.env.NODE_ENV === 'production'
+      ? getEnvVar('NEXT_PUBLIC_API_URL')
+      : (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api'),
   NODE_ENV: process.env.NODE_ENV ?? 'development',
 } as const

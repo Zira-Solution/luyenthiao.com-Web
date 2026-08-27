@@ -30,3 +30,5 @@ export type {
   SpeakingSlideKind,
   SpeakingTest,
 } from "./speaking"
+
+export * from './auth'
