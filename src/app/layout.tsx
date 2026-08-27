@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/common'
 import { APP_DESCRIPTION, APP_NAME } from '@/constants'
 import { env } from '@/lib/env'
 import { baloo2, nunito } from '@/lib/fonts'
+import { AuthProvider } from '@/providers/auth-provider'
 import { QueryProvider } from '@/providers/query-provider'
 
 import './globals.css'
@@ -31,7 +32,9 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
