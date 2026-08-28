@@ -2,7 +2,7 @@
 
 ## Overview
 
-Next.js App Router project for **english-learning-app** — a web app to help users learn English (exact game/quiz mechanics not yet decided). Scaffolded from the Zoney.vn-Web project's tooling and folder conventions so AI-assisted development stays consistent across both repos. No backend/API is wired up yet — the data layer (API client, schemas, hooks) will be added once the backend is decided.
+Next.js App Router project for **english-learning-app** — a web app to help users learn English (exact game/quiz mechanics not yet decided). Scaffolded from the Zoney.vn-Web project's tooling and folder conventions so AI-assisted development stays consistent across both repos. The backend is a NestJS API (separate repo) — the data layer lives in `src/lib/api-client.ts`, `src/store/auth-store.ts`, `src/providers/auth-provider.tsx`, and `src/hooks/auth/`, covering the full auth surface (register/login/refresh/logout/change-password/forgot-password/reset-password). Non-auth domains still have no backend wiring.
 
 - **Language:** TypeScript (strict mode) — no `.js` or `.jsx` anywhere
 - **Framework:** Next.js App Router
@@ -53,6 +53,9 @@ Currently only `/` (home placeholder, `HelloPlaceholder`) exists. Update this se
 | Route | Directory | Prefix example |
 | ----- | --------- | -------------- |
 | — | — | No routes beyond `/` exist yet. Fill in this table as routes are built. |
+| `/forgot-password` | `src/components/auth` | `forgot-password-form.tsx` |
+| `/reset-password` | `src/components/auth` | `reset-password-form.tsx` |
+| `/account/change-password` | `src/components/auth` | `change-password-form.tsx`, `require-auth.tsx` |
 
 ### `src/actions/`
 
@@ -64,12 +67,12 @@ Project-wide constants. `ROUTES` object defines all paths — currently only `HO
 
 ### `src/hooks/`
 
-Custom React hooks, exported via `index.ts`. Empty for now.
+Custom React hooks, exported via `index.ts`. `auth/` — TanStack Query mutation hooks for the auth API (`useRegister`, `useLogin`, `useLogout`, `useChangePassword`, `useForgotPassword`, `useResetPassword`), re-exported via `auth/index.ts`.
 
 ### `src/lib/`
 
 - `utils.ts` — `cn()` for merging Tailwind classes
-- `env.ts` — type-safe environment variables (`APP_URL`, `NODE_ENV` only — no `API_URL` until a backend exists)
+- `env.ts` — type-safe environment variables (`APP_URL`, `API_URL`, `NODE_ENV`). `api-client.ts` — `apiFetch`/`authFetch` (the latter auto-retries once on a 401 via a silent `/auth/refresh`, with single-flight dedup) and `ApiError`.
 - `fonts.ts` — placeholder, no fonts chosen yet
 
 ### `src/types/`
@@ -78,6 +81,10 @@ Custom React hooks, exported via `index.ts`. Empty for now.
 - `Result<T, E>` — union type for success/error
 
 Add project-specific domain types here once the data model is defined.
+
+### `src/store/`
+
+Zustand client-state stores, `use<Name>Store` convention. `auth-store.ts` holds the session (`accessToken`/`user`/`status`) in memory only, deliberately not persisted.
 
 ## SEO
 
