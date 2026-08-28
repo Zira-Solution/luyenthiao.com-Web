@@ -57,7 +57,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
 
 let refreshPromise: Promise<void> | null = null
 
-function refreshSession(): Promise<void> {
+export function refreshSession(): Promise<void> {
   if (!refreshPromise) {
     refreshPromise = apiFetch<AuthResponse>("/auth/refresh", { method: "POST" })
       .then((data) => {
