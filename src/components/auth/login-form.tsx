@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -21,6 +21,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export function LoginForm(): React.ReactElement {
   const router = useRouter();
   const login = useLogin();
+  const searchParams = useSearchParams();
+  const resetSuccess = searchParams.get("resetSuccess") === "1";
   const {
     register,
     handleSubmit,
@@ -46,6 +48,12 @@ export function LoginForm(): React.ReactElement {
         <h1 className="text-4xl md:text-5xl font-black uppercase text-center text-white tracking-wider mb-8 font-heading text-shadow-game-title">
           ĐĂNG NHẬP
         </h1>
+
+        {resetSuccess && !errorMessage && (
+          <div className="mb-6 p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold text-center text-shadow-game-title">
+            Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại.
+          </div>
+        )}
 
         {errorMessage && (
           <div className="mb-6 p-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-bold text-center text-shadow-game-title">
