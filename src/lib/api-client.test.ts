@@ -115,4 +115,33 @@ describe("apiFetch", () => {
     const result = await apiFetch("/auth/logout", { method: "POST" });
     expect(result).toBeUndefined();
   });
+
+  it("always sends credentials: 'include' so the refresh cookie is attached", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await apiFetch("/auth/login", { method: "POST" });
+
+    const init = fetchMock.mock.calls[0]![1] as RequestInit;
+    expect(init.credentials).toBe("include");
+  });
+
+  it("does not attempt a refresh on a 401 (only authFetch does)", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ message: "Sai tài khoản hoặc mật khẩu" }), { status: 401 }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(apiFetch("/auth/login", { method: "POST" })).rejects.toThrow(ApiError);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const refreshCalls = fetchMock.mock.calls.filter((call) =>
+      String(call[0]).includes("/auth/refresh"),
+    );
+    expect(refreshCalls).toHaveLength(0);
+  });
 });

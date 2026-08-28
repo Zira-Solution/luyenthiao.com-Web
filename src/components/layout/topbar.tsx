@@ -221,7 +221,7 @@ export function Topbar() {
                   <button
                     onClick={() => {
                       setMenuOpen(false);
-                      logout.mutate(undefined, { onSuccess: () => router.push("/") });
+                      logout.mutate(undefined, { onSettled: () => router.push("/") });
                     }}
                     className="w-full text-left px-4 py-2.5 text-white text-xs font-bold hover:bg-white/10 transition-colors cursor-pointer"
                   >

@@ -17,7 +17,7 @@ const signupSchema = z
       .string()
       .min(3, "Tên đăng nhập tối thiểu 3 ký tự")
       .max(50, "Tên đăng nhập tối đa 50 ký tự"),
-    fullName: z.string().min(1, "Vui lòng nhập họ tên"),
+    fullName: z.string().min(1, "Vui lòng nhập họ tên").max(150, "Họ tên tối đa 150 ký tự"),
     email: z.string().email("Email không hợp lệ"),
     password: z.string().min(8, "Mật khẩu tối thiểu 8 ký tự").max(72, "Mật khẩu tối đa 72 ký tự"),
     confirmPassword: z.string(),
