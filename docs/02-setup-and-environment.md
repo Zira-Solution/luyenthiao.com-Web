@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node.js 20 or newer (`engines` in `src/package.json`)
+- Node.js `^22.22.2 || ^24.15.0 || >=26.0.0` (`engines` in `src/package.json`, required by `jsdom` 30 used in tests); CI uses Node 24
 - npm (the lockfile is `src/package-lock.json`)
 
 ## Environment variables

@@ -11,7 +11,7 @@ wired to the backend; exams, history, notebook, ranking, tasks, speaking and wri
 
 | Layer | Choice |
 |---|---|
-| Runtime | Node ≥ 20, npm |
+| Runtime | Node 22.22.2+ or 24.15.0+ (`engines` in `package.json`, required by `jsdom` 30), npm; CI on Node 24 |
 | Framework | Next.js 16.1.6 (App Router), React 19.2.3, `output: 'standalone'` |
 | Language | TypeScript strict |
 | Styling | Tailwind CSS v4 (`@theme` tokens in `app/globals.css`), shadcn-style primitives on `@base-ui/react` |
