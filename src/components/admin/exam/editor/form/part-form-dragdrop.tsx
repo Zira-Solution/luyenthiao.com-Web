@@ -8,7 +8,7 @@ import { Field } from "../editor-field"
 
 import { MediaPickerField } from "@/components/admin/media"
 import { getColorName, isColorCode } from "@/lib/exam"
-import { blankDetail, defaultQuestion } from "@/lib/exam/factories"
+import { blankDetail, defaultQuestion } from "@/lib/exam-factories"
 import { useExamEditorStore } from "@/store/exam-editor-store"
 import type { ExamQuestion, WordBoxItem } from "@/types/exam"
 

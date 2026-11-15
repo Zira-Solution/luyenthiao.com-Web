@@ -12,7 +12,7 @@ import { PartSettingsFields } from "./form/part-settings-fields"
 import { PartPreview } from "./part-preview"
 import { QuestionsJsonEditor } from "./questions-json-editor"
 
-import { blankPart, PART_KIND_LABEL, PART_KINDS } from "@/lib/exam/blank"
+import { blankPart, PART_KIND_LABEL, PART_KINDS } from "@/lib/exam-blank"
 import { useExamEditorStore } from "@/store/exam-editor-store"
 import type { PartKind } from "@/types/exam"
 

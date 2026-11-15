@@ -3,15 +3,14 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
-
+import { ExamModeSelectModal } from "./exam-mode-select-modal";
 import { ExamPlayer } from "./exam-player";
-import { ModeSelectModal } from "./mode-select-modal";
 
 import { loadAttempt, loadExams, normalizeExam, type RawCheckPoint } from "@/lib/exam";
 import examMock from "@/mocks/exam-7778495e.json";
 import type { Exam } from "@/types/exam";
 
-interface CheckpointClientWrapperProps {
+interface ExamCheckpointProps {
   id: string;
   initialData: {
     level: string;
@@ -22,7 +21,7 @@ interface CheckpointClientWrapperProps {
   };
 }
 
-export function CheckpointClientWrapper({ id, initialData }: CheckpointClientWrapperProps) {
+export function ExamCheckpoint({ id, initialData }: ExamCheckpointProps) {
   const [started, setStarted] = useState(false);
   const [reviewRequested, setReviewRequested] = useState(false);
 
@@ -84,7 +83,7 @@ export function CheckpointClientWrapper({ id, initialData }: CheckpointClientWra
       <div className="absolute inset-0 overflow-y-auto font-sans">
         <div className="flex flex-col items-center w-full h-full pt-[30px] max-md:-mt-[90px]">
           <div className="origin-top scale-[0.9] max-md:scale-[0.75]">
-            <ModeSelectModal data={initialData} onStart={() => setStarted(true)} />
+            <ExamModeSelectModal data={initialData} onStart={() => setStarted(true)} />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { gradeExam } from "./grade"
+import { gradeExam } from "./exam-grade"
 
 import type { AnswerMap, Exam } from "@/types/exam"
 

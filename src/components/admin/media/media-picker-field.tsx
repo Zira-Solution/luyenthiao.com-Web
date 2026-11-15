@@ -7,7 +7,7 @@ import { useState, type ReactElement } from "react"
 
 import { MediaBrowserDialog } from "./media-browser-dialog"
 
-import type { MediaKind } from "@/lib/admin/media"
+import type { MediaKind } from "@/lib/admin-media"
 import { cn } from "@/lib/utils"
 
 interface MediaPickerFieldProps {

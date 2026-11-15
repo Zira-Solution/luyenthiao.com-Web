@@ -20,7 +20,6 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import tasksMocks from "@/mocks/tasks.json";
 
-
 const taskIcons = {
   exam: { icon: FileQuestion, color: "text-blue-400 bg-blue-500/10 border-blue-500/30" },
   trophy: { icon: Trophy, color: "text-yellow-350 bg-yellow-500/10 border-yellow-500/30" },

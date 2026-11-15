@@ -6,7 +6,7 @@ import { type ReactElement } from "react"
 import { TextAreaInput, TextInput } from "../editor-field"
 
 import { MediaPickerField } from "@/components/admin/media"
-import { nextLetter } from "@/lib/exam/factories"
+import { nextLetter } from "@/lib/exam-factories"
 import { useExamEditorStore } from "@/store/exam-editor-store"
 import type { WordBoxItem } from "@/types/exam"
 

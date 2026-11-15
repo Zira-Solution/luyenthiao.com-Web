@@ -6,7 +6,7 @@ import { type ReactElement } from "react"
 import { Field, TextInput } from "../editor-field"
 
 import { MediaPickerField } from "@/components/admin/media"
-import { blankDetail, defaultQuestion } from "@/lib/exam/factories"
+import { blankDetail, defaultQuestion } from "@/lib/exam-factories"
 import { cn } from "@/lib/utils"
 import { useExamEditorStore } from "@/store/exam-editor-store"
 import type { ExamDetail, ExamQuestion, WordBoxItem } from "@/types/exam"

@@ -16,7 +16,6 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import notificationsMocks from "@/mocks/notifications.json";
 
-
 const typeMeta = {
   result: { icon: FileText, color: "text-blue-400 bg-blue-500/15 border-blue-500/30" },
   challenge: { icon: Swords, color: "text-red-400 bg-red-500/15 border-red-500/30" },

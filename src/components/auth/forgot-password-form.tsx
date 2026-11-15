@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import { GameButton } from "@/components/ui/game-button";
 import { GameInput } from "@/components/ui/game-input";
-import { useForgotPassword } from "@/hooks/auth";
+import { useForgotPassword } from "@/hooks";
 import { ApiError } from "@/lib/api-client";
 
 const forgotPasswordSchema = z.object({

@@ -7,7 +7,6 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import historyMocks from "@/mocks/history.json";
 
-
 export default function HistoryPage() {
   const router = useRouter();
   

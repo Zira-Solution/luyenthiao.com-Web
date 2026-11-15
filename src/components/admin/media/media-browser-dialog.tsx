@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui"
 import { useMediaLibrary } from "@/hooks/use-media-library"
-import type { MediaItem, MediaKind } from "@/lib/admin/media"
+import type { MediaItem, MediaKind } from "@/lib/admin-media"
 import { cn } from "@/lib/utils"
 
 interface MediaBrowserDialogProps {

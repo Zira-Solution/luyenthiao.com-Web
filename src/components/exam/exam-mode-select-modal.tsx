@@ -14,7 +14,7 @@ interface CheckpointData {
   parts: { name: string; maxScore: number; minutes: number }[];
 }
 
-export function ModeSelectModal({ data, onStart }: { data: CheckpointData; onStart: () => void }) {
+export function ExamModeSelectModal({ data, onStart }: { data: CheckpointData; onStart: () => void }) {
   const router = useRouter();
   const [mode, setMode] = useState<"exam" | "practice">("exam");
   const totalParts = data.parts.length;

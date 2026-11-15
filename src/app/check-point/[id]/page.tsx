@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { CheckpointClientWrapper } from "@/components/checkpoint/checkpoint-client-wrapper";
+import { ExamCheckpoint } from "@/components/exam";
 import checkpointData from "@/mocks/checkpoints.json";
-
 
 type CheckpointKey = keyof typeof checkpointData;
 
@@ -25,5 +24,5 @@ export default async function CheckPointPage({ params }: PageProps) {
   const data = checkpointData[id as CheckpointKey];
   if (!data) notFound();
 
-  return <CheckpointClientWrapper id={id} initialData={data} />;
+  return <ExamCheckpoint id={id} initialData={data} />;
 }

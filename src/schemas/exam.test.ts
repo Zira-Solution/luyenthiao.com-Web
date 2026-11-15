@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest"
 
+import { examSchema } from "./exam"
 
-import { normalizeExam } from "./normalize"
-import { examSchema } from "./schema"
-
+import { normalizeExam } from "@/lib/exam-normalize"
 import examMock from "@/mocks/exam-7778495e.json"
 
 describe("normalizeExam", () => {

@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-import { BottomNav } from "@/components/layout/bottom-nav";
-import { Topbar } from "@/components/layout/topbar";
+import { BottomNav, Topbar } from "@/components/common";
 
 export default function DashboardLayout({
   children,

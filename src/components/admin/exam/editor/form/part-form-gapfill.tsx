@@ -6,7 +6,7 @@ import { useRef, type ReactElement } from "react"
 import { Field } from "../editor-field"
 import { TagsInput } from "../tags-input"
 
-import { blankDetail, defaultQuestion } from "@/lib/exam/factories"
+import { blankDetail, defaultQuestion } from "@/lib/exam-factories"
 import { cn } from "@/lib/utils"
 import { useExamEditorStore } from "@/store/exam-editor-store"
 import type { ExamDetail, ExamQuestion } from "@/types/exam"

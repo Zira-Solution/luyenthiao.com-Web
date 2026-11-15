@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query"
 
-import { fetchMediaLibrary, type MediaKind } from "@/lib/admin/media"
+import { fetchMediaLibrary, type MediaKind } from "@/lib/admin-media"
 
 export function useMediaLibrary(kind: MediaKind) {
   return useQuery({

@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH } from "@/constants";
-import { useLogout } from "@/hooks/auth";
+import { useLogout } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
 

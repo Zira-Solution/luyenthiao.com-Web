@@ -3,9 +3,9 @@
 import { AlertTriangle, CheckCircle2 } from "lucide-react"
 import type { ReactElement } from "react"
 
-import { validateExam } from "@/lib/admin/validate"
+import { validateExam } from "@/lib/admin-validate"
 import type { Exam } from "@/lib/exam"
-import { PART_KIND_LABEL } from "@/lib/exam/blank"
+import { PART_KIND_LABEL } from "@/lib/exam-blank"
 
 interface ValidationPanelProps {
   exam: Exam

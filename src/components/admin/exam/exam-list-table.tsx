@@ -4,7 +4,7 @@ import { Check, Copy, FileDown, FileUp, Pencil, Play, Plus, Trash2 } from "lucid
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, type ReactElement } from "react"
 
-import { createId } from "@/lib/exam/blank"
+import { createId } from "@/lib/exam-blank"
 import { cn } from "@/lib/utils"
 import { useExamStore } from "@/store/exam-store"
 

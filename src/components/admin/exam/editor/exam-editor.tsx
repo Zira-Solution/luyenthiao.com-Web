@@ -9,9 +9,9 @@ import { PartCard } from "./part-card"
 import { ValidationPanel } from "./validation-panel"
 
 import { ROUTES } from "@/constants"
-import { clearDraft, loadDraft, saveDraft } from "@/lib/admin/draft"
+import { clearDraft, loadDraft, saveDraft } from "@/lib/admin-draft"
 import { examSchema, type Exam, type ExamPart, type ExamStructure } from "@/lib/exam"
-import { blankExam, blankPart, blankStructure, structurePartCount } from "@/lib/exam/blank"
+import { blankExam, blankPart, blankStructure, structurePartCount } from "@/lib/exam-blank"
 import { selectDirty, useExamEditorStore } from "@/store/exam-editor-store"
 import { useExamStore } from "@/store/exam-store"
 

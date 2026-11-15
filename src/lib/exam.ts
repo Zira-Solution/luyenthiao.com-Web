@@ -1,10 +1,10 @@
-export { gradeExam, type GradeResult, type DetailGrade } from "./grade"
+export { gradeExam, type GradeResult, type DetailGrade } from "./exam-grade"
 export {
   normalizeExam,
   type RawCheckPoint,
-} from "./normalize"
-export { examSchema } from "./schema"
-export { getColorName, isColorCode } from "./color"
+} from "./exam-normalize"
+export { examSchema } from "@/schemas/exam"
+export { getColorName, isColorCode } from "./exam-color"
 export {
   loadExams,
   saveExams,
@@ -15,6 +15,6 @@ export {
   exportExams,
   importExams,
   type ExamAttempt,
-} from "./storage"
+} from "./exam-storage"
 
 export type { Exam, ExamDetail, ExamPart, ExamQuestion, ExamStructure, PartKind } from "@/types/exam"

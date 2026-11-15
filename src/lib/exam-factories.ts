@@ -1,4 +1,4 @@
-import { createId } from "@/lib/exam/blank"
+import { createId } from "@/lib/exam-blank"
 import type { ExamDetail, ExamQuestion, PartKind } from "@/types/exam"
 
 export function blankDetail(kind: PartKind, label: string): ExamDetail {

@@ -1,5 +1,4 @@
-import { examSchema } from "./schema"
-
+import { examSchema } from "@/schemas/exam"
 import type { AnswerMap, Exam } from "@/types/exam"
 
 

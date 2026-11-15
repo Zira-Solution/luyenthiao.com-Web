@@ -11,7 +11,8 @@ import {
   useState,
 } from "react"
 
-import { PART_RENDERERS, type ReviewContext } from "@/components/exam"
+import { PART_RENDERERS, type ReviewContext } from "./parts"
+
 import { gradeExam, saveAttempt, type ExamAttempt } from "@/lib/exam"
 import type { AnswerMap, Exam } from "@/types/exam"
 

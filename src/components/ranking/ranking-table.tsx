@@ -5,7 +5,6 @@ import { Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import rankingData from "@/mocks/ranking.json";
 
-
 export function RankingTable() {
   return (
     <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2rem] border-3 border-ranking-table-border overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]">

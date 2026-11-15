@@ -5,7 +5,6 @@ import { GraduationCap, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import schoolRankingData from "@/mocks/school-ranking.json";
 
-
 export function SchoolRankingTable() {
   return (
     <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2rem] border-3 border-ranking-table-border overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]">

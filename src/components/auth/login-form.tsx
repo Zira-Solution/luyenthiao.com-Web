@@ -8,7 +8,7 @@ import { z } from "zod";
 
 import { GameButton } from "@/components/ui/game-button";
 import { GameInput } from "@/components/ui/game-input";
-import { useLogin } from "@/hooks/auth";
+import { useLogin } from "@/hooks";
 import { ApiError } from "@/lib/api-client";
 
 const loginSchema = z.object({
