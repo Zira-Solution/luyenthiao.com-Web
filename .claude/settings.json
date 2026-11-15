@@ -1,49 +1,28 @@
 {
   "hooks": {
     "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rm -f /tmp/codegraph-used && echo '[CODEGRAPH] Session started — flag reset. Codegraph must be queried before using Read/Glob/Grep on project files.'",
-            "statusMessage": "Resetting Codegraph session flag..."
-          }
-        ]
-      }
+      { "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.mjs\" SessionStart", "timeout": 10 }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.mjs\" UserPromptSubmit", "timeout": 10 }] }
     ],
     "PreToolUse": [
       {
-        "matcher": "mcp__codegraph__.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "touch /tmp/codegraph-used && node -e \"process.exit(0)\"",
-            "statusMessage": "Codegraph query tracked..."
-          }
-        ]
-      },
-      {
-        "matcher": "Read|Glob|Grep",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node -e \"const c=[]; process.stdin.on('data',d=>c.push(d)); process.stdin.on('end',()=>{ const i=JSON.parse(Buffer.concat(c).toString()); const t=i.tool_name; const input=i.tool_input||{}; const path=(input.file_path||input.pattern||input.query||''); const skip=['.claude','CLAUDE.md','ARCHITECTURE.md','node_modules','.git','package.json','tsconfig.json','.env']; if(skip.some(p=>path.includes(p))){ process.exit(0); } const fs=require('fs'); const used=fs.existsSync('/tmp/codegraph-used'); if(!used){ console.log(JSON.stringify({systemMessage:'[CODEGRAPH BLOCK] Bạn đang dùng '+t+' trên project files mà chưa query Codegraph. DỪNG LẠI. Query Codegraph trước, sau đó thử lại.'})); process.exit(2); } console.log(JSON.stringify({systemMessage:'[CODEGRAPH OK] Codegraph đã được query trong phiên này. '+t+' được phép dùng làm fallback.'})); process.exit(0); });\"",
-            "statusMessage": "Checking Codegraph usage..."
-          }
-        ]
+        "matcher": "Read|Grep|Glob|Bash|Edit|Write|MultiEdit|NotebookEdit|Agent|Task|mcp__codegraph__.*",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.mjs\" PreToolUse", "timeout": 10 }]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "mcp__codegraph__.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "touch /tmp/codegraph-used && node -e \"process.exit(0)\"",
-            "statusMessage": "Codegraph usage flagged..."
-          }
-        ]
+        "matcher": "Read|Bash|Skill|Edit|Write|MultiEdit|NotebookEdit|mcp__codegraph__.*",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.mjs\" PostToolUse", "timeout": 10 }]
       }
+    ],
+    "SubagentStart": [
+      { "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.mjs\" SubagentStart", "timeout": 10 }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.mjs\" Stop", "timeout": 10 }] }
     ]
   }
 }
