@@ -60,7 +60,7 @@ luyenthiao.com-Web/
    │  ├─ tests/*.mjs          # vendored + new tests (section 8)
    │  └─ VENDORED.md          # source, date, adaptations, resync procedure
    ├─ settings.json           # rewritten: registers the vendored guard only
-   ├─ skills/                 # 34 skills (section 7)
+   ├─ skills/                 # 35 skills (section 7)
    └─ superpowers/{specs,plans}/   # unchanged location
 ```
 
@@ -205,7 +205,7 @@ Known limitation: the vendored guard is active only when Claude Code is started 
 
 ## 7. Skills
 
-Keep 34 skills: the current 35 minus `web-clone`, plus `graphify` copied from
+Keep 35 skills: the current 35 minus `web-clone`, plus `graphify` copied from
 `~/.claude/skills/graphify`. Before removal, `web-clone` is archived (section 3).
 
 Mirror rule (host `tooling-and-skills.md` §3): every project skill also exists at
@@ -227,7 +227,7 @@ overwrite; list the difference and ask the owner.
    `.claude/rules/*.md`, `.claude/agents/*.md` exists; grep finds no `web-clone`, `gates`,
    `/tmp/codegraph`, `hooks/auth`, `lib/exam/`, `components/checkpoint`, `components/layout` in those
    files.
-5. Skills: 34 directories each with a `SKILL.md`; mirrors present on the host or differences reported.
+5. Skills: 35 directories each with a `SKILL.md`; mirrors present on the host or differences reported.
 6. App unchanged: `tsc` still exactly the 15 known errors, `npm test` 3 files / 22 tests, lint no new
    entries.
 7. Owner opens a new Claude Code session inside the repo and confirms CLAUDE.md/AGENTS.md load and no

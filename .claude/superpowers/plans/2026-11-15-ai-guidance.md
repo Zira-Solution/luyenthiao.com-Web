@@ -716,7 +716,7 @@ ls "$ARCH/.claude/skills/web-clone" && git rm -r -q .claude/skills/web-clone && 
 cp -r "$HOSTC/skills/graphify" "$REPO/.claude/skills/graphify"
 ls "$REPO/.claude/skills" | wc -l; for d in "$REPO"/.claude/skills/*/; do [ -f "$d/SKILL.md" ] || echo "NO SKILL.md $d"; done
 ```
-Expected: `34`, no `NO SKILL.md` lines.
+Expected: `35`, no `NO SKILL.md` lines.
 - [ ] **Step 3: Mirror to the host**
 ```bash
 for d in "$REPO"/.claude/skills/*/; do n=$(basename "$d"); t="$HOSTC/skills/$n";
