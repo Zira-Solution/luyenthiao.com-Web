@@ -2,7 +2,7 @@
 
 import type { ReactElement } from "react"
 
-import { PART_RENDERERS } from "@/components/exam"
+import { PART_RENDERERS } from "@/components/exam/parts"
 import type { ExamPart } from "@/types/exam"
 
 interface PartPreviewProps {
