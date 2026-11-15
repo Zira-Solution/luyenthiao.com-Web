@@ -3,7 +3,6 @@ import nextConfig from 'eslint-config-next'
 import * as importX from 'eslint-plugin-import-x'
 
 const eslintConfig = [
-  { ignores: ['.claude/**'] },
   ...nextConfig,
   {
     plugins: { 'import-x': importX, '@typescript-eslint': tsPlugin },
