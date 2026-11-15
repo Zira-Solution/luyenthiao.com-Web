@@ -7,10 +7,10 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    env:
-      # Placeholder values: src/lib/env.ts requires both variables in production builds.
-      NEXT_PUBLIC_APP_URL: http://localhost:3000
-      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+    # No NEXT_PUBLIC_* values here on purpose. Setting placeholders hid the 2026-11-15 deploy
+    # failure: CI was green while the production build died on a host with no env vars.
+    # The build must survive missing public env vars (src/lib/env.ts falls back), so CI runs it
+    # the same way the deploy host does.
     defaults:
       run:
         working-directory: src

@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node.js `^22.22.2 || ^24.15.0 || >=26.0.0` (`engines` in `src/package.json`, required by `jsdom` 30 used in tests); CI uses Node 24
+- Node.js `^22.22.2 || ^24.15.0` (`engines` in `src/package.json`; the lower bounds are what `jsdom` 30 needs for tests). CI, Vercel and local development all use Node 24
 - npm (the lockfile is `src/package-lock.json`)
 
 ## Environment variables
@@ -15,8 +15,9 @@ Copy `src/.env.example` to `src/.env.local` and adjust. Next.js loads `.env*` fi
 | `NEXT_PUBLIC_APP_URL` | Public URL of this web app | `http://localhost:3000` |
 | `NEXT_PUBLIC_API_URL` | Base URL of the backend API | `http://localhost:3000/api` |
 
-Both variables are required when `NODE_ENV=production` (`npm run build`, `npm start`): `src/lib/env.ts`
-throws if either is missing. CI sets placeholder values in `.github/workflows/ci.yml`.
+Neither variable is required for the build: `src/lib/env.ts` falls back (production `APP_URL`
+defaults to `https://luyenthiao.com`, `API_URL` to the dev backend with a warning). Set them so the
+deployed app points at the real hosts — see `docs/04-deploy-vercel.md`.
 
 The `.env.example` default `NEXT_PUBLIC_API_URL=http://localhost:3000/api` points at this app itself. To use `luyenthiao.com-Backend` locally, run it (it listens on port 3005) and set `NEXT_PUBLIC_API_URL=http://localhost:3005/api` in `src/.env.local`. The backend accepts requests only from its `CORS_ORIGIN` (default `http://localhost:3000`), so keep the app on port 3000 or add your origin to the backend `.env`.
 

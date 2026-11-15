@@ -30,8 +30,9 @@ wired to the backend; exams, history, notebook, ranking, tasks, speaking and wri
   persisted; `providers/auth-provider.tsx` bootstraps it; `providers/query-provider.tsx` provides TanStack Query.
 - Route handler `app/api/admin/media/route.ts` lists files under `public/clone-assets` (resolved from
   `process.cwd()`, i.e. `src/`) for the admin media picker.
-- `lib/env.ts`: `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_APP_URL` default to localhost in development and are
-  required in production (it throws if missing).
+- `lib/env.ts`: `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_APP_URL` always fall back and never throw — a
+  throw here would crash the client (it reaches `api-client.ts`) and break `next build`. See
+  `src/lib/env.test.ts` and `docs/04-deploy-vercel.md`.
 - `src/.env.example` sets `NEXT_PUBLIC_API_URL=http://localhost:3000/api`, which points at this app itself. The backend dev server listens on port 3005 (`luyenthiao.com-Backend` README), so set `NEXT_PUBLIC_API_URL=http://localhost:3005/api` in `src/.env.local` to reach it.
 - The backend allows only `CORS_ORIGIN` (default `http://localhost:3000`, see the backend `.env.example`); if the app runs on another port, credentialed auth calls fail CORS — add that origin to the backend `.env` or free port 3000.
 
