@@ -88,6 +88,13 @@ describe("speakingTestMock", () => {
       }
       if (q.kind === "mic-answer") {
         expect(q.pointer).toBeDefined()
+        // The pin disc is r=10 and its spike reaches ~12.7 units up-left of the centre, in the
+        // 0..100 overlay of `PointerPrompt`. Keep the whole pin inside that square so it stays
+        // on the picture.
+        expect(q.pointer && q.pointer.top).toBeGreaterThanOrEqual(13)
+        expect(q.pointer && q.pointer.top).toBeLessThanOrEqual(90)
+        expect(q.pointer && q.pointer.left).toBeGreaterThanOrEqual(13)
+        expect(q.pointer && q.pointer.left).toBeLessThanOrEqual(90)
       }
       if (q.kind === "mic-zoom") {
         expect(q.cards?.length).toBe(4)

@@ -132,10 +132,10 @@ function PointerPrompt({
         ) : null}
         {pointer ? (
           <svg viewBox="0 0 100 100" className="pointer-events-none absolute inset-0 h-full w-full">
-            <g
-              transform={`translate(${pointer.left} ${pointer.top}) rotate(-45)`}
-              className="origin-center"
-            >
+            {/* No `origin-center`: it sets transform-origin to the viewport centre (50,50), so the
+                rotate also swung the pin away from `pointer` — with the default SVG origin (0 0)
+                the pin sits exactly at (left, top) and only the spike rotates. */}
+            <g transform={`translate(${pointer.left} ${pointer.top}) rotate(-45)`}>
               <circle r={10} fill="#ff4d4f" />
               <polygon points="-4,-14 4,-14 0,-2" fill="#ff4d4f" />
             </g>
