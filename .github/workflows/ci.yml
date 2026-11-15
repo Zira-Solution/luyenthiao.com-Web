@@ -7,9 +7,14 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      # Placeholder values: src/lib/env.ts requires both variables in production builds.
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
     defaults:
       run:
         working-directory: src
+    # Only the Test step gates this job until phase 3; see docs/03-known-issues.md.
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
