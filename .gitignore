@@ -48,10 +48,6 @@ volumes/
 .codegraph/*
 .superpowers/
 
-# Webclone
-_webclone/captures/
-_webclone/album/
-_webclone/
 # Code graph indexes
 graphify-out/
 .codegraph/
