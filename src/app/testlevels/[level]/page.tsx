@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { LevelHeader, LevelMap } from "@/components/testlevels";
-
-import levelData from "../../../../_webclone/design-model/mocks/testlevels.json";
+import levelData from "@/mocks/testlevels.json";
 
 type LevelKey = keyof typeof levelData;
 

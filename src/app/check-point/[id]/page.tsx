@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 
-import checkpointData from "../../../../_webclone/design-model/mocks/checkpoints.json";
-
 import { CheckpointClientWrapper } from "@/components/checkpoint/checkpoint-client-wrapper";
+import checkpointData from "@/mocks/checkpoints.json";
+
 
 type CheckpointKey = keyof typeof checkpointData;
 

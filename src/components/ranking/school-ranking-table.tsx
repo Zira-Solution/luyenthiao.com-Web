@@ -2,9 +2,9 @@
 
 import { GraduationCap, Trophy } from "lucide-react";
 
-import schoolRankingData from "../../../_webclone/design-model/mocks/school-ranking.json";
-
 import { cn } from "@/lib/utils";
+import schoolRankingData from "@/mocks/school-ranking.json";
+
 
 export function SchoolRankingTable() {
   return (

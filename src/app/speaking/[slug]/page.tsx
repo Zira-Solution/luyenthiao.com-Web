@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import speakingDataJson from "../../../../_webclone/design-model/mocks/speaking.json";
-
 import { SpeakingFlow } from "@/components/speaking";
+import speakingDataJson from "@/mocks/speaking.json";
 import type { SpeakingTest } from "@/types/speaking";
 
 

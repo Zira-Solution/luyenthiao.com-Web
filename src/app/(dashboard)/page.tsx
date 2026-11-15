@@ -6,9 +6,9 @@ import { useState, useRef } from "react";
 import { EffectCoverflow, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import planetsData from "../../../_webclone/design-model/mocks/planets.json";
-
 import { cn } from "@/lib/utils";
+import planetsData from "@/mocks/planets.json";
+
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 

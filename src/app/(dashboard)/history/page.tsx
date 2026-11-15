@@ -4,9 +4,9 @@ import { Search, ChevronLeft, Shield, Filter, Calendar, Award, BookOpen, CheckCi
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import historyMocks from "../../../../_webclone/design-model/mocks/history.json";
-
 import { cn } from "@/lib/utils";
+import historyMocks from "@/mocks/history.json";
+
 
 export default function HistoryPage() {
   const router = useRouter();

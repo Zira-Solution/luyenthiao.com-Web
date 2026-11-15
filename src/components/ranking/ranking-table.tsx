@@ -2,9 +2,9 @@
 
 import { Trophy } from "lucide-react";
 
-import rankingData from "../../../_webclone/design-model/mocks/ranking.json";
-
 import { cn } from "@/lib/utils";
+import rankingData from "@/mocks/ranking.json";
+
 
 export function RankingTable() {
   return (

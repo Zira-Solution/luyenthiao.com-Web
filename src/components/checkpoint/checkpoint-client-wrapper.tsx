@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
-import examMock from "../../../_webclone/design-model/mocks/exam-7778495e.json";
 
 import { ExamPlayer } from "./exam-player";
 import { ModeSelectModal } from "./mode-select-modal";
 
 import { loadAttempt, loadExams, normalizeExam, type RawCheckPoint } from "@/lib/exam";
+import examMock from "@/mocks/exam-7778495e.json";
 import type { Exam } from "@/types/exam";
 
 interface CheckpointClientWrapperProps {

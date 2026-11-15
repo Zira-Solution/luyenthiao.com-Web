@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import writingDataJson from "../../../../_webclone/design-model/mocks/writing.json";
-
 import { WritingFlow } from "@/components/writing";
+import writingDataJson from "@/mocks/writing.json";
 import type { WritingTest } from "@/types/writing";
 
 

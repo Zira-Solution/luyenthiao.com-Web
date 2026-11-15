@@ -17,9 +17,9 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import tasksMocks from "../../../../_webclone/design-model/mocks/tasks.json";
-
 import { cn } from "@/lib/utils";
+import tasksMocks from "@/mocks/tasks.json";
+
 
 const taskIcons = {
   exam: { icon: FileQuestion, color: "text-blue-400 bg-blue-500/10 border-blue-500/30" },
