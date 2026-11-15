@@ -48,8 +48,7 @@ luyenthiao.com-Web/
    │  ├─ tooling.md           # port of ~/.claude/rules/tooling-and-skills.md
    │  ├─ verification.md      # port of Zoney.vn/.claude/rules/kiem-chung.md
    │  ├─ agent-roles.md       # port of Zoney.vn/.claude/rules/phan-vai-agent.md
-   │  ├─ extension-fallback.md   # kept, updated
-   │  └─ skill-fallback-table.md # kept, updated
+   │  └─ (extension-fallback.md, skill-fallback-table.md moved to .claude/docs/ — read on demand; rules without `paths` load every session)
    ├─ agents/
    │  ├─ implementer.md       # port of Zoney.vn/.claude/agents/implementer.md (model: sonnet)
    │  ├─ spec-reviewer.md     # port (model: sonnet)
@@ -107,8 +106,8 @@ placeholder text. Where a fact is uncertain it is omitted rather than guessed.
   exists; Sonnet implements); one subagent per task.
 - Reference table "read when": `.claude/ARCHITECTURE.md` (before any code task), each rule file,
   `docs/03-known-issues.md`.
-- Agents table (name, model, when) for the four agents; note that editing an agent file requires a new
-  session.
+- Agents table (name, model, when) for the four agents; note that agent edits are hot-reloaded (restart only once, after
+  `.claude/agents/` is first created).
 - Guard note: what the vendored guard enforces, `#quick`, kill switch, `GUARD_PROJECT=0`, and that it
   is silent when a user-level guard is installed.
 - Footer rule: the file must stay ≤ 200 lines; new rules go to `.claude/rules/<name>.md` plus one table
@@ -141,7 +140,7 @@ placeholder text. Where a fact is uncertain it is omitted rather than guessed.
 | `tooling.md` | Port of the host `tooling-and-skills.md`, with paths pointing to the vendored guard (`node .claude/hooks/guard.mjs status|decline`), skill install locations (`.claude/skills/<name>` + `~/.claude/skills/<name>`), token economy. |
 | `verification.md` | Port of Zoney `kiem-chung.md`, translated to English and adapted to Next (real path = the running app via `npm run dev`, browser or Playwright). |
 | `agent-roles.md` | Port of Zoney `phan-vai-agent.md`, translated, models per host routing rules. |
-| `extension-fallback.md`, `skill-fallback-table.md` | Kept; references updated (no web-clone, graphify order). |
+| `extension-fallback.md`, `skill-fallback-table.md` | Kept, moved to `.claude/docs/` (owner decision 2026-11-15: rules without `paths` frontmatter load at every session start); `coding.md` and `animation-matrix.md` get `paths: ["src/**"]`. |
 
 ### 4.5 Agents
 

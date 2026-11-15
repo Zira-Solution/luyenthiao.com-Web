@@ -1,40 +1,71 @@
-# CLAUDE.md — AI Agent Guide
+@AGENTS.md
 
-## Language
+# CLAUDE.md — Claude Code layer
 
-Always respond in **Vietnamese** for all communication: explanations, responses, reports.
+`AGENTS.md` above is shared by every agent. This file adds what only Claude Code has.
 
-## Honesty
+## Superpowers — required for every task
 
-- Never fabricate knowledge. If uncertain → search, read files, or ask the user.
-- Never present speculation as fact. If unavoidable, prefix with:
-  > ⚠️ **[SPECULATION]:** ... _(state the basis, not yet verified)_
+Invoke the matching superpowers skill before writing code or files: brainstorming → writing-plans →
+subagent-driven-development (or executing-plans); systematic-debugging for bugs;
+verification-before-completion before claiming done. "Simple task" is not a reason to skip.
 
-## Environment
+Specs and plans go to `.claude/superpowers/specs/` and `.claude/superpowers/plans/` (this overrides the skill default `docs/superpowers/`). A skill step that says "commit" still needs the owner's explicit approval (`.claude/rules/git.md`).
 
-- Running via **CLI** → skills, hooks, and MCP tools all work normally.
-- Running via **IDE extension** → see `.claude/rules/extension-fallback.md`.
-- This is set explicitly per session, not inferred. If unset, ask the user once at session start rather than guessing.
+## Setup
 
-## References (read before starting work)
+Prerequisites: superpowers plugin (`/plugin install superpowers@claude-plugins-official`), `npm i -g @colbymchenry/codegraph`, `uv tool install graphifyy` (or `pip install graphifyy`), Node ≥ 20.
+Start Claude Code inside `luyenthiao.com-Web`: this repo's hooks, settings and agents do not load when the session starts at the workspace root, and its CLAUDE.md and rules then load only on demand.
 
-- `.claude/ARCHITECTURE.md` — project structure, before any code task
-- `.claude/rules/coding.md` — coding rules
-- `.claude/rules/workflow.md` — workflow process
-- `.claude/skills/` — supplementary skills, invoke as relevant, no limit on combinations
+## Hard rules
 
-## Process
+1. **Explore in order:** `graphify query "<question>" --budget 1500` (map) → `codegraph_explore`
+   (symbols, `projectPath` = this repo) → raw reads only for what is still missing. Skip a step whose tool is not installed (`.claude/rules/tooling.md` §1). Run graphify from the repo root (or pass `--graph <repo>/graphify-out/graph.json`).
+2. **Two-stage review** after every task: spec compliance first, then code quality — separate passes.
+3. **Role split:** the main (Opus) session analyses, writes specs and plans, and supervises; once a plan
+   exists it does not write code — it dispatches agents. See `.claude/rules/agent-roles.md`.
+4. **One subagent per task**; never two implementers in parallel on the same tree.
 
-1. Analyze project context
-2. Plan before acting (Plan Mode for large changes) — wait for approval before writing code
-3. Verify results after execution; confirm existing logic is not broken
+## Rules and docs
+
+Files in `.claude/rules/` load automatically: `coding.md` and `animation-matrix.md` only when working under `src/` (`paths` frontmatter), the others at every session start. Files in `.claude/docs/` and `docs/` are read on demand. A path-scoped rule loads only when a matching file is read or edited — reviewers read `.claude/rules/coding.md` explicitly.
+
+| File | When |
+|---|---|
+| `.claude/ARCHITECTURE.md` | Before any task that touches code |
+| `.claude/rules/coding.md` | Writing or reviewing code |
+| `.claude/rules/workflow.md` | Planning work, adding pages or shadcn components |
+| `.claude/rules/animation-matrix.md` | Adding motion |
+| `.claude/rules/verification.md` | Before saying "done" |
+| `.claude/rules/agent-roles.md` | Before dispatching agents |
+| `.claude/rules/git.md` | Before any git command |
+| `.claude/rules/research.md` | Questions about libraries, APIs, errors |
+| `.claude/rules/tooling.md` | Missing tooling, new skills/plugins, token economy |
+| `.claude/docs/extension-fallback.md` | Running in an IDE extension where skills/hooks/MCP are unavailable |
+| `docs/03-known-issues.md` | Before trusting `tsc`, lint or build results |
+
+## Agents
+
+| Agent | Model | Use for |
+|---|---|---|
+| `implementer` | Sonnet | Writing code from an approved plan |
+| `spec-reviewer` | Sonnet | Review stage 1: does the change match the spec/plan |
+| `code-reviewer` | Opus | Review stage 2: quality, logic, edge cases |
+| `runner` | Sonnet | Running commands with long output and returning a summary |
+
+Definitions: `.claude/agents/*.md`. Edits are hot-reloaded; restart only once, after `.claude/agents/` is created for the first time.
+
+## Guard hook
+
+`.claude/hooks/guard.mjs` (registered in `.claude/settings.json`) enforces the exploration order, the
+brainstorm-before-edit rule and tooling setup. Add `#quick` to a prompt to bypass the brainstorm gate for a
+trivial edit. It is silent when a user-level guard is installed or `GUARD_PROJECT=0`. Kill switch:
+`~/.claude/state/guard/disabled`. Details: `.claude/hooks/VENDORED.md`.
+
+## Skills
+
+Project skills live in `.claude/skills/`: UI and Next (`frontend-design`, `ui-ux-pro-max`, `tailwind-4-docs`, `vercel-react-best-practices`, `performance`, `html5-seo`, `seo-metadata`), design taste (`design-taste-frontend`, `high-end-visual-design`, `minimalist-ui`, …), animation (`animate`, `framer-motion-*`, `gsap-*`), `graphify`, `full-output-enforcement`. Invoke every relevant one; there is no limit on combining them.
 
 ---
 
-## Hard Rules (non-negotiable, apply to every task regardless of size)
-
-1. **Codegraph before code.** Any read of project data — a file path, a component, an import, a single line — goes through Codegraph first. Never substitute `Read` / `Grep` / `Glob` for a Codegraph query. If Codegraph is unresponsive: `codegraph init`. If not installed: `npm i -g @colbymchenry/codegraph && codegraph install`, then re-run `codegraph init` and wait for indexing before continuing.
-2. **Spec before code.** No implementation until the design is reviewed and approved by the user.
-3. **Brainstorm before anything, even simple tasks.** Simple tasks are where unexamined assumptions cause the most mistakes. Never skip this because a task "looks trivial."
-4. **One subagent per task** when running parallel execution — no cross-task context pollution.
-5. **Two-stage review on completion:** first spec compliance (does output match the agreed design?), then code quality (is the implementation correct and clean?).
+This file must stay under 200 lines. New rules go into `.claude/rules/<name>.md` — add `paths` frontmatter unless the rule applies to every task — plus one row in the table.
