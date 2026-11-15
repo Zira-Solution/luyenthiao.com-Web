@@ -1,3 +1,7 @@
+---
+paths:
+  - "src/**"
+---
 # Animation Matrix — pick tech by effect type, never one library for everything
 
 Source of truth: the technology proposal of 15/08/2026, §1.2–1.3. The stack block in `.claude/ARCHITECTURE.md` points here.

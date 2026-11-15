@@ -50,4 +50,4 @@ State explicitly when building UI: typography choices, color/spacing decisions, 
 
 ## Skill-specific inline behavior
 
-See `.claude/rules/skill-fallback-table.md` for the per-skill reference table (tailwind-4-docs, seo-metadata, animate, gsap-react, etc.) — kept separate since it's lookup data, not a rule to hold in working memory for every task.
+See `.claude/docs/skill-fallback-table.md` for the per-skill reference table (tailwind-4-docs, seo-metadata, animate, gsap-react, etc.) — kept separate since it's lookup data, not a rule to hold in working memory for every task.

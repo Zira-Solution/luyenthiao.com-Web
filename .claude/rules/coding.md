@@ -1,3 +1,7 @@
+---
+paths:
+  - "src/**"
+---
 # Coding Rules
 
 ## Language
