@@ -23,5 +23,21 @@ npm test            # Vitest
 npm run build       # production build
 ```
 
+## Migrating from the old layout
+
+Until 2026-11-15 the Next.js project lived at the repository root. After pulling this layout:
+
+1. Move a local `.env.local` (or `.env`) from the repository root to `src/`.
+2. Delete the leftover root `node_modules/`, `.next/`, `next-env.d.ts` and `tsconfig.tsbuildinfo`,
+   then run `npm ci` in `src/`. A stale root `node_modules/` can hide a missing install in `src/`.
+3. Point your editor's ESLint/TypeScript tooling at `src/` (for example, open `src/` as the
+   workspace folder).
+4. Rebase open branches: `lib/exam/*` became `lib/exam-*.ts` and `schemas/exam.ts`,
+   `lib/admin/*` became `lib/admin-*.ts`, `hooks/auth/*` moved to `hooks/`,
+   `components/layout/*` moved to `components/common/`, and `components/checkpoint/*` moved to
+   `components/exam/` (`CheckpointClientWrapper` is now `ExamCheckpoint`, `ModeSelectModal` is now
+   `ExamModeSelectModal`).
+5. Any deployment must use `src/` as the project root.
+
 See `docs/02-setup-and-environment.md` for environment variables and
 `docs/03-known-issues.md` before relying on `tsc`/`lint`/`build` results (only tests gate CI for now).
