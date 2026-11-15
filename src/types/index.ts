@@ -32,3 +32,6 @@ export type {
 } from "./speaking"
 
 export * from './auth'
+export type { Notification, NotificationType } from "./notification"
+export type { SchoolRankingEntry } from "./ranking"
+export type { Task, TaskIcon, TaskRewardType } from "./task"
