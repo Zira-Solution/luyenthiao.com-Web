@@ -51,7 +51,7 @@ errors). Do **not** run commands that edit files. Never run git write commands, 
 
 When the spec says "must show X", do not only read the code: exercise the running app as in
 `.claude/rules/verification.md` Tier 2. Check port 3000 first
-(`netstat -ano | grep ":3000 " | grep LISTENING`); if it is busy, do not kill it: use that server
+(Windows (Git Bash): `netstat -ano | grep ":3000 " | grep LISTENING`; macOS/Linux: `lsof -iTCP:3000 -sTCP:LISTEN`); if it is busy, do not kill it: use that server
 only if the user started it for this purpose, otherwise report. Start `npm run dev` in `src/` in
 the background, note the port Next prints, and stop only the server you started. You have no
 browser tool: verify over HTTP (curl the route, check the status and the SSR HTML) and report

@@ -44,6 +44,6 @@ The repository ships AI agent guidance (`AGENTS.md`, `CLAUDE.md`, `.claude/`). T
 - Start Claude Code inside `luyenthiao.com-Web` (the guard in `.claude/hooks/` is not loaded from a
   parent folder).
 - Install the superpowers plugin: `/plugin install superpowers@claude-plugins-official`.
-- Install the code-graph tools: `npm i -g @colbymchenry/codegraph` and `uv tool install graphifyy`
+- Install the code-graph tools: `npm i -g @colbymchenry/codegraph`, then `codegraph install` (choose Claude Code) to register the `codegraph` MCP server; and `uv tool install graphifyy`
   (or `pip install graphifyy`). On first use the guard asks to index the repo, or lets you decline.
 - Node ≥ 20 is required for the guard hooks.

@@ -67,6 +67,6 @@ answer.
 
 ## Environment notes
 
-- The shell is Git Bash on Windows. Use Unix syntax (`/dev/null`, forward slashes, `$VAR`).
+- On Windows the shell is Git Bash. Use Unix syntax (`/dev/null`, forward slashes, `$VAR`).
 - Node is a Windows binary: pass `E:/...`-style absolute paths to `node`, not Git Bash temp-directory paths.
 - Run npm in `src/`: `cd src && npm test`, `npm run lint`, `npx tsc --noEmit`.

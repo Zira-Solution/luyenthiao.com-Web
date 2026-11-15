@@ -12,7 +12,7 @@
 3. **Write test cases before implementing** — use `superpowers:test-driven-development` skill
 4. **Execute** — use `superpowers:executing-plans` or `superpowers:subagent-driven-development`
 5. **Verify** — see `.claude/rules/verification.md`
-6. **Review** — use `superpowers:requesting-code-review` skill
+6. **Review in two stages** — `spec-reviewer`, then `code-reviewer` (`.claude/rules/agent-roles.md`)
 
 ## Skill Selection Guide
 

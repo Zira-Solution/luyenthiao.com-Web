@@ -49,7 +49,7 @@ refreshes graphs in the background at the end of each turn (`graphify update --f
 ## 5. Gates and escape hatches
 - Brainstorm gate: editing project files in the main agent requires `superpowers:brainstorming`
   (or writing-plans / executing-plans / systematic-debugging / subagent-driven-development) in the session,
-  invoked as a Skill or typed as a slash command. Exempt: `docs/superpowers/**`, `.claude/superpowers/**`, `.gitignore`, files outside projects.
+  invoked as a Skill or typed as a slash command. Exempt: `docs/superpowers/**`, `.claude/superpowers/**` (the `.claude/superpowers/**` exemption exists only in the vendored guard; a user-level guard may still gate it), `.gitignore`, files outside projects.
 - `#quick` in a prompt bypasses the brainstorm gate for that turn (trivial edits only).
 - The same call denied 3 times by the same gate is let through with a warning: treat that as a
   signal to fix the workflow, not as permission to skip it.

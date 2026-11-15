@@ -14,7 +14,7 @@ Specs and plans go to `.claude/superpowers/specs/` and `.claude/superpowers/plan
 
 ## Setup
 
-Prerequisites: superpowers plugin (`/plugin install superpowers@claude-plugins-official`), `npm i -g @colbymchenry/codegraph`, `uv tool install graphifyy` (or `pip install graphifyy`), Node ≥ 20.
+Prerequisites: superpowers plugin (`/plugin install superpowers@claude-plugins-official`), `npm i -g @colbymchenry/codegraph`, then `codegraph install` (choose Claude Code) to register the `codegraph` MCP server, `uv tool install graphifyy` (or `pip install graphifyy`), Node ≥ 20.
 Start Claude Code inside `luyenthiao.com-Web`: this repo's hooks, settings and agents do not load when the session starts at the workspace root, and its CLAUDE.md and rules then load only on demand.
 
 ## Hard rules

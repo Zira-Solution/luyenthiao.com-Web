@@ -48,7 +48,7 @@ Every piece of state belongs to exactly one layer — pick by kind, not convenie
 | Kind | Tool |
 |---|---|
 | Server data (anything the backend owns) | **TanStack Query** (`@tanstack/react-query`) — never mirrored into Zustand |
-| Client UI state, cross-component (theme, modals, session progress) | **Zustand** — install when first needed, never preinstall |
+| Client UI state, cross-component (theme, modals, session progress) | **Zustand** |
 | Local widget state (single component) | `useState` |
 
 Server payloads validate with `zod`. Forms: `react-hook-form` + `zod`.

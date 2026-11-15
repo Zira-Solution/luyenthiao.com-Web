@@ -31,7 +31,8 @@ route**, not only run the checks.
 Check port 3000 first:
 
 ```bash
-netstat -ano | grep ":3000 " | grep LISTENING
+netstat -ano | grep ":3000 " | grep LISTENING   # Windows (Git Bash)
+lsof -iTCP:3000 -sTCP:LISTEN                    # macOS/Linux
 ```
 
 If it is busy, do not kill it: use that server only if the controller's prompt says to use it,
