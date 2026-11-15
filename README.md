@@ -24,4 +24,4 @@ npm run build       # production build
 ```
 
 See `docs/02-setup-and-environment.md` for environment variables and
-`docs/03-known-issues.md` before relying on `tsc`/`build` results.
+`docs/03-known-issues.md` before relying on `tsc`/`lint`/`build` results (only tests gate CI for now).

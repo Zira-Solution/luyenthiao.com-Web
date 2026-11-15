@@ -10,10 +10,13 @@
 Copy `src/.env.example` to `src/.env.local` and adjust. Next.js loads `.env*` files from `src/`
 (the project root); env files at the repository root are ignored.
 
-| Variable | Meaning | Default |
+| Variable | Meaning | Default (development) |
 |---|---|---|
 | `NEXT_PUBLIC_APP_URL` | Public URL of this web app | `http://localhost:3000` |
 | `NEXT_PUBLIC_API_URL` | Base URL of the backend API | `http://localhost:3000/api` |
+
+Both variables are required when `NODE_ENV=production` (`npm run build`, `npm start`): `src/lib/env.ts`
+throws if either is missing. CI sets placeholder values in `.github/workflows/ci.yml`.
 
 ## Run locally
 
