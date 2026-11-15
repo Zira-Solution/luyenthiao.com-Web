@@ -41,3 +41,8 @@ with the project's own assets before production.
 `tsx` and `playwright` are no longer used by any script in `src/` (their former users were
 archived). `playwright` is still used for manual screenshot verification outside the repo.
 Decide whether to keep them when the tooling is set up again.
+
+## 7. AI guidance
+
+`AGENTS.md`, `CLAUDE.md` and `.claude/` describe the layout as of the phase 1 restructure
+(2026-11-15). Update them when the layout changes.
