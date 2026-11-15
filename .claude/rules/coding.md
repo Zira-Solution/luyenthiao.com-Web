@@ -34,8 +34,8 @@ Each group separated by one blank line.
 
 - Use `cn()` from `@/lib/utils` for conditional classes.
 - No inline styles, no CSS modules — Tailwind only.
-- Colors only via `@theme` CSS-variable tokens in `globals.css` — no arbitrary values like `bg-[#fff]` (gate A8). Variable references `bg-(--brand)` are the correct form.
-- Prettier auto-sorts classes — run `npm run format` before committing.
+- Colors only via `@theme` CSS-variable tokens in `globals.css` — no arbitrary values like `bg-[#fff]`. Variable references `bg-(--brand)` are the correct form.
+- Prettier auto-sorts classes — run `npx prettier --write <file>` in `src/` on the files you changed (never repo-wide; see `docs/02-setup-and-environment.md`).
 
 ## State (3 layers)
 
@@ -51,9 +51,9 @@ Server payloads validate with `zod`. Forms: `react-hook-form` + `zod`.
 
 ## Animation
 
-- Tech per effect type — CSS/SVG first, libraries only when CSS can't do it: see `.claude/skills/web-clone/references/animation-matrix.md`.
-- Animate only `transform` and `opacity` — never `width`/`height`/`top`/`left` (gate A6).
-- `prefers-reduced-motion` support is mandatory (gate A7).
+- Tech per effect type — CSS/SVG first, libraries only when CSS can't do it: see `.claude/rules/animation-matrix.md`.
+- Animate only `transform` and `opacity` — never `width`/`height`/`top`/`left`.
+- `prefers-reduced-motion` support is mandatory.
 - `will-change`: apply selectively, remove when the animation ends — never leave it on.
 
 ## page.tsx
@@ -61,6 +61,7 @@ Server payloads validate with `zod`. Forms: `react-hook-form` + `zod`.
 - Contains only: static imports, dynamic imports, static data, metadata, layout TSX.
 - No UI logic, state, or inline interface TSX.
 - Metadata MUST have all 5 fields: title, description, keywords, alternates, openGraph.
+- Known debt: nine dashboard/result pages still contain client UI (planned for phase 3; see `.claude/superpowers/specs/2026-11-15-zoney-structure-refactor-design.md` section 10); do not copy that pattern.
 
 ### What "layout TSX" means
 
@@ -97,3 +98,4 @@ If you find yourself writing JSX markup inside `page.tsx` beyond component tags,
 - Every directory inside `components/` has an `index.ts` that exports all components.
 - Import from barrel: `import { Button } from '@/components/ui'`.
 - Never import directly from the file: avoid `import { Button } from '@/components/ui/button'`.
+- Exception: components that only need the exam part renderers import `@/components/exam/parts` directly — the `@/components/exam` barrel re-exports page-level components that pull large mock data.

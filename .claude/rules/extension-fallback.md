@@ -17,9 +17,10 @@ Before starting any task, answer inline:
 
 ## 2. Codegraph (replaces MCP `codegraph_explore`)
 
-1. Try `mcp__codegraph__codegraph_explore` first.
-2. If it errors, fall back to `Grep` → `Glob` → `Read`, in that order.
-3. Before touching any file, search for existing components/hooks/utils that already solve the problem. Never assume something doesn't exist without checking.
+1. Try `graphify query "<question>" --budget 1500` (map).
+2. Then `mcp__codegraph__codegraph_explore` or the `codegraph explore` CLI (precise symbols).
+3. Only then `Grep` → `Glob` → `Read`.
+4. Before touching any file, search for existing components/hooks/utils that already solve the problem. Never assume something doesn't exist without checking.
 
 ## 3. Writing Plans (replaces `superpowers:writing-plans`)
 

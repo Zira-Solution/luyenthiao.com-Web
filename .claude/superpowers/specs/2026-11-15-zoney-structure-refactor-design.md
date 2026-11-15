@@ -213,7 +213,7 @@ archive step cannot accidentally take runtime data with it.
 ## 10. Decided for phase 3 (recorded, not part of phase 1)
 
 - **Thin pages.** Every `page.tsx` becomes a server component following the Zoney 5-part pattern
-  with `metadata` (`title` + `description`). The nine client pages (`placement-test`, `notebook`,
+  with `metadata` carrying all five fields (`title`, `description`, `keywords`, `alternates`, `openGraph`) per `.claude/rules/coding.md` (owner decision 2026-11-15). The nine client pages (`placement-test`, `notebook`,
   `history`, `testresult`, `tasks`, dashboard home, `notifications`, `ranking`, `school-ranking`)
   move verbatim into `components/<domain>/<domain>-view.tsx`; bounded split only of already
   independent blocks; `useSearchParams` wrapped in `<Suspense>` if the build requires it.

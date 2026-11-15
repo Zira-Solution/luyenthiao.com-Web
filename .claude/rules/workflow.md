@@ -1,12 +1,17 @@
 # Workflow Rules
 
+## Where things go
+
+- Specs: `.claude/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
+- Plans: `.claude/superpowers/plans/YYYY-MM-DD-<topic>.md`
+
 ## New Feature Process
 
 1. **Brainstorm first** — use `superpowers:brainstorming` skill
 2. **Write a plan** — use `superpowers:writing-plans` skill
 3. **Write test cases before implementing** — use `superpowers:test-driven-development` skill
 4. **Execute** — use `superpowers:executing-plans` or `superpowers:subagent-driven-development`
-5. **Run tests to verify** — `npm run test` or the project's equivalent test command
+5. **Verify** — see `.claude/rules/verification.md`
 6. **Review** — use `superpowers:requesting-code-review` skill
 
 ## Skill Selection Guide
@@ -28,6 +33,7 @@
 ## Adding a shadcn/ui Component
 
 ```bash
+cd src
 npx shadcn@latest add <component-name>
 # Examples:
 npx shadcn@latest add input
@@ -48,8 +54,10 @@ The component is created at `src/components/ui/`. Then add its export to `src/co
 ## Format & Lint Before Finishing
 
 ```bash
-npm run format      # format all code
-npm run lint        # run ESLint
-npx tsc --noEmit    # TypeScript type-check
-npm run build       # build to confirm no errors
+cd src
+npx prettier --write <changed files>
+npm run lint
+npx tsc --noEmit
+npm test
+npm run build   # informational until the missing mocks are rebuilt; see docs/03-known-issues.md
 ```

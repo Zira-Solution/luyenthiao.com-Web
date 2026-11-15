@@ -4,7 +4,7 @@ Consult this only when the relevant skill is unavailable (extension environment)
 
 | Skill | Inline behavior when unavailable |
 | ----- | -------------------------------- |
-| `tailwind-4-docs` | Use v4 syntax only: `bg-[color]`, `@layer`, no `theme()` in classes |
+| `tailwind-4-docs` | Use v4 syntax only; colors through theme tokens (`bg-(--token)`), no arbitrary color values; no `theme()` in classes |
 | `seo-metadata` | Metadata must have: `title`, `description`, `keywords`, `alternates`, `openGraph` |
 | `html5-seo` | Use semantic tags: `<article>`, `<section>`, `<nav>`, correct heading hierarchy |
 | `performance` | Dynamic import below-fold components, use `SectionSkeleton` as fallback |

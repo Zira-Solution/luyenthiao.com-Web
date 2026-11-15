@@ -554,7 +554,7 @@ verification-before-completion before claiming done. "Simple task" is not a reas
 ## Hard rules
 
 1. **Explore in order:** `graphify query "<question>" --budget 1500` (map) → `codegraph_explore`
-   (symbols, `projectPath` = this repo) → raw reads only for what is still missing.
+   (symbols, `projectPath` = this repo) → raw reads only for what is still missing. Skip a step whose tool is not installed (`.claude/rules/tooling.md` §1).
 2. **Two-stage review** after every task: spec compliance first, then code quality — separate passes.
 3. **Role split:** the main (Opus) session analyses, writes specs and plans, and supervises; once a plan
    exists it does not write code — it dispatches agents. See `.claude/rules/agent-roles.md`.
@@ -585,7 +585,7 @@ verification-before-completion before claiming done. "Simple task" is not a reas
 | `code-reviewer` | Opus | Review stage 2: quality, logic, edge cases |
 | `runner` | Sonnet | Running commands with long output and returning a summary |
 
-Definitions: `.claude/agents/*.md`. After editing one, start a new session (agents load at session start).
+Definitions: `.claude/agents/*.md`. Edits are hot-reloaded; restart only once, after `.claude/agents/` is created for the first time.
 
 ## Guard hook
 
