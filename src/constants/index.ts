@@ -19,5 +19,5 @@ export const ROUTES = {
 } as const
 
 /** Đề mock duy nhất hiện có — liên kết tạm cho nút Writing/Speaking trên topbar, thay bằng danh sách đề từ API khi có. */
-export const DEMO_WRITE_TEST_PATH = '/write/FLYERS-Writing-Test-1'
-export const DEMO_SPEAKING_TEST_PATH = '/speaking/1392caf3-444d-431a-b0ec-baf39eba25fb'
+export const DEMO_WRITE_TEST_PATH = '/write/writing-demo-1'
+export const DEMO_SPEAKING_TEST_PATH = '/speaking/speaking-demo-1'

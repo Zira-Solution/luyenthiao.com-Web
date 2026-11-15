@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { WritingFlow } from "@/components/writing";
-import writingDataJson from "@/mocks/writing.json";
+import { writingTestMock } from "@/mocks/writing";
 import type { WritingTest } from "@/types/writing";
 
 
 
-const writingData: WritingTest = writingDataJson as WritingTest
+const writingData: WritingTest = writingTestMock
 
 interface PageProps {
   params: Promise<{ slug: string }>;

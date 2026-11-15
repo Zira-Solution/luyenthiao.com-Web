@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
-import notificationsMocks from "@/mocks/notifications.json";
+import { notificationsMock as notificationsMocks } from "@/mocks/notifications";
 
 const typeMeta = {
   result: { icon: FileText, color: "text-blue-400 bg-blue-500/15 border-blue-500/30" },

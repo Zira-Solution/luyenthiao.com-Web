@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { SpeakingFlow } from "@/components/speaking";
-import speakingDataJson from "@/mocks/speaking.json";
+import { speakingTestMock } from "@/mocks/speaking";
 import type { SpeakingTest } from "@/types/speaking";
 
 
-const speakingData: SpeakingTest = speakingDataJson as SpeakingTest;
+const speakingData: SpeakingTest = speakingTestMock;
 
 interface PageProps {
   params: Promise<{ slug: string }>;

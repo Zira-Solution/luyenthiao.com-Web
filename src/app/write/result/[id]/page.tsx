@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { WritingResultContent } from "@/components/writing";
-import writingDataJson from "@/mocks/writing.json";
+import { writingTestMock } from "@/mocks/writing";
 import type { WritingTest } from "@/types/writing";
 
 
 
-const writingData: WritingTest = writingDataJson as WritingTest
+const writingData: WritingTest = writingTestMock
 
 interface PageProps {
   params: Promise<{ id: string }>;

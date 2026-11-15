@@ -3,7 +3,7 @@
 import { GraduationCap, Trophy } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import schoolRankingData from "@/mocks/school-ranking.json";
+import { schoolRankingMock as schoolRankingData } from "@/mocks/school-ranking";
 
 export function SchoolRankingTable() {
   return (
