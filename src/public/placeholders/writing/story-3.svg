@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <title>Placeholder: 3. Dad helps</title>
+  <rect width="400" height="200" fill="#bfe6ff"/>
+  <rect y="200" width="400" height="100" fill="#8fd16a"/>
+  <rect x="270" y="110" width="22" height="120" fill="#8b5a2b"/><circle cx="281" cy="95" r="60" fill="#3f9b3f"/><circle cx="220" cy="140" r="18" fill="#f1c27d"/><rect x="206" y="158" width="28" height="82" rx="6" fill="#2a9d8f"/><path d="M230 165 L270 100" stroke="#2a9d8f" stroke-width="8"/><polygon points="285,80 303,102 285,124 267,102" fill="#ff6b9a"/><circle cx="130" cy="180" r="16" fill="#f1c27d"/><rect x="118" y="196" width="24" height="44" rx="6" fill="#3a86ff"/><path d="M122 184 q 8 6 16 0" stroke="#333333" stroke-width="2" fill="none"/>
+  <text x="200" y="288" font-family="sans-serif" font-size="16" text-anchor="middle" fill="#2d6a1f">3. Dad helps</text>
+</svg>

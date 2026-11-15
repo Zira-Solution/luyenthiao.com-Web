@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <title>Placeholder: 1. Flying a kite</title>
+  <rect width="400" height="200" fill="#bfe6ff"/>
+  <rect y="200" width="400" height="100" fill="#8fd16a"/>
+  <circle cx="120" cy="180" r="16" fill="#f1c27d"/><rect x="108" y="196" width="24" height="44" rx="6" fill="#3a86ff"/><path d="M132 200 L280 70" stroke="#555555" stroke-width="2"/><polygon points="280,40 305,70 280,100 255,70" fill="#ff6b9a"/>
+  <text x="200" y="288" font-family="sans-serif" font-size="16" text-anchor="middle" fill="#2d6a1f">1. Flying a kite</text>
+</svg>

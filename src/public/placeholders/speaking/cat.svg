@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>Placeholder: cat</title>
+  <rect width="200" height="200" rx="24" fill="#fff7e6"/>
+  <ellipse cx="90" cy="110" rx="55" ry="32" fill="#f4a259"/><circle cx="142" cy="75" r="28" fill="#f4a259"/><polygon points="122,56 128,30 138,52" fill="#f4a259"/><polygon points="146,52 156,30 162,58" fill="#f4a259"/>
+  <text x="100" y="188" font-family="sans-serif" font-size="22" text-anchor="middle" fill="#555555">cat</text>
+</svg>

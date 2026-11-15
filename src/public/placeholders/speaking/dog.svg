@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>Placeholder: dog</title>
+  <rect width="200" height="200" rx="24" fill="#fff7e6"/>
+  <ellipse cx="90" cy="115" rx="55" ry="32" fill="#a0522d"/><circle cx="145" cy="80" r="30" fill="#a0522d"/><ellipse cx="132" cy="62" rx="10" ry="22" fill="#6b3d12"/>
+  <text x="100" y="188" font-family="sans-serif" font-size="22" text-anchor="middle" fill="#555555">dog</text>
+</svg>

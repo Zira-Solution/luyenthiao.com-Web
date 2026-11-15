@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>Placeholder: hat</title>
+  <rect width="200" height="200" rx="24" fill="#fff7e6"/>
+  <ellipse cx="100" cy="135" rx="72" ry="16" fill="#333333"/><rect x="62" y="60" width="76" height="75" rx="6" fill="#333333"/><rect x="62" y="112" width="76" height="12" fill="#e63946"/>
+  <text x="100" y="188" font-family="sans-serif" font-size="22" text-anchor="middle" fill="#555555">hat</text>
+</svg>

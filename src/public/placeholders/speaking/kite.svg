@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>Placeholder: kite</title>
+  <rect width="200" height="200" rx="24" fill="#fff7e6"/>
+  <polygon points="100,22 150,88 100,154 50,88" fill="#ff6b9a"/><path d="M100 22 V154 M50 88 H150" stroke="#ffffff" stroke-width="4"/>
+  <text x="100" y="188" font-family="sans-serif" font-size="22" text-anchor="middle" fill="#555555">kite</text>
+</svg>
