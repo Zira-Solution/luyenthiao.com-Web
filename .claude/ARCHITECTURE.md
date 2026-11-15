@@ -4,7 +4,7 @@
 
 Next.js App Router client for luyenthiao.com (online English test preparation). The Next.js project is
 `src/`; run every npm command there. Backend: `luyenthiao.com-Backend` (NestJS). Only authentication is
-wired to the backend; exams, history, notebook, ranking, tasks, speaking and writing use `src/mocks/*.json`,
+wired to the backend; exams, history, notebook, ranking, tasks, speaking and writing use `src/mocks/` (JSON and typed `.ts` modules),
 `localStorage` or constants inside the page. Known defects and baselines: `docs/03-known-issues.md`.
 
 ## Stack (from `src/package.json`)
@@ -50,7 +50,7 @@ wired to the backend; exams, history, notebook, ranking, tasks, speaking and wri
 | `providers/` | `auth-provider.tsx`, `query-provider.tsx` |
 | `constants/` | `ROUTES`, app constants, demo test paths |
 | `types/` | `auth.ts`, `exam.ts`, `speaking.ts`, `writing.ts`, shared types |
-| `mocks/` | JSON mock data (five files are missing — see known issues) |
+| `mocks/` | Mock data: JSON files and typed `.ts` modules (`satisfies` + `mocks.test.ts`) |
 | `public/` | Static files; `public/clone-assets/` are third-party assets to be replaced |
 
 ## Routes

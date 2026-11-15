@@ -50,8 +50,8 @@ Important lines:
 Principle: **do not invent, do not sugar-coat.** If a command fails, say it failed and quote the
 error message verbatim. Do not summarize as "looks fine" when the exit code is non-zero.
 
-Known baseline: `docs/03-known-issues.md` lists failures that exist before any change (missing
-mocks cause `tsc` and `build` to fail; pre-existing lint errors). When a command output matches
+Known baseline: `docs/03-known-issues.md` lists failures that exist before any change (pre-existing
+lint errors; `tsc`, tests and build must pass). When a command output matches
 that baseline, say so, and report anything beyond it separately. Do not hide baseline failures
 either.
 

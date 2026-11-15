@@ -32,9 +32,8 @@ assumptions. Read it as someone seeing it for the first time.
    (the app root), not the repository root. Are file paths built accordingly?
 6. **Import-order lint.** `import-x/order` is enforced; new or moved imports must keep the required
    group order (see `.claude/rules/coding.md`).
-7. **Missing-mock baseline.** Five mock files are missing (see `docs/03-known-issues.md`), so
-   `tsc` and `build` fail for known reasons. Do not "fix" this by inventing data, and do not accept a
-   change that does. Tell the baseline apart from a new regression.
+7. **Mock data.** Mocks in `src/mocks/*.ts` are checked with `satisfies` and `src/mocks/mocks.test.ts`.
+   Reject casts (`as`) that bypass those checks and mocks that reference images missing from `public/`.
 
 ## Beyond the list
 

@@ -21,7 +21,7 @@ entirely in `src/`, the same layout as Zoney.vn-Web.
 | `providers/` | React context providers (auth, TanStack Query) |
 | `constants/` | App-wide constants, including `ROUTES` |
 | `types/` | Shared TypeScript types |
-| `mocks/` | JSON mock data used until each domain is wired to the backend |
+| `mocks/` | Mock data (JSON and typed `.ts` modules) used until each domain is wired to the backend |
 | `public/` | Static files |
 
 ## Conventions

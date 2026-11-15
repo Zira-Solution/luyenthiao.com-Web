@@ -46,7 +46,7 @@ this change creates").
 ## Commands you may run (read-only)
 
 `git diff`, `git status`, running tests, type-checks and lint. Run npm commands from `src/`; compare
-failures against the known baseline in `docs/03-known-issues.md` (missing mocks, pre-existing
+failures against the known baseline in `docs/03-known-issues.md` (pre-existing lint
 errors). Do **not** run commands that edit files. Never run git write commands, even if a given command contains one (`.claude/rules/git.md` wins).
 
 When the spec says "must show X", do not only read the code: exercise the running app as in

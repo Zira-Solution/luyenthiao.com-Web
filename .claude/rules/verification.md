@@ -16,8 +16,8 @@ npm run lint
 npm test
 ```
 
-Compare the results against the known baseline in `docs/03-known-issues.md` (missing mocks make
-`tsc` and `build` fail, and lint has pre-existing errors). A change must not add to the baseline;
+Compare the results against the known baseline in `docs/03-known-issues.md` (`tsc` and `build` must
+pass; lint has pre-existing errors). A change must not add to the baseline;
 do not "fix" the baseline by inventing data.
 
 Catches: wrong logic, type errors, regressions. Does **not** catch: wrong configuration, runtime

@@ -14,7 +14,7 @@ jobs:
     defaults:
       run:
         working-directory: src
-    # Only the Test step gates this job until phase 3; see docs/03-known-issues.md.
+    # Type-check, tests and build gate this job; lint is non-blocking (pre-existing errors, docs/03-known-issues.md section 3).
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -24,16 +24,12 @@ jobs:
           cache-dependency-path: src/package-lock.json
       - run: npm ci
       - name: Type-check
-        # Known failure until the missing mocks are rebuilt; see docs/03-known-issues.md section 1.
-        continue-on-error: true
         run: npx tsc --noEmit
       - name: Lint
-        # Pre-existing import-order errors; see docs/03-known-issues.md section 4.
+        # Pre-existing import-order errors; see docs/03-known-issues.md section 3.
         continue-on-error: true
         run: npm run lint
       - name: Test
         run: npm test
       - name: Build
-        # Known failure until the missing mocks are rebuilt; see docs/03-known-issues.md section 1.
-        continue-on-error: true
         run: npm run build

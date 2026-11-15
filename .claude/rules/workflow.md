@@ -59,5 +59,5 @@ npx prettier --write <changed files>
 npm run lint
 npx tsc --noEmit
 npm test
-npm run build   # informational until the missing mocks are rebuilt; see docs/03-known-issues.md
+npm run build   # must pass
 ```

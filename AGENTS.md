@@ -7,7 +7,7 @@ Claude Code reads it through `@AGENTS.md` in `CLAUDE.md`.
 
 Web client of luyenthiao.com, an online English test-preparation platform, built with Next.js
 (App Router). The API is the separate repository `luyenthiao.com-Backend` (NestJS, branch `develop`).
-Today only authentication talks to the backend; the other domains read `src/mocks/*.json`,
+Today only authentication talks to the backend; the other domains read `src/mocks/` (JSON and typed `.ts` modules),
 `localStorage` or constants inside the page. Architecture: `.claude/ARCHITECTURE.md`. Human docs: `docs/`.
 
 The Next.js project lives in `src/`; the repository root holds only metadata.
@@ -43,10 +43,10 @@ The Next.js project lives in `src/`; the repository root holds only metadata.
 npm ci
 cp -n .env.example .env.local  # then set NEXT_PUBLIC_API_URL=http://localhost:3005/api to reach luyenthiao.com-Backend
 npm run dev                     # http://localhost:3000
-npx tsc --noEmit                # baseline: 15 known errors, see docs/03-known-issues.md
+npx tsc --noEmit                # must pass (0 errors)
 npm run lint                    # baseline: 8 known import-order errors
 npm test                        # must pass
-npm run build                   # fails until the missing mocks are rebuilt
+npm run build                   # must pass
 npx prettier --write <file>     # format only the files you changed
 ```
 

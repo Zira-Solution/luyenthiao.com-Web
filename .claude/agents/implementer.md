@@ -50,7 +50,7 @@ This is a single repository: a Next.js app in `src/`. Run every npm command from
 (`cd src && npx tsc --noEmit`, `npm run lint`, `npm test`). The backend is a separate repository,
 `luyenthiao.com-Backend`.
 
-- Known baseline (missing mocks, pre-existing type, build and lint failures): `docs/03-known-issues.md`.
+- Known baseline (pre-existing lint errors; `tsc`, tests and build must pass): `docs/03-known-issues.md`.
   Compare your results against it; do not "fix" the baseline by inventing data.
 - Project rules: `.claude/rules/` (coding, workflow, verification, git, tooling). Read the relevant
   ones before editing code.
