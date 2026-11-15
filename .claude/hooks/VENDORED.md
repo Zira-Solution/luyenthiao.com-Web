@@ -6,16 +6,21 @@ copied on 2026-11-15, so teammates get the same enforcement.
 
 ## Behavior
 
-- Registered in `.claude/settings.json` for SessionStart, UserPromptSubmit, PreToolUse, PostToolUse,
-  SubagentStart and Stop.
-- Stands down (no output, exit 0) when `GUARD_PROJECT=0` or when `~/.claude/settings.json` /
-  `settings.local.json` registers another `guard.mjs` (a user-level guard). See `guard-lib/dedup.mjs`.
-- State lives in `~/.claude/state/guard/` on each machine; nothing is written into the repo.
+- Registered in `.claude/settings.json` (from commit `chore(ai): register the vendored guard in project settings`)
+  for SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, SubagentStart and Stop.
+- Stands down (reads stdin, prints nothing, exit 0) when `GUARD_PROJECT=0`, or when `~/.claude/settings.json` /
+  `~/.claude/settings.local.json` registers a hook command containing a path whose file name is exactly
+  `guard.mjs` and that is not this vendored file (`${CLAUDE_PROJECT_DIR}`-relative paths are ignored).
+  See `guard-lib/dedup.mjs`.
+- Limits: settings moved with `CLAUDE_CONFIG_DIR`, managed settings and plugin hooks are not inspected; if a
+  user-level guard lives there, set `GUARD_PROJECT=0` to avoid a double run.
+- Guard state lives in `~/.claude/state/guard/` on each machine. The Stop hook runs `graphify update` /
+  `codegraph sync`, which update the git-ignored `graphify-out/` and `.codegraph/` in the repo.
   Kill switch: create `~/.claude/state/guard/disabled`.
 
 ## Adaptations from the host copy
 
-1. `guard.mjs`: calls `shouldStandDown()` from `guard-lib/dedup.mjs` before running a hook handler.
+1. `guard.mjs`: reads stdin, then calls `shouldStandDown()` from `guard-lib/dedup.mjs` before running a hook handler.
 2. `guard-lib/dedup.mjs`: new.
 3. `guard-lib/handlers.mjs`: decline hint uses this file's absolute path; rule references point to
    `.claude/rules/tooling.md` of this repo; `.claude/superpowers/` is exempt from the brainstorm gate.

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { sandbox, makeRepo, run, hook, ctxOf, decisionOf, reasonOf, GUARD } from './helpers.mjs';
 
 const pre = (sb, tool, tool_input, extra = {}) =>
@@ -109,4 +110,51 @@ test('adapted: skill mirror reminder points at the project tooling rule', () => 
     cwd: repo,
   });
   assert.match(ctxOf(r), /\.claude\/rules\/tooling\.md/);
+});
+
+test('dedup: a file merely ending in guard.mjs does not count', () => {
+  const sb = sandbox();
+  writeUserSettings(sb, 'settings.json', 'node ~/.claude/hooks/myguard.mjs PreToolUse');
+  assert.equal(decisionOf(missingRead(sb)), 'deny');
+});
+
+test('dedup: guard.mjsx does not count', () => {
+  const sb = sandbox();
+  writeUserSettings(sb, 'settings.json', 'node ~/tools/guard.mjsx PreToolUse');
+  assert.equal(decisionOf(missingRead(sb)), 'deny');
+});
+
+test('dedup: unrelated user hooks only -> project guard enforces', () => {
+  const sb = sandbox();
+  writeUserSettings(sb, 'settings.json', 'codegraph.cmd prompt-hook');
+  assert.equal(decisionOf(missingRead(sb)), 'deny');
+});
+
+test('dedup: %USERPROFILE% backslash path counts as user-level', () => {
+  const sb = sandbox();
+  writeUserSettings(sb, 'settings.json', 'node "%USERPROFILE%\\.claude\\hooks\\guard.mjs" PreToolUse');
+  assert.equal(missingRead(sb).stdout, '');
+});
+
+test('dedup: guard inside a bash -c string counts as user-level', () => {
+  const sb = sandbox();
+  writeUserSettings(sb, 'settings.json', 'bash -c "node ~/.claude/hooks/guard.mjs PreToolUse; echo ok"');
+  assert.equal(missingRead(sb).stdout, '');
+});
+
+test('dedup: CLAUDE_PROJECT_DIR argument does not hide a user-level guard', () => {
+  const sb = sandbox();
+  writeUserSettings(sb, 'settings.json', 'node ~/.claude/hooks/guard.mjs PreToolUse "${CLAUDE_PROJECT_DIR}"');
+  assert.equal(missingRead(sb).stdout, '');
+});
+
+test('dedup: large stdin is drained when standing down', () => {
+  const sb = sandbox();
+  sb.env.GUARD_PROJECT = '0';
+  const big = JSON.stringify({ session_id: 's1', hook_event_name: 'PreToolUse', tool_name: 'Write',
+    tool_input: { file_path: 'x', content: 'a'.repeat(5 * 1024 * 1024) } });
+  const r = spawnSync(process.execPath, [GUARD, 'PreToolUse'], { input: big, env: sb.env, encoding: 'utf8' });
+  assert.equal(r.error, undefined);
+  assert.equal(r.status, 0);
+  assert.equal(r.stdout, '');
 });

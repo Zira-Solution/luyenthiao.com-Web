@@ -20,10 +20,11 @@ async function main() {
   const hookMode = /^[A-Z]/.test(cmd || '');
   try {
     if (hookMode) {
+      const raw = await readStdin();
       const { shouldStandDown } = await import('./guard-lib/dedup.mjs');
       if (shouldStandDown()) return;
       const { HANDLERS } = await import('./guard-lib/handlers.mjs');
-      const input = JSON.parse((await readStdin()) || '{}');
+      const input = JSON.parse(raw || '{}');
       const handler = HANDLERS[cmd];
       if (!handler) return;
       const out = handler(input);

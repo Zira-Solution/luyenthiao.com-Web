@@ -5,8 +5,32 @@ import { norm, samePath, claudeDir } from './env.mjs';
 
 // The vendored guard entry file (this repo's .claude/hooks/guard.mjs).
 export const SELF = norm(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'guard.mjs'));
-const GUARD_TOKEN = /[^\s"'`]*guard\.mjs/g;
-const PROJECT_VAR = /\$\{?CLAUDE_PROJECT_DIR\}?/;
+
+// Quoted strings are kept whole (paths with spaces); unquoted words split on whitespace.
+const TOKEN = /"([^"]*)"|'([^']*)'|([^\s"'`]+)/g;
+const GUARD_NAME = /(?:^|[\\/])guard\.mjs$/;
+const PROJECT_VAR = /^(?:\$\{?CLAUDE_PROJECT_DIR\}?|%CLAUDE_PROJECT_DIR%)/;
+
+function clean(token) {
+  return token.replace(/[;&|)]+$/, '');
+}
+
+// Candidate paths in a hook command. A quoted string that is itself a guard path stays whole;
+// any other quoted string (e.g. `bash -c "node ~/.claude/hooks/guard.mjs; echo"`) is split into words.
+function guardTokens(command) {
+  const out = [];
+  for (const m of command.matchAll(TOKEN)) {
+    const quoted = m[1] ?? m[2];
+    if (quoted !== undefined) {
+      const whole = clean(quoted.trim());
+      if (GUARD_NAME.test(whole)) out.push(whole);
+      else for (const word of quoted.split(/\s+/)) out.push(clean(word));
+    } else {
+      out.push(clean(m[3]));
+    }
+  }
+  return out.filter((t) => GUARD_NAME.test(t) && !PROJECT_VAR.test(t));
+}
 
 function hookCommands(file) {
   let data;
@@ -31,8 +55,7 @@ function hookCommands(file) {
 export function userGuardRegistered() {
   for (const name of ['settings.json', 'settings.local.json']) {
     for (const command of hookCommands(path.join(claudeDir(), name))) {
-      if (PROJECT_VAR.test(command)) continue;
-      for (const token of command.match(GUARD_TOKEN) || []) {
+      for (const token of guardTokens(command)) {
         if (!samePath(norm(token), SELF)) return true;
       }
     }
