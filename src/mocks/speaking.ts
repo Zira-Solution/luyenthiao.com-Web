@@ -90,8 +90,16 @@ export const speakingTestMock = {
         title: "Trả lời về bức tranh",
         instruction: "Nhìn mũi tên và trả lời câu hỏi bằng giọng nói.",
         questions: [
-          { id: "q-2-1", kind: "mic-answer", partTitle: "Trả lời về bức tranh", text: "What's this?", vi: "Đây là gì?", sceneBg: SCENE, pointer: { top: 84, left: 20 } },
-          { id: "q-2-2", kind: "mic-answer", text: "What colour is the kite?", vi: "Con diều màu gì?", sceneBg: SCENE, pointer: { top: 19, left: 54 } },
+          // `pointer` is in the 0..100 viewBox of the overlay in `PointerPrompt`, not a percentage
+          // of the picture. The overlay is letterboxed (`xMidYMid meet`), so in the 1200x900 scene
+          // `x = 150 + left * 9` and `y = top * 9`, and the pin disc is 90px across — wider than
+          // most objects. Put the pin DOWN-RIGHT of its target (the pin's spike points up-left, so
+          // it then aims at the object) and far enough away not to cover it.
+          // q-2-1 -> (321, 468), spike aims at the tree crown (150, 300).
+          { id: "q-2-1", kind: "mic-answer", partTitle: "Trả lời về bức tranh", text: "What's this?", vi: "Đây là gì?", sceneBg: SCENE, pointer: { top: 52, left: 19 } },
+          // q-2-2 -> (780, 306), spike aims at the kite (640, 170) without touching it: the
+          // question asks about the kite's colour, so the red pin must not sit on top of it.
+          { id: "q-2-2", kind: "mic-answer", text: "What colour is the kite?", vi: "Con diều màu gì?", sceneBg: SCENE, pointer: { top: 34, left: 70 } },
         ],
       },
       {

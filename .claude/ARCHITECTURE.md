@@ -21,6 +21,46 @@ wired to the backend; exams, history, notebook, ranking, tasks, speaking and wri
 | Tests | Vitest 4 + Testing Library (jsdom), tests next to the module |
 | Lint / format | ESLint 9 flat config (`import-x/order`), Prettier (`src/.prettierrc`, `src/.prettierignore`) |
 
+## Hosting: Vercel, not Amplify
+
+This app runs on **Vercel** (project `ziratech/luyenthiao-com-web`, Root Directory `src`; details in
+`docs/04-deploy-vercel.md`). Zoney.vn-Web — the sibling project this repo was scaffolded from in
+`8513d4a` and whose conventions several rules still mirror — runs on **AWS Amplify**. The two hosts do
+not support the same Next.js features, so never carry a rendering decision over from Zoney without
+checking the table below.
+
+| Capability | Vercel | Amplify Hosting compute |
+|---|---|---|
+| Next.js version supported | current (this repo: 16.1.6) | up through 15 |
+| Streaming SSR — `loading.tsx`, `<Suspense>`, React Server Components | yes | **no** (listed under "Unsupported features") |
+| On-demand ISR | yes | no |
+| Edge middleware | yes | no (Edge API routes only) |
+| `after()` / `unstable_after` | yes | no |
+
+Sources: [Next.js on Vercel → Streaming](https://vercel.com/docs/frameworks/full-stack/nextjs#streaming)
+and [Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-amplify-support.html)
+(both read 2026-11-16).
+
+### What that means when writing code here
+
+- **Stream instead of blocking.** A server `page.tsx` that awaits slow data should put the slow part
+  behind `<Suspense fallback={…}>`: Vercel sends the static shell immediately and streams the rest into
+  it on the same response. Blocking the whole page on one `await` wastes the platform.
+- `app/loading.tsx` already provides a route-level streaming fallback; `<Suspense>` is the finer-grained
+  tool when only one section is slow. Existing examples: `app/testresult/page.tsx`,
+  `app/write/result/[id]/page.tsx`, `app/login/page.tsx`.
+- **Do not reach for a client-side fetch just to avoid a slow server render.** On Amplify that was a
+  real workaround; here it only costs a round trip and a bigger bundle. Choose per feature: server
+  component + streaming for read-only data that can render on the server, TanStack Query for data the
+  client drives or mutates (see `.claude/rules/coding.md` → State).
+- **Partial Prerendering** is no longer experimental in Next.js 16; it is opt-in through
+  `cacheComponents: true` plus the `use cache` directive. It is **not** enabled in this repo — turning it
+  on is a separate decision that needs the owner's approval, not something to add while doing other work.
+- `src/next.config.ts` sets `output: 'standalone'`, inherited from the Zoney scaffold. Vercel's Next.js
+  adapter builds its own output and does not use it, so on this host it is dead config. It is still
+  present (harmless on 16.1.6) and has not been removed — do not remove it as a side effect of another
+  task.
+
 ## Request path
 
 - Browser → `apiFetch` / `authFetch` in `lib/api-client.ts` → backend at `NEXT_PUBLIC_API_URL`.

@@ -10,6 +10,11 @@ Web client of luyenthiao.com, an online English test-preparation platform, built
 Today only authentication talks to the backend; the other domains read `src/mocks/` (JSON and typed `.ts` modules),
 `localStorage` or constants inside the page. Architecture: `.claude/ARCHITECTURE.md`. Human docs: `docs/`.
 
+Hosted on **Vercel**, not on AWS Amplify like the sibling project Zoney.vn-Web that this repo's
+conventions came from. Streaming SSR (`loading.tsx`, `<Suspense>`, React Server Components) works
+here and Amplify does not support it, so prefer streaming a server-rendered page over blocking it or
+moving the fetch to the client. See `.claude/ARCHITECTURE.md` → "Hosting: Vercel, not Amplify".
+
 The Next.js project lives in `src/`; the repository root holds only metadata.
 
 ## Language

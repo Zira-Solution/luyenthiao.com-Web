@@ -2,6 +2,30 @@
 
 The project is deployed as `ziratech/luyenthiao-com-web`.
 
+## Why the host matters
+
+Zoney.vn-Web, the project this repo borrowed its structure and tooling from, runs on AWS Amplify.
+This one runs on Vercel, and the feature sets differ — Amplify Hosting compute supports Next.js only
+up through 15 and lists **Next.js streaming**, on-demand ISR and Edge middleware under
+[unsupported features](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-amplify-support.html),
+while Vercel streams [Route Handlers, Vercel Functions and React Server
+Components](https://vercel.com/docs/frameworks/full-stack/nextjs#streaming).
+
+So a page here may render on the server and stream — `loading.tsx` for a whole route segment,
+`<Suspense>` for one slow section — instead of blocking on data or pushing the fetch to the client.
+`.claude/ARCHITECTURE.md` → "Hosting: Vercel, not Amplify" has the comparison table and the rules that
+follow from it.
+
+### `output: 'standalone'`
+
+`src/next.config.ts` sets `output: 'standalone'`, which came in with the Zoney scaffold (`8513d4a`).
+It is the self-hosting / Docker output mode; Vercel's Next.js adapter produces its own build output
+and ignores it. It is harmless on Next.js 16.1.6 and is still in the config, but it is dead weight
+here, and it did break Vercel builds on Next.js 16.3.x before the fix landed
+([vercel/next.js#96646](https://github.com/vercel/next.js/issues/96646) — `ENOENT …
+.next/next-server.js.nft.json` during `onBuildComplete`; fixed in 16.4.0 and backported). Worth
+revisiting at the next Next.js upgrade.
+
 ## Settings that live in the dashboard
 
 Vercel has no `vercel.json` property for the Root Directory, so these two must be set in

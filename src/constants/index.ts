@@ -1,9 +1,17 @@
-export const APP_NAME = 'English Game'
+export const APP_NAME = 'luyenthiao.com'
 export const APP_DESCRIPTION =
-  'English Game — placeholder description, update once the product direction is defined.'
+  'Luyện thi tiếng Anh trực tuyến: làm bài thi thử, luyện Nghe, Nói, Đọc, Viết và theo dõi tiến bộ.'
 
 export const ROUTES = {
   HOME: '/',
+  HISTORY: '/history',
+  NOTEBOOK: '/notebook',
+  NOTIFICATIONS: '/notifications',
+  PLACEMENT_TEST: '/placement-test',
+  RANKING: '/ranking',
+  SCHOOL_RANKING: '/school-ranking',
+  TASKS: '/tasks',
+  TEST_RESULT: '/testresult',
   LOGIN: '/login',
   SIGNUP: '/signup',
   FORGOT_PASSWORD: '/forgot-password',
