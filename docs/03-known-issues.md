@@ -45,3 +45,11 @@ Decide whether to keep them when the tooling is set up again.
 
 `AGENTS.md`, `CLAUDE.md` and `.claude/` describe the layout as of the phase 1 restructure
 (2026-11-15). Update them when the layout changes.
+
+## 7. Screenshot baselines predate sharp 0.35.5
+
+The Next.js 16.1.6 → 16.4.6 upgrade (2026-11-16) pulled `sharp` 0.34.5 → 0.35.5. Pages built from
+`next/image` now re-encode slightly differently: `/testlevels/movers` compares as 33.8% of pixels
+changed against a pre-upgrade screenshot, at a maximum channel delta of 24 out of 765 — invisible
+side by side, and byte-identical across two runs on the same build. Do not read that as a
+regression; recapture the baseline instead. The routes without large images compared at 0 pixels.
