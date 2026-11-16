@@ -5,6 +5,16 @@
 The repository root holds only metadata (AI configuration, CI, docs). The Next.js project lives
 entirely in `src/`, the same layout as Zoney.vn-Web.
 
+## Hosting
+
+The app is deployed on **Vercel**, not on AWS Amplify like Zoney.vn-Web. That difference is not
+cosmetic: Amplify Hosting lists Next.js streaming among its unsupported features, while on Vercel
+`loading.tsx`, `<Suspense>` and React Server Components stream to the browser. Prefer streaming a
+server-rendered page over blocking it or falling back to a client-side fetch.
+
+Deployment settings: `docs/04-deploy-vercel.md`. Rendering consequences and the platform comparison
+table: `.claude/ARCHITECTURE.md` → "Hosting: Vercel, not Amplify".
+
 ## `src/` directories
 
 | Directory | Contents |
