@@ -20,7 +20,7 @@ follow from it.
 
 `src/next.config.ts` sets `output: 'standalone'`, which came in with the Zoney scaffold (`8513d4a`).
 It is the self-hosting / Docker output mode; Vercel's Next.js adapter produces its own build output
-and ignores it. It is harmless on Next.js 16.1.6 and is still in the config, but it is dead weight
+and ignores it. It is harmless on Next.js 16.4.6 and is still in the config, but it is dead weight
 here, and it did break Vercel builds on Next.js 16.3.x before the fix landed
 ([vercel/next.js#96646](https://github.com/vercel/next.js/issues/96646) — `ENOENT …
 .next/next-server.js.nft.json` during `onBuildComplete`; fixed in 16.4.0 and backported). Worth
@@ -80,9 +80,12 @@ plugin — a symptom far from its cause.
 
 ```bash
 cd src
-vercel ls --project luyenthiao-com-web
+vercel ls luyenthiao-com-web
 vercel inspect --logs <deployment-url>
 ```
+
+The project name is a positional argument. Vercel CLI 65 removed the `--project` flag, and there is
+no `src/.vercel` link directory here, so the name has to be given explicitly.
 
 Check the `Commit:` line first: a stale log explains a failure that is already fixed.
 
@@ -92,3 +95,10 @@ Check the `Commit:` line first: a stale log explains a failure that is already f
 |---|---|---|
 | 2026-11-15 | `Module not found: Can't resolve '@/mocks/notifications.json'` (8 errors) | Five mock files were never committed; fixed by rebuilding them |
 | 2026-11-15 | `Failed to collect configuration for /_not-found` → `Missing environment variable: NEXT_PUBLIC_APP_URL` | `src/lib/env.ts` threw in production; the project had no env vars. CI hid it by setting placeholder values, so CI was green while the deploy failed. CI now runs the build without those variables |
+| 2026-11-16 | `Turbopack build failed with 35 errors` → `Can't resolve '@vercel/turbopack-next/internal/font/google/font'`, `next/font/google queries have exactly one entry` | Upstream Next.js bug, not our code: the same commit built locally. Google Fonts intermittently answers with extensionless `fonts.gstatic.com/l/font?kit=…&skey=…` URLs, and Turbopack fed the JSON options through `QString::from`, so the `&` split the query into several entries ([#99114](https://github.com/vercel/next.js/issues/99114)). Fixed by upgrading Next 16.1.6 → 16.4.6; the fix shipped in [16.4.3](https://github.com/vercel/next.js/releases/tag/v16.4.3) |
+
+A build that fails inside `next/font/google` is almost never a code change — the same commit usually
+builds elsewhere. Reproduce it deterministically instead of redeploying until it passes: point
+`NEXT_FONT_GOOGLE_MOCKED_RESPONSES` at a module mapping each `https://fonts.googleapis.com/css2?…`
+URL to CSS whose `src: url(…)` entries use the `/l/font?kit=…&skey=…&v=…` shape. With the mock set,
+`fetchFontFile` returns `Buffer.from(url)`, so no network call is made.

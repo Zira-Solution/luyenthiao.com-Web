@@ -12,7 +12,7 @@ wired to the backend; exams, history, notebook, ranking, tasks, speaking and wri
 | Layer | Choice |
 |---|---|
 | Runtime | Node 22.22.2+ or 24.15.0+ (`engines` in `package.json`, required by `jsdom` 30), npm; CI on Node 24 |
-| Framework | Next.js 16.1.6 (App Router), React 19.2.3, `output: 'standalone'` |
+| Framework | Next.js 16.4.6 (App Router), React 19.2.3, `output: 'standalone'` |
 | Language | TypeScript strict |
 | Styling | Tailwind CSS v4 (`@theme` tokens in `app/globals.css`), shadcn-style primitives on `@base-ui/react` |
 | Server data | TanStack Query 5 |
@@ -31,7 +31,7 @@ checking the table below.
 
 | Capability | Vercel | Amplify Hosting compute |
 |---|---|---|
-| Next.js version supported | current (this repo: 16.1.6) | up through 15 |
+| Next.js version supported | current (this repo: 16.4.6) | up through 15 |
 | Streaming SSR — `loading.tsx`, `<Suspense>`, React Server Components | yes | **no** (listed under "Unsupported features") |
 | On-demand ISR | yes | no |
 | Edge middleware | yes | no (Edge API routes only) |
@@ -58,7 +58,7 @@ and [Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/use
   on is a separate decision that needs the owner's approval, not something to add while doing other work.
 - `src/next.config.ts` sets `output: 'standalone'`, inherited from the Zoney scaffold. Vercel's Next.js
   adapter builds its own output and does not use it, so on this host it is dead config. It is still
-  present (harmless on 16.1.6) and has not been removed — do not remove it as a side effect of another
+  present (harmless on 16.4.6) and has not been removed — do not remove it as a side effect of another
   task.
 
 ## Request path
@@ -120,4 +120,10 @@ and [Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/use
 
 `AGENTS.md`, `CLAUDE.md`, `.claude/rules/`, `.claude/agents/`, `.claude/skills/`, the vendored guard in
 `.claude/hooks/` (`VENDORED.md`), and superpowers specs/plans in `.claude/superpowers/`.
-From a Next.js version after 16.1.6, `next dev` writes `src/AGENTS.md` (generator: `node_modules/next/dist/server/lib/generate-agent-files.js`); expect a new untracked file after upgrading and review it.
+`next dev` writes a managed block into `src/AGENTS.md` and re-adds it on every start (generator:
+`node_modules/next/dist/server/lib/generate-agent-files.js`). This started with the 16.4.6 upgrade on
+2026-11-16; the file is committed so the tree stays clean. **`src/AGENTS.md` is not this project's
+guidance** — it only carries Next's own block plus a pointer back to the root `AGENTS.md`. An agent
+editing files under `src/` finds that file first, so keep the pointer there. Text outside the
+`<!-- BEGIN/END:nextjs-agent-rules -->` markers survives regeneration (`upsertFile` replaces only the
+marked block).
