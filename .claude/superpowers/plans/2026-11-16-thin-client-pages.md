@@ -29,6 +29,12 @@ export PW_CHROME="C:/Users/lemin/AppData/Local/ms-playwright/chromium-1248/chrom
 - New/edited files: LF endings. The nine pages use double quotes and semicolons; keep that, and match
   each barrel to its own existing style (`components/{dashboard,ranking}/index.ts` use double quotes
   with semicolons, `components/exam/index.ts` double quotes without).
+- **Import order in this repo is not the obvious one.** `eslint.config.mjs` lists the groups
+  `builtin, external, internal, parent, sibling, index`, but no resolver or `internal-regex` is
+  configured, so `@/...` is *not* recognised as `internal` and sorts into the trailing unknown
+  group. The real order is: external (`next`, `react`, `lucide-react`) → a blank line → relative
+  (`./...`) → a blank line → `@/...`. See `components/exam/exam-checkpoint.tsx` for a worked
+  example. Put every new relative import **above** the `@/` imports.
 - **Do not run `npx prettier --write` on these files.** `.prettierrc` sets `singleQuote: true,
   semi: false`, so it would restyle every moved line and bury the rename diff. ESLint here only
   enforces import order, which the given snippets already satisfy.
@@ -359,9 +365,12 @@ and with both declarations exported (`export interface VocabWord {`, `export con
 
 - [ ] **Step 3: Import it back**
 
-In `components/notebook/notebook-view.tsx`, add to the internal import group (after the `@/lib/utils` line):
+In `components/notebook/notebook-view.tsx`, add the relative import as its own group **above** the
+`@/lib/utils` import, with a blank line on each side (see the import-order note in the conventions):
 ```ts
 import { MOCK_WORDS, type VocabWord } from "./notebook-data";
+
+import { cn } from "@/lib/utils";
 ```
 Keep `VocabWord` in the import only if the view still names the type; if `npx tsc --noEmit` reports it unused, import just `MOCK_WORDS`.
 
@@ -519,10 +528,13 @@ Cut `const LEVEL_TESTS = [...]`, `const MOCK_QUESTIONS: Record<string, Question[
 
 - [ ] **Step 4: Import them back**
 
-In `components/placement-test/placement-test-view.tsx`, add after the `@/lib/utils` import:
+In `components/placement-test/placement-test-view.tsx`, add the two relative imports as their own
+group **above** the `@/lib/utils` import, with a blank line on each side:
 ```ts
 import { LEVEL_TESTS, MOCK_QUESTIONS, type Question } from "./placement-test-data";
 import { playBeep } from "./placement-test-sound";
+
+import { cn } from "@/lib/utils";
 ```
 Drop any of the three names from the import if `npx tsc --noEmit` reports it unused.
 
@@ -599,7 +611,8 @@ The moved file imports `@/components/ranking/ranking-table`. Now that it sits in
 ```ts
 import { RankingTable } from "./ranking-table";
 ```
-and move it from the internal group into the relative group at the end of the imports, so `import-x/order` is satisfied.
+and place it in its own group **above** the `@/lib/utils` import, with a blank line on each side —
+relative imports sort before `@/` here (see the conventions).
 
 - [ ] **Step 3: Rename the component**
 
@@ -678,7 +691,8 @@ to
 ```ts
 import { SchoolRankingTable } from "./school-ranking-table";
 ```
-and move it to the relative import group at the end.
+and place it in its own group **above** any `@/` import, with a blank line on each side — relative
+imports sort before `@/` here (see the conventions).
 
 - [ ] **Step 3: Rename the component**
 
