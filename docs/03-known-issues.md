@@ -21,8 +21,16 @@ with the project's own assets before production.
 
 ## 4. Pre-existing runtime warnings
 
-- `/ranking` logs a React hydration mismatch and a warning about `selected` on `<option>`.
+- `/ranking` and `/school-ranking` log a React warning about `selected` on `<option>`. Both
+  `<select>` elements are uncontrolled, so the fix is `defaultValue=""` on the `<select>` and no
+  `selected` on the options (`components/ranking/ranking-view.tsx`,
+  `components/ranking/school-ranking-view.tsx`). Still open.
 - Every page logs one 404 for a missing static resource.
+
+Fixed on 2026-11-16: the React hydration mismatch both ranking pages logged. The score cells called
+`toLocaleString()` without a locale, so the Node renderer and the browser chose different thousands
+separators (`183,350` vs `183.350`). `formatScore()` in `lib/utils.ts` now pins the locale to
+`vi-VN`; use it for any new number a page renders during SSR.
 
 ## 5. Unused dev dependencies
 

@@ -2,7 +2,7 @@
 
 import { GraduationCap, Trophy } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatScore } from "@/lib/utils";
 import { schoolRankingMock as schoolRankingData } from "@/mocks/school-ranking";
 
 export function SchoolRankingTable() {
@@ -110,7 +110,7 @@ export function SchoolRankingTable() {
                       isTop2 ? "text-xl md:text-2xl text-slate-200 drop-shadow-[0_2px_4px_rgba(156,163,175,0.3)]" : 
                       isTop3 ? "text-lg md:text-xl text-orange-300 drop-shadow-[0_2px_4px_rgba(154,52,18,0.3)]" : "text-base md:text-lg text-white"
                     )}>
-                      {school.score.toLocaleString()}
+                      {formatScore(school.score)}
                     </span>
                   </td>
                 </tr>
