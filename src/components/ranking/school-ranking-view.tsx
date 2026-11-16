@@ -27,8 +27,8 @@ export function SchoolRankingView(): React.ReactElement {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center w-full">
           {/* Level Select */}
           <div className="relative w-full">
-            <select className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner">
-              <option value="" disabled selected className="bg-dropdown-bg text-white">Chọn cấp độ</option>
+            <select defaultValue="" className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner">
+              <option value="" disabled className="bg-dropdown-bg text-white">Chọn cấp độ</option>
               <option value="ioe" className="bg-dropdown-bg text-white">IOE</option>
               <option value="starters" className="bg-dropdown-bg text-white">Starters (Pre A1)</option>
               <option value="movers" className="bg-dropdown-bg text-white">Movers (A1)</option>
@@ -41,8 +41,8 @@ export function SchoolRankingView(): React.ReactElement {
 
           {/* City Select */}
           <div className="relative w-full">
-            <select className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner">
-              <option value="" disabled selected className="bg-dropdown-bg text-white">Tỉnh / Thành phố</option>
+            <select defaultValue="" className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner">
+              <option value="" disabled className="bg-dropdown-bg text-white">Tỉnh / Thành phố</option>
               <option value="hn" className="bg-dropdown-bg text-white">Hà Nội</option>
               <option value="hcm" className="bg-dropdown-bg text-white">Hồ Chí Minh</option>
               <option value="dn" className="bg-dropdown-bg text-white">Đà Nẵng</option>

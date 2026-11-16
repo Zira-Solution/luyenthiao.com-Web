@@ -43,8 +43,8 @@ export function RankingView(): React.ReactElement {
           
           {/* Level Select */}
           <div className="relative w-full text-shadow-game-title">
-            <select className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title">
-              <option value="" disabled selected className="bg-dropdown-bg text-white text-shadow-game-title">Chọn cấp độ</option>
+            <select defaultValue="" className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title">
+              <option value="" disabled className="bg-dropdown-bg text-white text-shadow-game-title">Chọn cấp độ</option>
               <option value="ioe" className="bg-dropdown-bg text-white text-shadow-game-title">IOE</option>
               <option value="starters" className="bg-dropdown-bg text-white text-shadow-game-title">Starters (Pre A1)</option>
               <option value="movers" className="bg-dropdown-bg text-white text-shadow-game-title">Movers (A1)</option>
@@ -57,8 +57,8 @@ export function RankingView(): React.ReactElement {
 
           {/* City Select */}
           <div className="relative w-full text-shadow-game-title">
-            <select className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title">
-              <option value="" disabled selected className="bg-dropdown-bg text-white text-shadow-game-title">Tỉnh / Thành phố</option>
+            <select defaultValue="" className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title">
+              <option value="" disabled className="bg-dropdown-bg text-white text-shadow-game-title">Tỉnh / Thành phố</option>
               <option value="hn" className="bg-dropdown-bg text-white text-shadow-game-title">Hà Nội</option>
               <option value="hcm" className="bg-dropdown-bg text-white text-shadow-game-title">Hồ Chí Minh</option>
               <option value="dn" className="bg-dropdown-bg text-white text-shadow-game-title">Đà Nẵng</option>
@@ -71,8 +71,8 @@ export function RankingView(): React.ReactElement {
 
           {/* School Select */}
           <div className="relative w-full text-shadow-game-title">
-            <select className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title">
-              <option value="" disabled selected className="bg-dropdown-bg text-white text-shadow-game-title">Trường / Trung tâm</option>
+            <select defaultValue="" className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title">
+              <option value="" disabled className="bg-dropdown-bg text-white text-shadow-game-title">Trường / Trung tâm</option>
               <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả các trường</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-blue-300 text-shadow-game-title">
