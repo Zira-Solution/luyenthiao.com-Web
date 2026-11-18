@@ -1,3 +1,4 @@
+import { safeRedirectPath } from '@/lib/safe-redirect'
 import { z } from '@/lib/zod'
 
 const planetSchema = z.object({
@@ -32,7 +33,10 @@ export function toPlanets(rows: z.output<typeof planetsSchema>): Planet[] {
   return [...rows]
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .map((row) => {
-      const href = row.linkUrl || `/testlevels/${row.slug}`
+      const href =
+        row.linkUrl && safeRedirectPath(row.linkUrl) === row.linkUrl
+          ? row.linkUrl
+          : `/testlevels/${row.slug}`
       return {
         slug: row.slug,
         name: row.name,

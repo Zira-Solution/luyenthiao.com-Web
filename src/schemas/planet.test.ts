@@ -31,4 +31,20 @@ describe('planets', () => {
     expect(ioe?.href).toBe('/challenges')
     expect(ioe?.comingSoon).toBe(true)
   })
+
+  it.each([
+    'https://evil.example',
+    '//evil.example',
+    '/\\evil.example',
+    'javascript:alert(1)',
+    '/\t/evil.example',
+    '/\n/evil.example',
+    '/\r/evil.example',
+  ])('ignores the unsafe linkUrl %s', (linkUrl) => {
+    const rows = planetsSchema.parse(planets).map((row) => ({ ...row, linkUrl }))
+    for (const planet of toPlanets(rows)) {
+      expect(planet.href).toBe(`/testlevels/${planet.slug}`)
+      expect(planet.comingSoon).toBe(false)
+    }
+  })
 })
