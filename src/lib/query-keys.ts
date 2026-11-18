@@ -1,7 +1,5 @@
+import type { HistoryQuery } from '@/schemas/history'
 import type { RankingPeriod } from '@/schemas/ranking'
-
-// Replaced by the import from '@/schemas/history' in Task 7.
-type HistoryQuery = { kind?: string; status?: string; levelSlug?: string }
 
 /**
  * Every query that holds one student's data starts with 'me', so PrivateDataCleanup can drop them all

@@ -1,32 +1,50 @@
 "use client";
 
-import { Search, ChevronLeft, Shield, Filter, Calendar, Award, BookOpen, CheckCircle } from "lucide-react";
+import { Search, ChevronLeft, Shield, Filter, Calendar, Award, CheckCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { useMyHistory } from "@/hooks/use-history";
+import { GENERIC_ERROR_MESSAGE } from "@/lib/api-client";
+import { formatDateTimeVi } from "@/lib/format";
+import { LEVEL_OPTIONS, levelLabel } from "@/lib/level-label";
 import { cn } from "@/lib/utils";
-import historyMocks from "@/mocks/history.json";
+import {
+  HISTORY_KIND_LABELS,
+  HISTORY_STATUS_LABELS,
+  kindLabel,
+  statusLabel,
+  type HistoryKind,
+  type HistoryQuery,
+  type HistoryStatus,
+} from "@/schemas/history";
+
+const KIND_TABS: { value: "all" | HistoryKind; label: string }[] = [
+  { value: "all", label: "Tất cả" },
+  ...(Object.keys(HISTORY_KIND_LABELS) as HistoryKind[]).map((value) => ({
+    value,
+    label: HISTORY_KIND_LABELS[value],
+  })),
+];
 
 export function HistoryView(): React.ReactElement {
   const router = useRouter();
   
-  // Filter States
+  // Filter States: kind, status and level go to the server; the title search runs in the browser.
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
-  const [selectedSkill, setSelectedSkill] = useState<string>("all");
+  const [selectedKind, setSelectedKind] = useState<"all" | HistoryKind>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
-  
-  // Toggle to simulate logged-in populated state vs default trial empty state
-  const [isTrialMode, setIsTrialMode] = useState<boolean>(true);
+  const [selectedStatus, setSelectedStatus] = useState<"all" | HistoryStatus>("all");
 
-  // Filter logic
-  const filteredHistory = historyMocks.filter((item) => {
-    const matchesLevel = selectedLevel === "all" || item.level.toLowerCase().includes(selectedLevel.toLowerCase());
-    const matchesSkill = selectedSkill === "all" || item.skill.toLowerCase().includes(selectedSkill.toLowerCase());
-    const matchesStatus = selectedStatus === "all" || item.status === selectedStatus;
-    const matchesSearch = searchQuery === "" || item.examName.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesLevel && matchesSkill && matchesStatus && matchesSearch;
-  });
+  const query: HistoryQuery = {};
+  if (selectedKind !== "all") query.kind = selectedKind;
+  if (selectedStatus !== "all") query.status = selectedStatus;
+  if (selectedLevel !== "all") query.levelSlug = selectedLevel;
+
+  const { data, isPending, error, refetch } = useMyHistory(query);
+
+  const needle = searchQuery.trim().toLowerCase();
+  const filteredHistory = (data ?? []).filter((item) => needle === "" || item.title.toLowerCase().includes(needle));
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 pb-[120px] flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
@@ -40,29 +58,6 @@ export function HistoryView(): React.ReactElement {
           <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-yellow-450 text-shadow-game-title" />
           <span>Quay lại</span>
         </button>
-
-        {/* Mode Toggle Banner (Helpful for testing both UI designs requested by spec) */}
-        <div className="hidden sm:flex items-center bg-game-input-focus-shadow/90 border border-blue-500/40 px-3.5 py-1.5 rounded-full text-[10px] md:text-xs font-bold text-blue-200 shadow-md text-shadow-game-title">
-          <span className="mr-2 text-shadow-game-title">Trạng thái:</span>
-          <button 
-            onClick={() => setIsTrialMode(true)}
-            className={cn(
-              "px-3 py-1 rounded-full cursor-pointer uppercase transition-all tracking-wider text-[10px]",
-              isTrialMode ? "bg-red-500 text-white font-black" : "hover:text-white"
-            )}
-          >
-            Dùng thử (Trống)
-          </button>
-          <button 
-            onClick={() => setIsTrialMode(false)}
-            className={cn(
-              "px-3 py-1 rounded-full cursor-pointer uppercase transition-all tracking-wider text-[10px]",
-              !isTrialMode ? "bg-green-500 text-white font-black" : "hover:text-white"
-            )}
-          >
-            Đã đăng nhập (Có dữ liệu)
-          </button>
-        </div>
 
         <button 
           onClick={() => alert("Đang chuyển hướng đến trang đổi khiên...")}
@@ -83,28 +78,6 @@ export function HistoryView(): React.ReactElement {
         LỊCH SỬ LÀM BÀI
       </h1>
 
-      {/* Interactive Mode Toggle for mobile/small screens */}
-      <div className="flex sm:hidden items-center justify-center bg-game-input-focus-shadow/90 border border-blue-500/40 px-3.5 py-1.5 rounded-2xl text-[10px] font-bold text-blue-200 shadow-md mb-6 w-full max-w-xs text-shadow-game-title">
-        <button 
-          onClick={() => setIsTrialMode(true)}
-          className={cn(
-            "flex-1 py-1.5 rounded-lg cursor-pointer uppercase transition-all tracking-wider text-[9px] text-center",
-            isTrialMode ? "bg-red-500 text-white font-black" : "hover:text-white"
-          )}
-        >
-          Dùng thử
-        </button>
-        <button 
-          onClick={() => setIsTrialMode(false)}
-          className={cn(
-            "flex-1 py-1.5 rounded-lg cursor-pointer uppercase transition-all tracking-wider text-[9px] text-center",
-            !isTrialMode ? "bg-green-500 text-white font-black" : "hover:text-white"
-          )}
-        >
-          Có dữ liệu
-        </button>
-      </div>
-
       {/* Filters Panel */}
       <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2rem] p-5 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.4)] mb-6 flex flex-col gap-4 text-shadow-game-title">
         <div className="flex items-center gap-2 text-white/80 font-black text-sm uppercase tracking-wider border-b border-white/10 pb-3 text-shadow-game-title">
@@ -117,7 +90,8 @@ export function HistoryView(): React.ReactElement {
           <div className="flex items-center bg-game-input-focus-shadow rounded-xl px-4 py-3 border-2 border-ranking-table-border focus-within:border-blue-400 transition-all shadow-inner w-full text-shadow-game-title">
             <Search className="w-5 h-5 text-blue-300 mr-2 shrink-0 text-shadow-game-title" />
             <input 
-              type="text" 
+              type="search"
+              aria-label="Tìm kiếm"
               placeholder="Tìm tên bài kiểm tra..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -127,51 +101,49 @@ export function HistoryView(): React.ReactElement {
           
           {/* Level Filter */}
           <div className="relative w-full text-shadow-game-title">
-            <select 
+            <select aria-label="Lọc theo cấp độ" 
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
               className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
             >
               <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả cấp độ</option>
-              <option value="ioe" className="bg-dropdown-bg text-white text-shadow-game-title">IOE</option>
-              <option value="starters" className="bg-dropdown-bg text-white text-shadow-game-title">Starters (Pre A1)</option>
-              <option value="movers" className="bg-dropdown-bg text-white text-shadow-game-title">Movers (A1)</option>
-              <option value="flyers" className="bg-dropdown-bg text-white text-shadow-game-title">Flyers (A2)</option>
-              <option value="toefl" className="bg-dropdown-bg text-white text-shadow-game-title">TOEFL Primary</option>
+              {LEVEL_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value} className="bg-dropdown-bg text-white text-shadow-game-title">{o.label}</option>
+              ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-blue-300 text-shadow-game-title">
               <Award className="w-4 h-4 text-shadow-game-title" />
             </div>
           </div>
 
-          {/* Skill Filter */}
-          <div className="relative w-full text-shadow-game-title">
-            <select 
-              value={selectedSkill}
-              onChange={(e) => setSelectedSkill(e.target.value)}
-              className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
-            >
-              <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả kĩ năng</option>
-              <option value="listening" className="bg-dropdown-bg text-white text-shadow-game-title">Listening (Nghe)</option>
-              <option value="reading" className="bg-dropdown-bg text-white text-shadow-game-title">Reading & Writing (Đọc & Viết)</option>
-              <option value="speaking" className="bg-dropdown-bg text-white text-shadow-game-title">Speaking (Nói)</option>
-              <option value="writing" className="bg-dropdown-bg text-white text-shadow-game-title">Writing (Viết)</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-blue-300 text-shadow-game-title">
-              <BookOpen className="w-4 h-4 text-shadow-game-title" />
-            </div>
+          {/* Kind Tabs */}
+          <div className="flex w-full gap-1 bg-game-input-focus-shadow rounded-xl p-1 border-2 border-ranking-table-border text-shadow-game-title">
+            {KIND_TABS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setSelectedKind(tab.value)}
+                aria-pressed={selectedKind === tab.value}
+                className={cn(
+                  "flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center",
+                  selectedKind === tab.value ? "bg-topbar-login-border border border-blue-400 text-white" : "text-blue-200 hover:text-white"
+                )}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
           {/* Status Filter */}
           <div className="relative w-full text-shadow-game-title">
-            <select 
+            <select aria-label="Lọc theo trạng thái" 
               value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
+              onChange={(e) => setSelectedStatus(e.target.value as "all" | HistoryStatus)}
               className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
             >
               <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả trạng thái</option>
-              <option value="Hoàn thành" className="bg-dropdown-bg text-white text-shadow-game-title">Hoàn thành</option>
-              <option value="Đang làm" className="bg-dropdown-bg text-white text-shadow-game-title">Đang làm</option>
+              {(Object.keys(HISTORY_STATUS_LABELS) as HistoryStatus[]).map((value) => (
+                <option key={value} value={value} className="bg-dropdown-bg text-white text-shadow-game-title">{HISTORY_STATUS_LABELS[value]}</option>
+              ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-blue-300 text-shadow-game-title">
               <CheckCircle className="w-4 h-4 text-shadow-game-title" />
@@ -180,32 +152,23 @@ export function HistoryView(): React.ReactElement {
         </div>
       </div>
 
-      {/* Trial Notification Banner */}
-      {isTrialMode && (
-        <div className="w-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-2 border-orange-500/40 rounded-3xl p-4 text-center mb-6 shadow-inner animate-pulse text-shadow-game-title">
-          <p className="text-yellow-250 font-black text-xs md:text-sm tracking-wider uppercase drop-shadow text-shadow-game-title">
-            📢 THÔNG BÁO: Hiện bạn đang ở trạng thái dùng thử. Vui lòng đăng nhập để lưu trữ lịch sử, xem lại bài làm, đáp án và sử dụng trọn vẹn các tính năng của FLYER.
-          </p>
-          <div className="flex justify-center gap-4 mt-3 text-shadow-game-title">
-            <button 
-              onClick={() => router.push("/login")}
-              className="px-4 py-1.5 rounded-xl bg-topbar-login-bg hover:bg-blue-500 text-white font-black text-[10px] md:text-xs uppercase tracking-wider border-b-3 border-topbar-login-border text-shadow-game-title"
-            >
-              Đăng Nhập
-            </button>
-            <button 
-              onClick={() => alert("Chuyển sang trang Đăng Ký...")}
-              className="px-4 py-1.5 rounded-xl bg-topbar-signup-bg hover:bg-red-500 text-white font-black text-[10px] md:text-xs uppercase tracking-wider border-b-3 border-topbar-signup-border text-shadow-game-title"
-            >
-              Đăng Ký
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* History Content */}
       <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] border-3 border-ranking-table-border p-4 md:p-6 shadow-[0_15px_30px_rgba(0,0,0,0.5)] overflow-hidden text-shadow-game-title">
-        {isTrialMode || filteredHistory.length === 0 ? (
+        {isPending ? (
+          <p className="w-full py-10 text-center text-blue-300 font-extrabold text-sm uppercase tracking-wider">
+            Đang tải lịch sử…
+          </p>
+        ) : error ? (
+          <div className="w-full py-10 text-center">
+            <p className="text-white font-black text-sm tracking-wider mb-4">{error instanceof Error ? error.message : GENERIC_ERROR_MESSAGE}</p>
+            <button
+              onClick={() => refetch()}
+              className="px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-xs uppercase tracking-wider cursor-pointer"
+            >
+              Thử lại
+            </button>
+          </div>
+        ) : filteredHistory.length === 0 ? (
           /* Empty State */
           <div className="w-full py-10 flex flex-col items-center justify-center text-center text-shadow-game-title">
             <div className="relative w-36 h-36 md:w-44 md:h-44 mb-6 animate-[floating_4s_ease-in-out_infinite] text-shadow-game-title">
@@ -220,19 +183,11 @@ export function HistoryView(): React.ReactElement {
               <span className="absolute -top-1 right-2 text-3xl md:text-4xl animate-bounce text-shadow-game-title">💤</span>
             </div>
             <h2 className="text-white font-black text-lg md:text-2xl tracking-wider mb-2 font-heading text-shadow-game-title">
-              HIỆN TẠI CHƯA CÓ LỊCH SỬ BÀI LÀM.
+              Chưa có bài làm nào.
             </h2>
             <p className="text-blue-300 font-extrabold text-xs md:text-sm tracking-widest uppercase text-shadow-game-title">
               CHĂM CHỈ LÀM BÀI HƠN BẠN NHÉ!
             </p>
-            {isTrialMode && (
-              <button 
-                onClick={() => setIsTrialMode(false)}
-                className="mt-6 px-5 py-2.5 bg-gradient-to-b from-green-450 to-green-600 hover:from-green-400 hover:to-green-500 border-2 border-green-800 text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer text-shadow-game-title"
-              >
-                Mô phỏng tài khoản đã làm bài 🚀
-              </button>
-            )}
           </div>
         ) : (
           /* Populated History Table */
@@ -245,12 +200,11 @@ export function HistoryView(): React.ReactElement {
                     <span>Thời gian nộp bài</span>
                   </th>
                   <th className="pb-4 pt-2 px-3 text-shadow-game-title">Cấp độ</th>
-                  <th className="pb-4 pt-2 px-3 text-shadow-game-title">Kĩ năng</th>
+                  <th className="pb-4 pt-2 px-3 text-shadow-game-title">Loại</th>
                   <th className="pb-4 pt-2 px-3 text-shadow-game-title">Đề thi</th>
                   <th className="pb-4 pt-2 px-3 text-center text-shadow-game-title">Điểm số</th>
                   <th className="pb-4 pt-2 px-3 text-center text-shadow-game-title">Số câu đúng</th>
                   <th className="pb-4 pt-2 px-3 text-center text-shadow-game-title">Trạng thái</th>
-                  <th className="pb-4 pt-2 px-3 text-center text-shadow-game-title">Hành động</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-blue-500/10 text-white font-semibold text-xs md:text-sm text-shadow-game-title">
@@ -260,44 +214,42 @@ export function HistoryView(): React.ReactElement {
                     className="hover:bg-white/5 transition-colors group text-shadow-game-title"
                   >
                     <td className="py-4 px-3 text-white/70 whitespace-nowrap text-shadow-game-title">
-                      {item.submitTime}
+                      {formatDateTimeVi(item.createdAt)}
                     </td>
                     <td className="py-4 px-3 whitespace-nowrap text-shadow-game-title">
                       <span className={cn(
                         "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border",
-                        item.level.includes("Starters") && "bg-green-500/10 border-green-500/30 text-green-400",
-                        item.level.includes("Movers") && "bg-red-500/10 border-red-500/30 text-red-400",
-                        item.level.includes("Flyers") && "bg-purple-500/10 border-purple-500/30 text-purple-400",
-                        item.level.includes("IOE") && "bg-blue-500/10 border-blue-500/30 text-blue-400",
-                        item.level.includes("TOEFL") && "bg-amber-500/10 border-amber-500/30 text-amber-400"
+                        item.levelSlug === "starters" && "bg-green-500/10 border-green-500/30 text-green-400",
+                        item.levelSlug === "movers" && "bg-red-500/10 border-red-500/30 text-red-400",
+                        item.levelSlug === "flyers" && "bg-purple-500/10 border-purple-500/30 text-purple-400",
+                        item.levelSlug === "ioe" && "bg-blue-500/10 border-blue-500/30 text-blue-400",
+                        item.levelSlug === "toefl_primary" && "bg-amber-500/10 border-amber-500/30 text-amber-400"
                       )}>
-                        {item.level}
+                        {levelLabel(item.levelSlug)}
                       </span>
                     </td>
                     <td className="py-4 px-3 whitespace-nowrap text-blue-200 text-shadow-game-title">
-                      {item.skill}
+                      {kindLabel(item.kind)}
                     </td>
                     <td className="py-4 px-3 font-extrabold max-w-xs truncate group-hover:text-yellow-350 transition-colors text-shadow-game-title">
-                      {item.examName}
+                      {item.title}
                     </td>
                     <td className="py-4 px-3 text-center font-black text-yellow-350 text-base drop-shadow-sm text-shadow-game-title">
-                      {item.score}
+                      {item.score}/{item.maxScore}
                     </td>
                     <td className="py-4 px-3 text-center font-bold text-green-400 text-shadow-game-title">
-                      {item.ratio}
+                      {item.correctCount}/{item.totalQuestions}
                     </td>
                     <td className="py-4 px-3 text-center whitespace-nowrap text-shadow-game-title">
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold text-shadow-game-title">
-                        {item.status}
+                      <span className={cn(
+                        "px-2 py-0.5 rounded-md border text-[10px] font-bold text-shadow-game-title",
+                        item.status === "passed" && "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+                        item.status === "failed" && "bg-red-500/20 text-red-400 border-red-500/30",
+                        item.status === "pending" && "bg-amber-500/20 text-amber-400 border-amber-500/30",
+                        item.status === "graded" && "bg-blue-500/20 text-blue-400 border-blue-500/30"
+                      )}>
+                        {statusLabel(item.status)}
                       </span>
-                    </td>
-                    <td className="py-4 px-3 text-center whitespace-nowrap text-shadow-game-title">
-                      <button 
-                        onClick={() => alert(`Đang tải bài thi: ${item.examName}`)}
-                        className="px-3 py-1 bg-topbar-login-border hover:bg-blue-600 border border-blue-400 text-white text-[10px] font-black uppercase tracking-wider rounded-lg active:scale-95 transition-all cursor-pointer text-shadow-game-title"
-                      >
-                        Xem lại
-                      </button>
                     </td>
                   </tr>
                 ))}
