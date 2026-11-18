@@ -1,4 +1,6 @@
-export * from "./ranking-table";
-export * from "./school-ranking-table";
-export { RankingView } from "./ranking-view";
-export { SchoolRankingView } from "./school-ranking-view";
+export * from './ranking-table'
+export * from './school-ranking-table'
+export { RankingView } from './ranking-view'
+export { SchoolRankingView } from './school-ranking-view'
+export { MyRankCard } from './my-rank-card'
+export { Pagination, PeriodTabs, RankingMessage } from './ranking-controls'
