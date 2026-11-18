@@ -93,7 +93,7 @@ Public (no hint required): `/`, `/login`, `/signup`, `/forgot-password`, `/reset
 `/school-ranking`, `/placement-test`, `/testlevels/*`.
 Everything else needs the hint, including `/admin/*`, `/account/*`, `/check-point/*`, `/testresult`, `/history`,
 `/notebook`, `/notifications`, `/tasks`, `/write/*`, `/speaking/*`.
-Guest-only: `/login`, `/signup` (a visitor with the hint goes to `/`).
+Guest-only: `/login`, `/signup` (a visitor with the hint goes to the safe `redirect` target, else `/`; revised 2026-11-18 in review).
 
 Matching is by path segment: a path matches entry `p` when it equals `p` or starts with `p + '/'`. Prefix matching
 without the boundary once matched a static file in Zoney (`/checkin` vs `/checkin-banner.png`).
@@ -101,7 +101,9 @@ without the boundary once matched a static file in Zoney (`/checkin` vs `/checki
 ### 3.3 Proxy decisions
 
 `src/proxy.ts` exports `proxy` and `config.matcher` excluding `_next/static`, `_next/image`, `favicon.ico`,
-`robots.txt`, `sitemap.xml` and files with an extension (`clone-assets`, images, audio). The decision logic is a pure
+`robots.txt` and `sitemap.xml`. Other static files are let through by the decision function for an allow-list of
+extensions (images, audio/video, fonts, css/js/json/txt/xml/webmanifest/map), so a dynamic route whose last segment
+contains a dot (`/check-point/1.5`) is still protected (revised 2026-11-18 in review). The decision logic is a pure
 function in `src/lib/route-access.ts` so it is unit-tested without a request.
 
 1. **CSRF on route handlers.** A request to `/api/*` whose method is not `GET`/`HEAD`/`OPTIONS` and whose
@@ -110,7 +112,7 @@ function in `src/lib/route-access.ts` so it is unit-tested without a request.
    server-to-server).
    Paths under `/api/` stop here: they are never redirected by steps 2–3 (a route handler answers for itself).
 2. Protected path without the hint → `307` to `/login?redirect=<pathname + search>`.
-3. Guest-only path with the hint → `307` to `/`.
+3. Guest-only path with the hint → `307` to `safeRedirectPath(redirect)` (`/` when absent or unsafe).
 4. Otherwise pass through.
 
 ### 3.4 Stale hint
@@ -142,6 +144,10 @@ Used by the login form (after success go to `safeRedirectPath(searchParams.get('
   `app/not-found.tsx` (extracted into a shared component if needed) and never mounts the editor. Used by
   `app/admin/layout.tsx`.
 - These guards are UX. The backend (`JwtAuthGuard`, `AdminGuard`) remains the boundary.
+- Revised 2026-11-18 in review: right after a logout seen by a mounted `RequireAuth` (store flag `signedOut`, set by
+  `clearSession('logout')`), the guard goes to `/` instead of `/login`, so it does not race the Topbar's own navigation.
+  After authentication the login form navigates with a full page load (`hardNavigate`), because Next's client router
+  cache can still hold a guest-time prefetch that the proxy redirected to `/login`.
 
 ## 5. `ApiError`
 
@@ -158,7 +164,7 @@ export class ApiError extends Error {
 }
 ```
 
-- `fromApi` is `true` only when the body is JSON with a numeric `statusCode` and a string or string-array `message`
+- `fromApi` is `true` only when the status is below 500 and the body is JSON with a numeric `statusCode` and a string or string-array `message`
   (the NestJS error shape). Then `message` is the backend text (array joined with `", "`), `code` is the body's
   `code` if it is a string, else `error` if it is a string, else `null`.
 - Otherwise (HTML, empty body, non-Nest JSON) `fromApi` is `false` and `message` is the generic

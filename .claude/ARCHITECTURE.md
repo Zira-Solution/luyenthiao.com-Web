@@ -75,6 +75,15 @@ and [Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/use
   `src/lib/env.test.ts` and `docs/04-deploy-vercel.md`.
 - `src/.env.example` sets `NEXT_PUBLIC_API_URL=http://localhost:3000/api`, which points at this app itself. The backend dev server listens on port 3005 (`luyenthiao.com-Backend` README), so set `NEXT_PUBLIC_API_URL=http://localhost:3005/api` in `src/.env.local` to reach it.
 - The backend allows only `CORS_ORIGIN` (default `http://localhost:3000`, see the backend `.env.example`); if the app runs on another port, credentialed auth calls fail CORS — add that origin to the backend `.env` or free port 3000.
+- **Security layer** (spec `.claude/superpowers/specs/2026-11-18-web-security-foundation-design.md`). The backend stays the security boundary; everything below is defence in depth and UX:
+  - Headers: `lib/security-headers.ts`, wired in `next.config.ts` (`poweredByHeader: false`). The CSP is production-only; `connect-src` is `'self' <api origin> <ws/wss api origin>` derived from `NEXT_PUBLIC_API_URL` (`https:`→`wss:` for socket.io), and the API origin is also in `img-src`/`media-src` (so an `http://` API works in the local production simulation). If `NEXT_PUBLIC_API_URL` is not an absolute http(s) URL the CSP degrades to `'self'` for API calls and logs a `[security-headers]` warning instead of failing the build. No nonces: they would force dynamic rendering.
+  - Hint cookie `lta_authed=1` (`lib/auth-hint-cookie.ts`; `Path=/; Max-Age=2592000; SameSite=Lax`, plus `Secure` on https) is written/removed only by `setSession`/`clearSession` in `store/auth-store.ts`, and removed BEFORE the store state changes (prevents redirect loops; pinned by a test). It is a UX hint, not a security boundary. A refresh that fails for network reasons also signs the user out and clears the hint; they stay on `/login` until they reload or log in again (the bootstrap refresh runs only on a full page load). Also, the post-login navigation is a full page load (`hardNavigate` in `lib/navigation.ts`) on purpose: the client router cache can hold a guest-time redirect to `/login`.
+  - `proxy.ts` (Next 16's name for middleware) calls the pure `lib/route-access.ts` `decideRoute`: guests on non-public pages → 307 `/login?redirect=<path+query>`; hinted visitors on `/login`/`/signup` → the safe `redirect` target (or `/`); cross-site (`Sec-Fetch-Site: cross-site`) non-GET/HEAD/OPTIONS requests to `/api/*` → 403 `{ message: 'Yêu cầu không hợp lệ.', code: 'CROSS_SITE_REQUEST' }`. `/api/*` is never redirected. Static files are skipped only for an allowlist of extensions (images, audio/video, fonts, css/js/json/txt/xml/webmanifest/map). Public pages: `/`, `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/ranking`, `/school-ranking`, `/placement-test`, `/testlevels/*`. Routes prefetched into Next's client cache can skip the proxy, so the client guards still matter.
+  - `lib/safe-redirect.ts` `safeRedirectPath`: same-origin path only; rejects `//`, `/\`, schemes and control characters, re-checks the output after URL normalisation (dot segments such as `/.//evil.com`) and never returns `/login`/`/signup` (decoded, case-insensitive). Used by `LoginForm` and the proxy.
+  - Guards: `RequireAuth` (`components/auth/require-auth.tsx`) and `RequireAdmin` (`components/auth/require-admin.tsx`), both exported from the `@/components/auth` barrel. `RequireAuth` is applied by the `layout.tsx` of `app/admin`, `app/account`, `app/check-point`, `app/testresult`, `app/write`, `app/speaking` and `app/(dashboard)/(protected)`. Unauthenticated → `/login?redirect=<current path>`, except right after a logout seen by that mounted guard (store flag `signedOut`, set by `clearSession('logout')` from `useLogout`) → `/`. `RequireAdmin` (role `'ADMIN'`) in `app/admin/layout.tsx` renders `NotFoundView`. Guards are UX only: server-component children are still rendered into the RSC payload, so never rely on them to hide server-fetched data. New signed-in pages go under one of these segments.
+  - Login: after authentication (fresh login or a successful bootstrap refresh) `LoginForm` does `router.replace(safeRedirectPath(redirect))`. Known gap (next sub-project): the signup flow does not carry `redirect`.
+  - `ApiError(message, status, code, fromApi)` in `lib/api-client.ts`: `fromApi` is true only for a NestJS error body (numeric `statusCode` + string/string[] `message`) with status < 500 (Nest's default 500 body is English and meaningless to students); show `message` to users only then. Otherwise `message` is `GENERIC_ERROR_MESSAGE` ('Không thể kết nối máy chủ, vui lòng thử lại sau.'). A network failure gives status 0; a 2xx with a non-JSON body also becomes a generic `ApiError`. `code` is the body's `code`, else Nest's `error` reason phrase.
+  - HTML strings render only through `<SafeHtml>` (`components/common/safe-html.tsx`) → `sanitizeHtml` (`lib/safe-html.ts`, `sanitize-html` 2.18.2 pinned; pure JS so SSR and browser output match — DOMPurify returns its input unchanged without a DOM). Allow-list: formatting, lists, tables, `img`/`a`/`audio`/`source`; only `style` (regex-limited properties), no `class`/`id`; `data:` URLs for `img` only; links forced to `target=_blank rel=noopener noreferrer`. `lib/no-raw-html.test.ts` fails on any other `dangerouslySetInnerHTML`.
 
 ## `src/` structure
 
@@ -82,10 +91,10 @@ and [Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/use
 |---|---|
 | `app/` | Routes, layouts, `robots.ts`, `sitemap.ts`, route handlers in `app/api/` |
 | `components/ui/` | Primitives (button, card, dialog, game-button, game-input) |
-| `components/common/` | App-wide: `Topbar`, `BottomNav`, `ThemeProvider` |
+| `components/common/` | App-wide: `Topbar`, `BottomNav`, `ThemeProvider`, `NotFoundView`, `SafeHtml` |
 | `components/<domain>/` | `admin`, `auth`, `dashboard` (currently unused), `exam` (+ `exam/parts`), `ranking`, `speaking`, `testlevels`, `writing` |
 | `hooks/` | Flat `use-*.ts`; auth mutation hooks re-exported from `hooks/index.ts`; `use-media-library.ts` |
-| `lib/` | `index.ts` (barrel exporting `cn`), `api-client.ts`, `env.ts`, `utils.ts` (`cn`), `fonts.ts`, `exam.ts` (exam helpers barrel), `exam-*.ts`, `admin-*.ts` |
+| `lib/` | `index.ts` (barrel exporting `cn`), `api-client.ts`, `env.ts`, `utils.ts` (`cn`), `fonts.ts`, `exam.ts` (exam helpers barrel), `exam-*.ts`, `admin-*.ts`, `security-headers.ts`, `auth-hint-cookie.ts`, `safe-redirect.ts`, `route-access.ts`, `safe-html.ts` |
 | `schemas/` | Zod schemas (`exam.ts`) |
 | `store/` | `auth-store.ts`, `exam-store.ts`, `exam-editor-store.ts` |
 | `providers/` | `auth-provider.tsx`, `query-provider.tsx` |
@@ -98,7 +107,8 @@ and [Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/use
 
 | Route | Components |
 |---|---|
-| `/` (`app/(dashboard)/page.tsx`), `/history`, `/notebook`, `/notifications`, `/placement-test`, `/tasks` | inline in the page (known debt) inside `app/(dashboard)/layout.tsx` (`Topbar`, `BottomNav`) |
+| `/` (`app/(dashboard)/page.tsx`), `/placement-test` | inline in the page (known debt) inside `app/(dashboard)/layout.tsx` (`Topbar`, `BottomNav`) |
+| `/history`, `/notebook`, `/notifications`, `/tasks` | inline in the page (known debt), now in `app/(dashboard)/(protected)/` (its `layout.tsx` applies `RequireAuth`; URLs unchanged) inside `app/(dashboard)/layout.tsx` |
 | `/ranking`, `/school-ranking` | inline page UI + `components/ranking` (known debt), inside `app/(dashboard)/layout.tsx` |
 | `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/account/change-password` | `components/auth` |
 | `/admin/exam`, `/admin/exam/[id]` | `components/admin` |
