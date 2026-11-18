@@ -4,6 +4,7 @@ import { ChevronDown, Plus, Trophy, BookOpen, School, ClipboardList } from "luci
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 
+import { UnreadBadge } from "@/components/common/unread-badge";
 import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH } from "@/constants";
 import { useLogout } from "@/hooks";
 import { cn } from "@/lib/utils";
@@ -343,7 +344,7 @@ export function Topbar() {
             onClick={() => router.push("/notifications")}
             className={cn(pathname === "/notifications" && "bg-white/10 border-yellow-400")}
           >
-            <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center shrink-0">
+            <div className="relative w-7 h-7 md:w-8 md:h-8 flex items-center justify-center shrink-0">
               <img 
                 src="/clone-assets/media/ic_bell.19fd4917.png" 
                 alt="Thông báo" 
@@ -352,6 +353,7 @@ export function Topbar() {
                   (e.target as HTMLImageElement).src = 'https://api.dicebear.com/7.x/bottts/svg?seed=bell';
                 }}
               />
+              <UnreadBadge />
             </div>
             <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider">
               Thông báo

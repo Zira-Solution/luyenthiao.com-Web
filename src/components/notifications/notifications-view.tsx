@@ -13,8 +13,15 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import {
+  useMarkAllNotificationsRead,
+  useMarkNotificationRead,
+  useMyNotifications,
+  useUnreadCount,
+} from "@/hooks/use-notifications";
+import { GENERIC_ERROR_MESSAGE } from "@/lib/api-client";
+import { formatRelativeTimeVi } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { notificationsMock as notificationsMocks } from "@/mocks/notifications";
 
 const typeMeta = {
   result: { icon: FileText, color: "text-blue-400 bg-blue-500/15 border-blue-500/30" },
@@ -26,22 +33,15 @@ const typeMeta = {
 
 export function NotificationsView(): React.ReactElement {
   const router = useRouter();
-  const [readIds, setReadIds] = useState<Set<number>>(new Set());
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const { data, isPending, error, refetch } = useMyNotifications(filter);
+  const markRead = useMarkNotificationRead();
+  const markAllRead = useMarkAllNotificationsRead();
 
-  const unreadCount = notificationsMocks.filter((n) => n.read === false && !readIds.has(n.id)).length;
-
-  const markAllRead = () => {
-    setReadIds(new Set(notificationsMocks.map((n) => n.id)));
-  };
-
-  const markRead = (id: number) => {
-    setReadIds((prev) => new Set(prev).add(id));
-  };
-
-  const visible = notificationsMocks.filter(
-    (n) => filter === "all" || (n.read === false && !readIds.has(n.id))
-  );
+  const visible = data ?? [];
+  const unreadCount = visible.filter((n) => !n.read).length;
+  const unreadCountQuery = useUnreadCount();
+  const unreadTotal = unreadCountQuery.data ?? unreadCount;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 md:px-8 py-4 md:py-6 pb-[120px] flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
@@ -58,8 +58,9 @@ export function NotificationsView(): React.ReactElement {
 
         {/* Mark all read */}
         <button
-          onClick={markAllRead}
-          className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-[10px] md:text-xs uppercase tracking-wider cursor-pointer"
+          onClick={() => markAllRead.mutate()}
+          disabled={markAllRead.isPending || unreadTotal === 0}
+          className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-[10px] md:text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <CheckCheck className="w-4 h-4 text-green-400" />
           <span>Đánh dấu tất cả</span>
@@ -101,28 +102,41 @@ export function NotificationsView(): React.ReactElement {
 
       {/* Notifications List */}
       <div className="w-full flex flex-col gap-4">
-        {visible.length === 0 ? (
+        {isPending ? (
+          <p className="w-full text-center text-blue-300 font-extrabold text-sm uppercase tracking-wider">
+            Đang tải thông báo…
+          </p>
+        ) : error ? (
+          <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-3xl border-3 border-ranking-table-border p-10 text-center">
+            <p className="text-white font-black text-sm tracking-wider mb-4">{error instanceof Error ? error.message : GENERIC_ERROR_MESSAGE}</p>
+            <button
+              onClick={() => refetch()}
+              className="px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-xs uppercase tracking-wider cursor-pointer"
+            >
+              Thử lại
+            </button>
+          </div>
+        ) : visible.length === 0 ? (
           <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-3xl border-3 border-ranking-table-border p-10 text-center">
             <div className="mx-auto w-16 h-16 bg-game-input-focus-shadow rounded-full flex items-center justify-center mb-4">
               <Bell className="w-8 h-8 text-blue-300" />
             </div>
             <p className="text-white font-black text-lg tracking-wider mb-1 font-heading">
-              KHÔNG CÒN THÔNG BÁO
-            </p>
-            <p className="text-blue-300 font-extrabold text-xs uppercase tracking-widest">
-              Bạn đã xem hết các thông báo. 
+              Không có thông báo nào.
             </p>
           </div>
         ) : (
           visible.map((n) => {
-            const isRead = n.read === true || readIds.has(n.id);
+            const isRead = n.read;
             const meta = typeMeta[n.type as keyof typeof typeMeta] ?? typeMeta.system;
             const Icon = meta.icon;
 
             return (
               <button
                 key={n.id}
-                onClick={() => markRead(n.id)}
+                onClick={() => {
+                  if (!isRead) markRead.mutate(n.id);
+                }}
                 className={cn(
                   "w-full text-left flex items-start gap-4 rounded-3xl border-2 p-4 backdrop-blur-sm transition-all duration-300 cursor-pointer hover:-translate-y-0.5 hover:shadow-lg text-shadow-game-title",
                   isRead
@@ -155,7 +169,7 @@ export function NotificationsView(): React.ReactElement {
 
                 {/* Time */}
                 <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap shrink-0 mt-1">
-                  {n.time}
+                  {formatRelativeTimeVi(n.createdAt)}
                 </span>
               </button>
             );
