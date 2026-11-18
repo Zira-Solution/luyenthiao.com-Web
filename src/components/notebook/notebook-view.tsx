@@ -2,11 +2,13 @@
 
 import { ChevronLeft, Search, BookOpen, Star, RefreshCw, Volume2, HelpCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-import { MOCK_WORDS } from "./notebook-data";
-
+import { useDeleteNotebookEntry, useMyNotebook, useUpdateNotebookEntry } from "@/hooks/use-notebook";
+import { GENERIC_ERROR_MESSAGE } from "@/lib/api-client";
+import { LEVEL_OPTIONS, levelLabel } from "@/lib/level-label";
 import { cn } from "@/lib/utils";
+import type { NotebookWord } from "@/schemas/notebook";
 
 export function NotebookView(): React.ReactElement {
   const router = useRouter();
@@ -16,37 +18,73 @@ export function NotebookView(): React.ReactElement {
   const [levelFilter, setLevelFilter] = useState("all");
   
   // Flip states of cards by id
-  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
-  
-  // Starred states of words
-  const [starredWords, setStarredWords] = useState<Record<string, boolean>>(
-    MOCK_WORDS.reduce((acc, word) => ({ ...acc, [word.id]: word.starred }), {})
-  );
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
 
-  const toggleFlip = (id: string) => {
+  const { data, isPending, error, refetch } = useMyNotebook();
+  const update = useUpdateNotebookEntry();
+  const remove = useDeleteNotebookEntry();
+  const words = data ?? [];
+  const [actionError, setActionError] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const onActionError = (e: unknown) => {
+    setActionError(e instanceof Error ? e.message : GENERIC_ERROR_MESSAGE);
+  };
+
+  const toggleFlip = (id: number) => {
     setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const toggleStar = (e: React.MouseEvent, id: string) => {
+  const toggleStar = (e: React.MouseEvent, word: NotebookWord) => {
     e.stopPropagation(); // prevent card flip
-    setStarredWords((prev) => ({ ...prev, [id]: !prev[id] }));
+    if (update.isPending) return;
+    setActionError(null);
+    update.mutate({ id: word.id, patch: { isFavorite: !word.isFavorite } }, { onError: onActionError });
   };
 
-  const handleSpeak = (e: React.MouseEvent, text: string) => {
+  const toggleMemorized = (e: React.MouseEvent, word: NotebookWord) => {
     e.stopPropagation(); // prevent card flip
+    if (update.isPending) return;
+    setActionError(null);
+    update.mutate({ id: word.id, patch: { memorized: !word.memorized } }, { onError: onActionError });
+  };
+
+  const handleDelete = (e: React.MouseEvent, word: NotebookWord) => {
+    e.stopPropagation(); // prevent card flip
+    if (remove.isPending) return;
+    if (!window.confirm("Xoá từ này khỏi sổ tay?")) return;
+    setActionError(null);
+    remove.mutate(word.id, { onError: onActionError });
+  };
+
+  const speakWithVoice = (text: string) => {
     if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "en-US";
       window.speechSynthesis.speak(utterance);
     }
   };
 
+  const handleSpeak = (e: React.MouseEvent, word: NotebookWord) => {
+    e.stopPropagation(); // prevent card flip
+    if (word.audioUrl) {
+      audioRef.current?.pause();
+      const audio = new Audio(word.audioUrl);
+      audioRef.current = audio;
+      audio.play().catch(() => speakWithVoice(word.word));
+      return;
+    }
+    speakWithVoice(word.word);
+  };
+
   // Filter words
-  const filteredWords = MOCK_WORDS.filter((word) => {
-    const matchesSearch = word.word.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          word.vietnamese.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLevel = levelFilter === "all" || word.level.toLowerCase().includes(levelFilter.toLowerCase());
-    const matchesStarred = activeCategory !== "starred" || starredWords[word.id];
+  const filteredWords = words.filter((word) => {
+    const needle = searchQuery.trim().toLowerCase();
+    const matchesSearch = word.word.toLowerCase().includes(needle) ||
+                          word.meaningVi.toLowerCase().includes(needle);
+    const matchesLevel = levelFilter === "all" || word.level === levelFilter;
+    const matchesStarred = activeCategory !== "starred" || word.isFavorite;
     return matchesSearch && matchesLevel && matchesStarred;
   });
 
@@ -80,6 +118,7 @@ export function NotebookView(): React.ReactElement {
       <div className="flex gap-2 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-sm rounded-full border-2 border-ranking-table-border shadow-lg mb-6 max-w-md w-full justify-between text-shadow-game-title">
         <button 
           onClick={() => setActiveCategory("vocab")}
+          aria-pressed={activeCategory === "vocab"}
           className={cn(
             "flex-1 py-2 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center",
             activeCategory === "vocab" ? "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border border-blue-400 text-white shadow-md" : "text-blue-200 hover:text-white"
@@ -89,6 +128,7 @@ export function NotebookView(): React.ReactElement {
         </button>
         <button 
           onClick={() => setActiveCategory("grammar")}
+          aria-pressed={activeCategory === "grammar"}
           className={cn(
             "flex-1 py-2 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center",
             activeCategory === "grammar" ? "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border border-blue-400 text-white shadow-md" : "text-blue-200 hover:text-white"
@@ -98,42 +138,36 @@ export function NotebookView(): React.ReactElement {
         </button>
         <button 
           onClick={() => setActiveCategory("starred")}
+          aria-pressed={activeCategory === "starred"}
           className={cn(
             "flex-1 py-2 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center",
             activeCategory === "starred" ? "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border border-blue-400 text-white shadow-md" : "text-blue-200 hover:text-white"
           )}
         >
-          Yêu thích ⭐
+          Đánh dấu sao ⭐
         </button>
       </div>
 
       {activeCategory === "grammar" ? (
         /* GRAMMAR VIEW */
         <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] max-w-4xl text-shadow-game-title">
-          <h2 className="text-white font-black text-xl md:text-2xl font-heading mb-6 border-b border-white/10 pb-3 flex items-center gap-2 text-shadow-game-title">
-            <span>📝 Cấu trúc câu quan trọng</span>
-          </h2>
-          <div className="flex flex-col gap-6 text-shadow-game-title">
-            <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-shadow-game-title">
-              <span className="px-2.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-black uppercase tracking-wider text-shadow-game-title">Cơ bản</span>
-              <h3 className="text-yellow-350 font-black text-lg mt-2 text-shadow-game-title">1. Like + V-ing</h3>
-              <p className="text-white/80 text-sm mt-1.5 text-shadow-game-title">Dùng để diễn tả sở thích làm một việc gì đó.</p>
-              <div className="mt-3 p-3.5 rounded-xl bg-blue-950/40 text-xs text-blue-200 leading-relaxed font-semibold text-shadow-game-title">
-                <span className="block text-white/50 text-[10px] uppercase font-bold mb-1 text-shadow-game-title">Ví dụ:</span>
-                I like reading book. (Tôi thích đọc sách)
-              </div>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-shadow-game-title">
-              <span className="px-2.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-black uppercase tracking-wider text-shadow-game-title">Trung cấp</span>
-              <h3 className="text-yellow-350 font-black text-lg mt-2 text-shadow-game-title">2. Conditional Sentence Type 1</h3>
-              <p className="text-white/80 text-sm mt-1.5 text-shadow-game-title">Diễn tả điều kiện có thể xảy ra ở hiện tại hoặc tương lai.</p>
-              <div className="mt-3 p-3.5 rounded-xl bg-blue-950/40 text-xs text-blue-200 leading-relaxed font-semibold text-shadow-game-title">
-                <span className="block text-white/50 text-[10px] uppercase font-bold mb-1 text-shadow-game-title">Ví dụ:</span>
-                If it rains, we will stay at home. (Nếu trời mưa, chúng tôi sẽ ở nhà)
-              </div>
-            </div>
-          </div>
+          <p className="text-white font-black text-sm md:text-base text-center text-shadow-game-title">
+            Ngữ pháp sắp có. Hãy quay lại sau nhé!
+          </p>
+        </div>
+      ) : isPending ? (
+        <p className="w-full text-center text-blue-300 font-extrabold text-sm uppercase tracking-wider">
+          Đang tải sổ tay…
+        </p>
+      ) : error ? (
+        <div className="w-full text-center">
+          <p className="text-white font-black text-sm tracking-wider mb-4">{error instanceof Error ? error.message : GENERIC_ERROR_MESSAGE}</p>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-xs uppercase tracking-wider cursor-pointer"
+          >
+            Thử lại
+          </button>
         </div>
       ) : (
         /* VOCABULARY / STARRED VIEW */
@@ -145,7 +179,8 @@ export function NotebookView(): React.ReactElement {
             <div className="flex flex-1 items-center bg-game-input-focus-shadow rounded-xl px-4 py-3 border-2 border-ranking-table-border focus-within:border-blue-400 transition-all shadow-inner w-full text-shadow-game-title">
               <Search className="w-5 h-5 text-blue-300 mr-2 shrink-0 text-shadow-game-title" />
               <input 
-                type="text" 
+                type="search"
+                aria-label="Tìm kiếm"
                 placeholder="Tìm từ vựng hoặc nghĩa tiếng Việt..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -155,32 +190,43 @@ export function NotebookView(): React.ReactElement {
 
             {/* Level Select */}
             <div className="relative w-full sm:w-64 text-shadow-game-title">
-              <select 
+              <select
+                aria-label="Lọc theo cấp độ" 
                 value={levelFilter}
                 onChange={(e) => setLevelFilter(e.target.value)}
                 className="w-full bg-game-input-focus-shadow hover:bg-game-input-hover-bg rounded-xl px-4 py-3 border-2 border-ranking-table-border focus:border-blue-400 text-white font-semibold text-sm outline-none appearance-none cursor-pointer shadow-inner text-shadow-game-title"
               >
                 <option value="all" className="bg-dropdown-bg text-white text-shadow-game-title">Tất cả cấp độ</option>
-                <option value="Starters" className="bg-dropdown-bg text-white text-shadow-game-title">Starters (Pre A1)</option>
-                <option value="Movers" className="bg-dropdown-bg text-white text-shadow-game-title">Movers (A1)</option>
-                <option value="Flyers" className="bg-dropdown-bg text-white text-shadow-game-title">Flyers (A2)</option>
-                <option value="TOEFL" className="bg-dropdown-bg text-white text-shadow-game-title">TOEFL Primary/Junior</option>
+                {LEVEL_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value} className="bg-dropdown-bg text-white text-shadow-game-title">{o.label}</option>
+                ))}
               </select>
             </div>
           </div>
 
           {/* Cards Grid */}
-          {filteredWords.length === 0 ? (
+          {actionError && (
+            <p role="alert" className="w-full max-w-5xl mb-4 text-center text-red-300 font-black text-sm tracking-wider text-shadow-game-title">
+              {actionError}
+            </p>
+          )}
+
+          {words.length === 0 ? (
+            <div className="w-full max-w-md py-16 text-center bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] border-3 border-ranking-table-border p-8 shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
+              <HelpCircle className="w-16 h-16 text-blue-300 mx-auto mb-4 text-shadow-game-title" />
+              <p className="text-white font-black text-sm tracking-wider text-shadow-game-title">Sổ tay trống. Từ bạn tra trong lúc làm bài sẽ xuất hiện ở đây.</p>
+            </div>
+          ) : filteredWords.length === 0 ? (
             <div className="w-full max-w-md py-16 text-center bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] border-3 border-ranking-table-border p-8 shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
               <HelpCircle className="w-16 h-16 text-blue-300 mx-auto mb-4 animate-bounce text-shadow-game-title" />
-              <h3 className="text-white font-black text-xl font-heading mb-2 text-shadow-game-title">Không tìm thấy từ vựng</h3>
+              <h3 className="text-white font-black text-xl font-heading mb-2 text-shadow-game-title">Không tìm thấy từ phù hợp.</h3>
               <p className="text-blue-300 font-semibold text-xs uppercase tracking-wider text-shadow-game-title">Vui lòng điều chỉnh bộ lọc hoặc từ khoá tìm kiếm</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl text-shadow-game-title">
               {filteredWords.map((word) => {
                 const isFlipped = !!flippedCards[word.id];
-                const isStarred = !!starredWords[word.id];
+                const isStarred = word.isFavorite;
 
                 return (
                   <div 
@@ -206,11 +252,14 @@ export function NotebookView(): React.ReactElement {
                         {/* Level badge and star indicator */}
                         <div className="flex justify-between items-center text-shadow-game-title">
                           <span className="px-2.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[9px] font-black text-blue-300 uppercase tracking-widest text-shadow-game-title">
-                            {word.level}
+                            {levelLabel(word.level)}
                           </span>
                           <button 
-                            onClick={(e) => toggleStar(e, word.id)}
-                            className="text-yellow-450 hover:scale-115 transition-transform text-shadow-game-title"
+                            onClick={(e) => toggleStar(e, word)}
+                            disabled={update.isPending}
+                            aria-label={`Đánh dấu sao ${word.word}`}
+                            aria-pressed={word.isFavorite}
+                            className="text-yellow-450 hover:scale-115 transition-transform text-shadow-game-title disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <Star className={cn("w-5 h-5", isStarred ? "fill-yellow-450 text-yellow-450" : "text-white/30")} />
                           </button>
@@ -227,7 +276,8 @@ export function NotebookView(): React.ReactElement {
                           <div className="flex items-center gap-2 mt-2 text-shadow-game-title">
                             <span className="text-blue-300 font-extrabold text-sm text-shadow-game-title">{word.ipa}</span>
                             <button 
-                              onClick={(e) => handleSpeak(e, word.word)}
+                              onClick={(e) => handleSpeak(e, word)}
+                              aria-label={`Phát âm ${word.word}`}
                               className="w-7 h-7 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-white hover:bg-blue-500/40 transition-colors cursor-pointer active:scale-90 text-shadow-game-title"
                             >
                               <Volume2 className="w-3.5 h-3.5 text-shadow-game-title" />
@@ -235,11 +285,40 @@ export function NotebookView(): React.ReactElement {
                           </div>
                         </div>
 
-                        {/* Tap to Flip Guide */}
-                        <div className="text-center text-white/30 text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 group-hover:text-white/50 transition-colors text-shadow-game-title">
-                          <RefreshCw className="w-3 h-3 animate-spin text-shadow-game-title" />
-                          <span>Ấn để lật thẻ</span>
+                        {/* Memorized / delete */}
+                        <div className="flex items-center justify-center gap-2 mb-1 text-shadow-game-title">
+                          <button
+                            onClick={(e) => toggleMemorized(e, word)}
+                            aria-pressed={word.memorized}
+                            aria-label={`Đã thuộc ${word.word}`}
+                            disabled={update.isPending}
+                            className={cn(
+                              "px-3 py-1 rounded-lg border text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
+                              word.memorized ? "bg-green-500/20 border-green-500/40 text-green-400" : "bg-white/5 border-white/20 text-white/60 hover:text-white"
+                            )}
+                          >
+                            Đã thuộc
+                          </button>
+                          <button
+                            onClick={(e) => handleDelete(e, word)}
+                            aria-label={`Xoá ${word.word}`}
+                            disabled={remove.isPending}
+                            className="px-3 py-1 rounded-lg border border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500/20 text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            Xoá
+                          </button>
                         </div>
+
+                        {/* Tap to Flip Guide */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); toggleFlip(word.id); }}
+                          aria-pressed={isFlipped}
+                          aria-label={`Lật thẻ ${word.word}`}
+                          className="text-center text-white/30 text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 group-hover:text-white/50 transition-colors cursor-pointer text-shadow-game-title"
+                        >
+                          <RefreshCw className="w-3 h-3 animate-spin motion-reduce:animate-none text-shadow-game-title" />
+                          <span>Ấn để lật thẻ</span>
+                        </button>
                       </div>
 
                       {/* CARD BACK SIDE */}
@@ -260,21 +339,28 @@ export function NotebookView(): React.ReactElement {
                         {/* Translation and Example */}
                         <div className="text-center my-auto flex flex-col items-center text-shadow-game-title">
                           <h4 className="text-yellow-350 font-black text-xl md:text-2xl tracking-wide leading-tight text-shadow-game-title">
-                            {word.vietnamese}
+                            {word.meaningVi}
                           </h4>
                           
-                          <div className="w-full mt-4 p-3 rounded-xl bg-blue-950/50 text-[10px] md:text-xs text-blue-200 leading-relaxed font-semibold text-left text-shadow-game-title">
-                            <span className="block text-white/40 font-bold uppercase tracking-wide mb-1 text-shadow-game-title">Ví dụ:</span>
-                            <p className="text-white font-extrabold text-shadow-game-title">{word.example}</p>
-                            <p className="text-blue-300/80 mt-1 text-shadow-game-title">{word.exampleVietnamese}</p>
-                          </div>
+                          {(word.exampleEn || word.exampleVi) && (
+                            <div className="w-full mt-4 p-3 rounded-xl bg-blue-950/50 text-[10px] md:text-xs text-blue-200 leading-relaxed font-semibold text-left text-shadow-game-title">
+                              <span className="block text-white/40 font-bold uppercase tracking-wide mb-1 text-shadow-game-title">Ví dụ:</span>
+                              {word.exampleEn && <p className="text-white font-extrabold text-shadow-game-title">{word.exampleEn}</p>}
+                              {word.exampleVi && <p className="text-blue-300/80 mt-1 text-shadow-game-title">{word.exampleVi}</p>}
+                            </div>
+                          )}
                         </div>
 
                         {/* Tap to Flip Guide */}
-                        <div className="text-center text-white/30 text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 text-shadow-game-title">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); toggleFlip(word.id); }}
+                          aria-pressed={isFlipped}
+                          aria-label={`Lật lại thẻ ${word.word}`}
+                          className="text-center text-white/30 text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 cursor-pointer text-shadow-game-title"
+                        >
                           <RefreshCw className="w-3 h-3 text-shadow-game-title" />
                           <span>Ấn để quay lại</span>
-                        </div>
+                        </button>
                       </div>
 
                     </div>
