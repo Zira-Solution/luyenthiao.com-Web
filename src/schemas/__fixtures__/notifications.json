@@ -1,0 +1,29 @@
+[
+  {
+    "id": 3,
+    "title": "Bài viết đã được chấm",
+    "message": "Giáo viên đã chấm bài viết của em. Vào xem nhận xét nhé!",
+    "type": "REWARD",
+    "targetUserId": 7,
+    "createdAt": "2026-11-17T02:13:31.968Z",
+    "isRead": true
+  },
+  {
+    "id": 2,
+    "title": "Sự kiện thách đấu cuối tuần",
+    "message": "Tham gia đấu trường thứ Bảy này để nhận điểm thưởng gấp đôi!",
+    "type": "EVENT",
+    "targetUserId": null,
+    "createdAt": "2026-11-17T02:13:31.935Z",
+    "isRead": false
+  },
+  {
+    "id": 1,
+    "title": "Chào mừng đến với Luyện Thi AO",
+    "message": "Hãy hoàn thành bài kiểm tra đầu vào để nhận lộ trình học phù hợp.",
+    "type": "ANNOUNCEMENT",
+    "targetUserId": null,
+    "createdAt": "2026-11-17T02:13:31.904Z",
+    "isRead": false
+  }
+]

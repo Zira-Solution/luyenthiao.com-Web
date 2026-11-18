@@ -3,6 +3,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 
+import { PrivateDataCleanup } from '@/providers/private-data-cleanup'
+
 interface QueryProviderProps {
   children: React.ReactNode
 }
@@ -20,5 +22,10 @@ export function QueryProvider({ children }: QueryProviderProps): React.ReactElem
       }),
   )
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <PrivateDataCleanup />
+      {children}
+    </QueryClientProvider>
+  )
 }
