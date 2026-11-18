@@ -14,6 +14,9 @@ Owner choices on 2026-11-18:
   browser with TanStack Query.
 - UI controls with no backend data are removed or adapted, not faked and not added to the backend.
 - `/write` and `/speaking` keep requiring login; their real flow is sub-project 4.
+- Images and media (avatars included) will live on R2 with Zoney's mechanism, in a new sub-project
+  "Media on R2" right after this one. Avatars are never shown on the public ranking, only on screens
+  that require login. This sub-project therefore ships no avatar images.
 
 ## 1. Scope
 
@@ -28,8 +31,12 @@ Owner choices on 2026-11-18:
 | Notebook | `/notebook` | `components/notebook/notebook-data.ts` | `GET /notebook/my`, `PATCH /notebook/:id`, `DELETE /notebook/:id` |
 
 Out of scope: `site-config` (no screen in this list reads it), `POST /notebook/save` (words are added
-while doing an exam: sub-project 3), the exam-review link from History (sub-project 3), vocab audio from
-R2 (needs the media host allow-list of sub-project 3; keep `speechSynthesis`).
+while doing an exam: sub-project 3), the exam-review link from History (sub-project 3), uploads and
+`next.config` `images.remotePatterns` for the media CDN (sub-project "Media on R2").
+
+CSP note (corrected 2026-11-18): `img-src` and `media-src` already allow `https:`
+(`src/lib/security-headers.ts:40-41`), so HTTPS images and audio from any host load; nothing in this
+sub-project needs a CSP change.
 
 ## 2. Data layer
 
@@ -94,16 +101,17 @@ The page fetches `getPlanets()` and passes the list to the client view.
 Mapping: `slug` → routing id, `name`, `subtitle` → description, `image`, `glowColor` → shadow colour,
 `ribbonFrom`/`ribbonTo` → the gradient (inline style, not a Tailwind class built at runtime).
 A planet is clickable only when `linkUrl` is set; the hard-coded clickable list goes. Order: `sortOrder`.
-Images keep going through `next/image`; a planet image on another host must be allowed by the CSP
-`img-src` (today: `'self'`, `data:`, the API origin). If seeded images are relative `/clone-assets/...`
-paths they work as is — verify against the real payload.
+Images keep going through `next/image`. `next.config.ts` has no `images` block, so `next/image` accepts
+only local paths: if the real payload has relative `/clone-assets/...` paths they work as is; an
+absolute URL is rendered with a plain `<img>` (no `remotePatterns` until "Media on R2"). Verify against
+the real payload.
 
 ### 3.2 Student ranking (`/ranking`)
 
 Server-rendered from `?period=&school=&page=`.
 Row: `rank`, `displayName`, `schoolName`, `totalPoints`; avatar = a CSS circle with the first letter of
-`displayName` (the backend has no avatars and `public/` has no student avatar asset; no external
-avatar service, the CSP would block it).
+`displayName` (the public ranking never shows avatars — owner choice; `public/` has no student avatar
+asset and no external avatar service is used).
 Controls: period tabs Tuần / Tháng / Tất cả, a school dropdown from `getPublicSchools()`, pagination
 (50 per page, `total` from the response). Removed: day/year tabs, level/city/class-code filters, the
 location column.
@@ -150,7 +158,8 @@ yet. The backend caps the list at 200 items; no pagination in the UI.
 Star / memorized toggles call `PATCH /:id`; delete calls `DELETE /:id` after a confirm. Search and level
 filter run in the browser. Tabs: Từ vựng (all), Đánh dấu sao (`isFavorite`), Ngữ pháp → a "Sắp có"
 panel. Empty state: "Sổ tay trống. Từ bạn tra trong lúc làm bài sẽ xuất hiện ở đây."
-`MOCK_WORDS` goes.
+Pronunciation plays `vocab.audioUrl` with an `<audio>` element when it is set, and falls back to the
+current `speechSynthesis` otherwise. `MOCK_WORDS` goes.
 
 ## 4. Removed files
 

@@ -19,6 +19,7 @@ constants (backend `docs/07-hien-trang-chuc-nang-va-api.md`). Owner decisions on
 |---|---|---|---|
 | 1 | Web security foundation (this spec) | none | headers, CSP, `proxy.ts`, client guards, `ApiError`, HTML sanitising |
 | 2 | Read-only screens: dashboard, notifications, tasks, history, ranking | M4 (ranking fields) | introduces `lib/api/<domain>.ts`, `server-only` env and server-rendered public data (ranking, public exams) |
+| 2b | Media on R2 (Zoney mechanism) | new avatar and upload routes; fixes M6 | content-sniffed validation, re-encoded images, user-scoped content-hash keys, CDN custom domain, `images.remotePatterns`; avatars never on the public ranking (owner, 2026-11-18). Own two-repo spec |
 | 3 | Exam flow: check-point, test result, placement test | H1 + M1 | server-side grading, answers removed from the student response; backend sanitises exam HTML on save |
 | 4 | Writing / speaking | to be decided in its spec | uploads to R2, submissions |
 | 5 | Challenges | none expected | socket.io `/challenge` |
