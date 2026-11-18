@@ -1,4 +1,4 @@
-/** Daily task shown on /tasks (mock data until the backend provides it). */
+/** A task on /tasks. */
 export type TaskIcon =
   | "exam"
   | "trophy"
@@ -9,16 +9,17 @@ export type TaskIcon =
   | "challenge"
   | "login"
 
-export type TaskRewardType = "diamond" | "coin"
+export type TaskGroup = "daily" | "weekly" | "achievement" | "other"
 
 export interface Task {
   id: number
+  group: TaskGroup
   icon: TaskIcon
   title: string
   description: string
   progress: number
   target: number
   done: boolean
-  rewardType: TaskRewardType
-  rewardValue: number
+  claimed: boolean
+  points: number
 }

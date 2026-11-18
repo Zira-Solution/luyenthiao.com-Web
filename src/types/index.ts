@@ -33,4 +33,4 @@ export type {
 
 export * from './auth'
 export type { Notification, NotificationType } from './notification'
-export type { Task, TaskIcon, TaskRewardType } from './task'
+export type { Task, TaskGroup, TaskIcon } from './task'

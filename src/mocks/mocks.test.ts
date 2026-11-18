@@ -3,9 +3,7 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { notificationsMock } from './notifications'
 import { speakingTestMock } from './speaking'
-import { tasksMock } from './tasks'
 import { writingTestMock } from './writing'
 
 import type { SpeakingPart } from '@/types/speaking'
@@ -15,35 +13,6 @@ const PUBLIC_DIR = path.resolve(import.meta.dirname, '..', 'public')
 function publicFileExists(src: string): boolean {
   return fs.existsSync(path.join(PUBLIC_DIR, src.replace(/^\//, '')))
 }
-
-describe('notificationsMock', () => {
-  it('covers every notification type with unique ids', () => {
-    const types = new Set(notificationsMock.map((n) => n.type))
-    expect([...types].sort()).toEqual(['challenge', 'event', 'result', 'reward', 'system'])
-    expect(new Set(notificationsMock.map((n) => n.id)).size).toBe(notificationsMock.length)
-  })
-
-  it('has both read and unread items', () => {
-    expect(notificationsMock.some((n) => n.read)).toBe(true)
-    expect(notificationsMock.some((n) => !n.read)).toBe(true)
-  })
-})
-
-describe('tasksMock', () => {
-  it('covers every icon and both reward types with unique ids', () => {
-    expect(new Set(tasksMock.map((t) => t.icon)).size).toBe(8)
-    expect(new Set(tasksMock.map((t) => t.rewardType))).toEqual(new Set(['diamond', 'coin']))
-    expect(new Set(tasksMock.map((t) => t.id)).size).toBe(tasksMock.length)
-  })
-
-  it('marks a task done exactly when progress reaches target', () => {
-    for (const t of tasksMock) {
-      expect(t.done).toBe(t.progress >= t.target)
-      expect(t.progress).toBeLessThanOrEqual(t.target)
-    }
-    expect(tasksMock.some((t) => t.done)).toBe(true)
-  })
-})
 
 describe('speakingTestMock', () => {
   // `satisfies` keeps narrow literal types; widen to the declared type before reading optional fields.
