@@ -6,6 +6,7 @@ import { type ReactElement } from "react"
 import { TextAreaInput, TextInput } from "../editor-field"
 
 import { MediaPickerField } from "@/components/admin/media"
+import { SafeHtml } from "@/components/common"
 import { nextLetter } from "@/lib/exam-factories"
 import { useExamEditorStore } from "@/store/exam-editor-store"
 import type { WordBoxItem } from "@/types/exam"
@@ -75,9 +76,10 @@ export function PartSettingsFields({ structIdx, partIdx }: PartSettingsFieldsPro
             placeholder="<table>…</table> (tuỳ chọn)"
           />
           {part.extraHtml && (
-            <div
+            <SafeHtml
+              as="div"
               className="rounded-xl bg-white/90 text-slate-900 p-3 overflow-auto max-h-40 text-sm"
-              dangerouslySetInnerHTML={{ __html: part.extraHtml }}
+              html={part.extraHtml}
             />
           )}
         </div>

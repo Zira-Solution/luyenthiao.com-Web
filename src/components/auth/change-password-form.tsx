@@ -2,12 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { GameButton } from "@/components/ui/game-button";
 import { GameInput } from "@/components/ui/game-input";
 import { useChangePassword } from "@/hooks";
 import { ApiError } from "@/lib/api-client";
+import { z } from "@/lib/zod";
 
 const changePasswordSchema = z
   .object({

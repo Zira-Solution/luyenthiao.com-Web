@@ -5,6 +5,7 @@ import type { ReactElement } from "react"
 
 import type { PartRendererProps } from "./types"
 
+import { SafeHtml } from "@/components/common"
 import { AnswerFeedback } from "@/components/exam/answer-feedback"
 import type { DetailGrade } from "@/lib/exam"
 import { cn } from "@/lib/utils"
@@ -147,7 +148,7 @@ function FormRowsLayout({
               return (
                 <div key={q.id} className="p-3 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold text-slate-500">
                   <strong>Ví dụ:</strong>{" "}
-                  <span dangerouslySetInnerHTML={{ __html: q.promptHtml ?? "" }} />
+                  <SafeHtml html={q.promptHtml ?? ""} />
                 </div>
               )
             }
@@ -175,10 +176,9 @@ function FormRowsLayout({
                         {d.label}
                       </span>
                       <div className="flex-1 flex items-center justify-between gap-4">
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: textPrompt.replace(`{{${d.label}}}`, "______"),
-                          }}
+                        <SafeHtml
+                          as="div"
+                          html={textPrompt.replace(`{{${d.label}}}`, "______")}
                           className="text-xs font-bold text-slate-700"
                         />
                         <div className="flex items-center gap-2">
@@ -271,7 +271,7 @@ function InlinePassageLayout({
             <h4 className="font-extrabold text-[10px] text-slate-500 uppercase tracking-wide border-b pb-2 mb-3">
               Các từ chọn
             </h4>
-            <div className="text-xs" dangerouslySetInnerHTML={{ __html: part.extraHtml }} />
+            <SafeHtml as="div" className="text-xs" html={part.extraHtml} />
           </div>
         )}
 
@@ -290,7 +290,7 @@ function InlinePassageLayout({
         {exampleQuestions.map((q) => (
           <div key={q.id} className="p-3.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600 font-semibold">
             <span className="px-1.5 py-0.5 bg-slate-400 text-white rounded font-bold text-[9px] mr-2">Ví dụ</span>
-            <span dangerouslySetInnerHTML={{ __html: q.promptHtml ?? "" }} />
+            <SafeHtml html={q.promptHtml ?? ""} />
           </div>
         ))}
 
@@ -313,7 +313,7 @@ function InlinePassageLayout({
                   />
                 )
               }
-              return <span key={i} dangerouslySetInnerHTML={{ __html: seg.text }} />
+              return <SafeHtml key={i} html={seg.text} />
             })}
           </div>
         )}

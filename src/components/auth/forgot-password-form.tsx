@@ -3,12 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { GameButton } from "@/components/ui/game-button";
 import { GameInput } from "@/components/ui/game-input";
 import { useForgotPassword } from "@/hooks";
 import { ApiError } from "@/lib/api-client";
+import { z } from "@/lib/zod";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
