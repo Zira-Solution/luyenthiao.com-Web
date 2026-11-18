@@ -91,7 +91,13 @@ Per domain: `src/schemas/<domain>.ts` (zod schema of the **backend** shape, impo
 
 Schemas follow the backend responses exactly (field lists in §3); dates arrive as ISO strings.
 Unknown enum values are mapped, not rejected (notification `type` → `system`, task `actionType` → a
-default icon), so a new backend value does not blank the screen.
+default icon), so a new backend value does not blank the screen. Empty strings mean "absent" (the real
+payload sends `audioUrl: ""`, `linkUrl: ""`, `notes: ""`).
+
+Real payloads captured on 2026-11-18 (dev seed, student `hs_an`) drive the mappings below: notification
+`type` values `REWARD | EVENT | ANNOUNCEMENT`; task `category` values `DAILY | WEEKLY | ACHIEVEMENT`;
+task `actionType` values `COMPLETE_EXAM | SCORE_90 | COMPLETE_SPEAKING | COMPLETE_WRITING | PLAY_CHALLENGE`;
+history `status` seen `pending | passed`; planets `image` are relative `/clone-assets/...` paths.
 
 ## 3. Screens
 
@@ -100,7 +106,10 @@ default icon), so a new backend value does not blank the screen.
 The page fetches `getPlanets()` and passes the list to the client view.
 Mapping: `slug` → routing id, `name`, `subtitle` → description, `image`, `glowColor` → shadow colour,
 `ribbonFrom`/`ribbonTo` → the gradient (inline style, not a Tailwind class built at runtime).
-A planet is clickable only when `linkUrl` is set; the hard-coded clickable list goes. Order: `sortOrder`.
+Target: `linkUrl` when non-empty, otherwise `/testlevels/<slug>` (the current behaviour for the exam
+levels). A target under `/challenges` is shown as "Sắp ra mắt" and not clickable until sub-project 5 adds
+that route (the seeded IOE planet has `linkUrl: "/challenges"`). The hard-coded clickable list goes.
+Order: `sortOrder`.
 Images keep going through `next/image`. `next.config.ts` has no `images` block, so `next/image` accepts
 only local paths: if the real payload has relative `/clone-assets/...` paths they work as is; an
 absolute URL is rendered with a plain `<img>` (no `remotePatterns` until "Media on R2"). Verify against
@@ -116,7 +125,8 @@ Controls: period tabs Tuần / Tháng / Tất cả, a school dropdown from `getP
 (50 per page, `total` from the response). Removed: day/year tabs, level/city/class-code filters, the
 location column.
 "Hạng của tôi": a client component that, when authenticated, calls `GET /ranking/me?period=` and shows
-`rank`, `fullName`, `totalPoints`; the table row with the same `rank` on the current page is highlighted.
+`rank`, `fullName`, `totalPoints`. No table row is highlighted: ranks tie (two students share rank 1 in
+the real payload), so a rank cannot identify the caller's row.
 Guests see a "Đăng nhập để xem hạng của bạn" link (`/login?redirect=/ranking`).
 
 ### 3.3 School ranking (`/school-ranking`)
@@ -129,13 +139,15 @@ Period tabs as in §3.2; the level filter goes.
 List from `GET /notifications/my?filter=all|unread` (tabs map to `filter`), `isRead` → read state,
 `createdAt` → relative time in Vietnamese (a small pure helper, unit-tested; no new library).
 Clicking an unread item calls `POST /:id/read`; "Đánh dấu tất cả đã đọc" calls `POST /read-all`.
+Type map: `REWARD` → reward, `EVENT` → event, `ANNOUNCEMENT` and anything else → system (the web's
+`result`/`challenge` icons stay unused until the backend sends such types).
 Topbar bell: a red badge with `GET /unread-count` (`count`, shown as `9+` above 9), only when
 authenticated; `staleTime` 60 s and refetch on window focus.
 
 ### 3.5 Tasks
 
 `GET /tasks/my`, grouped by `category` (`DAILY` → "Nhiệm vụ hằng ngày", `WEEKLY` → "Nhiệm vụ hằng
-tuần", others → "Nhiệm vụ khác"). Progress `currentCount/targetCount`, reward `points` "điểm".
+tuần", `ACHIEVEMENT` → "Thành tích", others → "Nhiệm vụ khác"). Progress `currentCount/targetCount`, reward `points` "điểm".
 Button: "Nhận thưởng" when `completed && !claimed`, "Đã nhận" when `claimed`, disabled otherwise.
 Claim errors: 400 → "Chưa hoàn thành nhiệm vụ.", 409 → "Bạn đã nhận thưởng nhiệm vụ này.", 404 →
 "Nhiệm vụ không còn tồn tại."; then the list is refetched. The hard-coded coin/diamond balances go.
@@ -158,7 +170,7 @@ yet. The backend caps the list at 200 items; no pagination in the UI.
 Star / memorized toggles call `PATCH /:id`; delete calls `DELETE /:id` after a confirm. Search and level
 filter run in the browser. Tabs: Từ vựng (all), Đánh dấu sao (`isFavorite`), Ngữ pháp → a "Sắp có"
 panel. Empty state: "Sổ tay trống. Từ bạn tra trong lúc làm bài sẽ xuất hiện ở đây."
-Pronunciation plays `vocab.audioUrl` with an `<audio>` element when it is set, and falls back to the
+Pronunciation plays `vocab.audioUrl` with an `<audio>` element when it is non-empty, and falls back to the
 current `speechSynthesis` otherwise. `MOCK_WORDS` goes.
 
 ## 4. Removed files
