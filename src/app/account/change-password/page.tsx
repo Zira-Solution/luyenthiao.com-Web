@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ChangePasswordForm, RequireAuth } from "@/components/auth";
+import { ChangePasswordForm } from "@/components/auth";
 
 export const metadata: Metadata = {
   title: "Đổi mật khẩu",
@@ -16,9 +16,7 @@ export const metadata: Metadata = {
 export default function ChangePasswordPage(): React.ReactElement {
   return (
     <main className="min-h-screen flex items-center justify-center bg-page-bg px-4 py-12">
-      <RequireAuth>
-        <ChangePasswordForm />
-      </RequireAuth>
+      <ChangePasswordForm />
     </main>
   );
 }

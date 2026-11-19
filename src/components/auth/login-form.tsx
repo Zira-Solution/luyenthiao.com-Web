@@ -2,14 +2,18 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { GameButton } from "@/components/ui/game-button";
 import { GameInput } from "@/components/ui/game-input";
 import { useLogin } from "@/hooks";
 import { ApiError } from "@/lib/api-client";
+import { hardNavigate } from "@/lib/navigation";
+import { safeRedirectPath } from "@/lib/safe-redirect";
+import { z } from "@/lib/zod";
+import { useAuthStore } from "@/store/auth-store";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Vui lòng nhập tên đăng nhập"),
@@ -19,10 +23,17 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm(): React.ReactElement {
-  const router = useRouter();
   const login = useLogin();
   const searchParams = useSearchParams();
   const resetSuccess = searchParams.get("resetSuccess") === "1";
+  const redirectTo = safeRedirectPath(searchParams.get("redirect"));
+  const status = useAuthStore((state) => state.status);
+
+  // One navigation path for both cases: a fresh login, and a visitor whose refresh cookie is still valid but who
+  // reached /login without the hint cookie (e.g. first visit after this change shipped).
+  useEffect(() => {
+    if (status === "authenticated") hardNavigate(redirectTo);
+  }, [status, redirectTo]);
   const {
     register,
     handleSubmit,
@@ -30,9 +41,7 @@ export function LoginForm(): React.ReactElement {
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
   const onSubmit = (values: LoginFormValues): void => {
-    login.mutate(values, {
-      onSuccess: () => router.push("/"),
-    });
+    login.mutate(values);
   };
 
   const errorMessage =

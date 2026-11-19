@@ -5,3 +5,4 @@ export * from "./forgot-password-form";
 export * from "./reset-password-form";
 export * from "./change-password-form";
 export * from "./require-auth";
+export * from "./require-admin";

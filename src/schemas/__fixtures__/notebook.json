@@ -1,0 +1,77 @@
+[
+  {
+    "id": 3,
+    "userId": 7,
+    "vocabId": 3,
+    "isFavorite": false,
+    "memorized": true,
+    "notes": "",
+    "createdAt": "2026-11-17T02:13:28.808Z",
+    "updatedAt": "2026-11-17T02:13:28.808Z",
+    "vocab": {
+      "id": 3,
+      "word": "curious",
+      "ipa": "/ˈkjʊəriəs/",
+      "type": "adj",
+      "meaningVi": "Tò mò, hiếu kỳ, thích khám phá",
+      "exampleEn": "She is a curious student who asks many questions.",
+      "exampleVi": "Cô ấy là một học sinh tò mò và hay đặt nhiều câu hỏi.",
+      "audioUrl": "",
+      "level": "starters",
+      "topic": "Personality",
+      "active": true,
+      "createdAt": "2026-11-16T05:07:52.886Z",
+      "updatedAt": "2026-11-16T05:07:52.886Z"
+    }
+  },
+  {
+    "id": 2,
+    "userId": 7,
+    "vocabId": 2,
+    "isFavorite": false,
+    "memorized": false,
+    "notes": "",
+    "createdAt": "2026-11-17T02:13:28.775Z",
+    "updatedAt": "2026-11-17T02:13:28.775Z",
+    "vocab": {
+      "id": 2,
+      "word": "challenge",
+      "ipa": "/ˈtʃælɪndʒ/",
+      "type": "n",
+      "meaningVi": "Thử thách, sự thách thức",
+      "exampleEn": "Take on the daily challenge to earn bonus points.",
+      "exampleVi": "Hãy tham gia thử thách hàng ngày để nhận điểm thưởng.",
+      "audioUrl": "",
+      "level": "starters",
+      "topic": "Game",
+      "active": true,
+      "createdAt": "2026-11-16T05:07:52.880Z",
+      "updatedAt": "2026-11-16T05:07:52.880Z"
+    }
+  },
+  {
+    "id": 1,
+    "userId": 7,
+    "vocabId": 1,
+    "isFavorite": true,
+    "memorized": false,
+    "notes": "",
+    "createdAt": "2026-11-17T02:13:28.731Z",
+    "updatedAt": "2026-11-17T02:13:28.731Z",
+    "vocab": {
+      "id": 1,
+      "word": "adventure",
+      "ipa": "/ədˈventʃər/",
+      "type": "n",
+      "meaningVi": "Cuộc phiêu lưu, chuyến phiêu lưu",
+      "exampleEn": "Learning English is an exciting adventure.",
+      "exampleVi": "Học tiếng Anh là một chuyến phiêu lưu đầy thú vị.",
+      "audioUrl": "",
+      "level": "movers",
+      "topic": "Explore",
+      "active": true,
+      "createdAt": "2026-11-16T05:07:52.873Z",
+      "updatedAt": "2026-11-16T05:07:52.873Z"
+    }
+  }
+]

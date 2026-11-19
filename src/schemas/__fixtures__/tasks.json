@@ -1,0 +1,98 @@
+[
+  {
+    "id": 7,
+    "title": "Chiến binh chăm chỉ: Hoàn thành 20 bài thi",
+    "description": "Cột mốc hoàn thành 20 bài thi",
+    "category": "ACHIEVEMENT",
+    "targetCount": 20,
+    "actionType": "COMPLETE_EXAM",
+    "points": 200,
+    "currentCount": 3,
+    "completed": false,
+    "claimed": false
+  },
+  {
+    "id": 8,
+    "title": "Thần đồng tiếng Anh: 10 bài đạt điểm 90+",
+    "description": "Cột mốc 10 bài thi xuất sắc",
+    "category": "ACHIEVEMENT",
+    "targetCount": 10,
+    "actionType": "SCORE_90",
+    "points": 300,
+    "currentCount": 0,
+    "completed": false,
+    "claimed": false
+  },
+  {
+    "id": 1,
+    "title": "Làm 1 bài luyện thi trắc nghiệm",
+    "description": "Hoàn thành 1 bài thi trắc nghiệm bất kỳ hôm nay",
+    "category": "DAILY",
+    "targetCount": 1,
+    "actionType": "COMPLETE_EXAM",
+    "points": 10,
+    "currentCount": 0,
+    "completed": false,
+    "claimed": false
+  },
+  {
+    "id": 2,
+    "title": "Luyện 1 bài Nói",
+    "description": "Hoàn thành 1 bài luyện nói trong ngày",
+    "category": "DAILY",
+    "targetCount": 1,
+    "actionType": "COMPLETE_SPEAKING",
+    "points": 10,
+    "currentCount": 0,
+    "completed": false,
+    "claimed": false
+  },
+  {
+    "id": 3,
+    "title": "Luyện 1 bài Viết",
+    "description": "Hoàn thành 1 bài luyện viết trong ngày",
+    "category": "DAILY",
+    "targetCount": 1,
+    "actionType": "COMPLETE_WRITING",
+    "points": 10,
+    "currentCount": 0,
+    "completed": false,
+    "claimed": false
+  },
+  {
+    "id": 4,
+    "title": "Hoàn thành 5 bài thi trắc nghiệm",
+    "description": "Luyện tập chăm chỉ 5 bài thi trong tuần",
+    "category": "WEEKLY",
+    "targetCount": 5,
+    "actionType": "COMPLETE_EXAM",
+    "points": 50,
+    "currentCount": 3,
+    "completed": false,
+    "claimed": false
+  },
+  {
+    "id": 5,
+    "title": "Đạt điểm 90+ trong 3 bài thi",
+    "description": "Đạt điểm xuất sắc (>=90%) 3 bài thi trong tuần",
+    "category": "WEEKLY",
+    "targetCount": 3,
+    "actionType": "SCORE_90",
+    "points": 80,
+    "currentCount": 0,
+    "completed": false,
+    "claimed": false
+  },
+  {
+    "id": 6,
+    "title": "Tham gia 3 trận đấu Thách Đấu",
+    "description": "Thử tài tranh hạng cùng bạn bè trong tuần",
+    "category": "WEEKLY",
+    "targetCount": 3,
+    "actionType": "PLAY_CHALLENGE",
+    "points": 40,
+    "currentCount": 0,
+    "completed": false,
+    "claimed": false
+  }
+]

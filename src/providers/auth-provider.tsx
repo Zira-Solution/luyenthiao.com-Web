@@ -27,7 +27,8 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
       // itself does not clear the store on failure (only authFetch's catch
       // path does that, and we're bypassing authFetch here), so we still
       // need to flip status to "unauthenticated" ourselves.
-      if (!cancelled) clearSession()
+      // A fast login must not be undone by a late failing bootstrap refresh.
+      if (!cancelled && useAuthStore.getState().status !== "authenticated") clearSession()
     })
 
     return () => {

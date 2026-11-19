@@ -1,4 +1,4 @@
-/** In-app notification shown on /notifications (mock data until the backend provides it). */
+/** In-app notification shown on /notifications. */
 export type NotificationType = "result" | "challenge" | "reward" | "event" | "system"
 
 export interface Notification {
@@ -6,7 +6,7 @@ export interface Notification {
   type: NotificationType
   title: string
   message: string
-  /** Relative time label shown as-is, e.g. "5 phút trước". */
-  time: string
+  /** ISO time; the view formats it with formatRelativeTimeVi. */
+  createdAt: string
   read: boolean
 }

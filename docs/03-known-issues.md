@@ -53,3 +53,10 @@ The Next.js 16.1.6 → 16.4.6 upgrade (2026-11-16) pulled `sharp` 0.34.5 → 0.3
 changed against a pre-upgrade screenshot, at a maximum channel delta of 24 out of 765 — invisible
 side by side, and byte-identical across two runs on the same build. Do not read that as a
 regression; recapture the baseline instead. The routes without large images compared at 0 pixels.
+
+## 8. Vitest fails when the shell's drive letter is lower case (Windows)
+
+Measured 2026-11-18. With the working directory written as `e:\…` (Git Bash `cd /e/…`, or VS Code opening the folder
+as `e:`), `npm test` fails every file at load with `TypeError: Cannot read properties of undefined (reading 'config')`
+or `Vitest failed to find the current suite`: the runner is loaded twice under two path spellings. From `E:\…`
+(`cd /E/…`) the same suite passes. Always run tests from an upper-case drive path.

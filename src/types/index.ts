@@ -14,7 +14,7 @@ export type {
   WritingPrompt,
   WritingStoryImage,
   WritingTest,
-} from "./writing"
+} from './writing'
 
 export type {
   SpeakingAnswer,
@@ -29,9 +29,8 @@ export type {
   SpeakingSceneSlot,
   SpeakingSlideKind,
   SpeakingTest,
-} from "./speaking"
+} from './speaking'
 
 export * from './auth'
-export type { Notification, NotificationType } from "./notification"
-export type { SchoolRankingEntry } from "./ranking"
-export type { Task, TaskIcon, TaskRewardType } from "./task"
+export type { Notification, NotificationType } from './notification'
+export type { Task, TaskGroup, TaskIcon } from './task'

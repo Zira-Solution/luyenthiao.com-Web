@@ -7,8 +7,8 @@ Claude Code reads it through `@AGENTS.md` in `CLAUDE.md`.
 
 Web client of luyenthiao.com, an online English test-preparation platform, built with Next.js
 (App Router). The API is the separate repository `luyenthiao.com-Backend` (NestJS, branch `develop`).
-Today only authentication talks to the backend; the other domains read `src/mocks/` (JSON and typed `.ts` modules),
-`localStorage` or constants inside the page. Architecture: `.claude/ARCHITECTURE.md`. Human docs: `docs/`.
+Authentication, dashboard, rankings, notifications, tasks, history and notebook use the API; exams, writing/speaking,
+challenges and admin still read `src/mocks/` (JSON and typed `.ts` modules), `localStorage` or constants inside the page. Architecture: `.claude/ARCHITECTURE.md`. Human docs: `docs/`.
 
 Hosted on **Vercel**, not on AWS Amplify like the sibling project Zoney.vn-Web that this repo's
 conventions came from. Streaming SSR (`loading.tsx`, `<Suspense>`, React Server Components) works

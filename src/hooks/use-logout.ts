@@ -14,7 +14,7 @@ export function useLogout() {
     onSettled: () => {
       // Best-effort, matching the backend's own logout design: clear local
       // session state even if the server call itself failed.
-      clearSession()
+      clearSession("logout")
       queryClient.clear()
     },
   })

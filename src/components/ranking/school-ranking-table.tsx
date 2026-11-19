@@ -1,133 +1,164 @@
-"use client";
+'use client'
 
-import { GraduationCap, Trophy } from "lucide-react";
+import { GraduationCap, Trophy } from 'lucide-react'
 
-import { cn, formatScore } from "@/lib/utils";
-import { schoolRankingMock as schoolRankingData } from "@/mocks/school-ranking";
+import { cn, formatScore } from '@/lib/utils'
+import type { SchoolRankingPage } from '@/schemas/ranking'
 
-export function SchoolRankingTable() {
+interface SchoolRankingTableProps {
+  items: SchoolRankingPage['items']
+}
+
+export function SchoolRankingTable({ items }: SchoolRankingTableProps): React.ReactElement {
   return (
-    <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2rem] border-3 border-ranking-table-border overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
+    <div className="bg-ranking-table-bg border-ranking-table-border w-full overflow-hidden rounded-[2rem] border-3 shadow-[0_15px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="border-b-2 border-ranking-table-border bg-game-input-focus-shadow">
-              <th className="py-4.5 px-6 text-blue-200 font-black uppercase text-xs md:text-sm tracking-widest w-24 text-center font-heading">
+            <tr className="border-ranking-table-border bg-game-input-focus-shadow border-b-2">
+              <th className="font-heading w-24 px-6 py-4.5 text-center text-xs font-black tracking-widest text-blue-200 uppercase md:text-sm">
                 Hạng
               </th>
-              <th className="py-4.5 px-6 text-blue-200 font-black uppercase text-xs md:text-sm tracking-widest font-heading">
+              <th className="font-heading px-6 py-4.5 text-xs font-black tracking-widest text-blue-200 uppercase md:text-sm">
                 Trường Học
               </th>
-              <th className="py-4.5 px-6 text-blue-200 font-black uppercase text-xs md:text-sm tracking-widest hidden md:table-cell font-heading">
+              <th className="font-heading hidden px-6 py-4.5 text-xs font-black tracking-widest text-blue-200 uppercase md:table-cell md:text-sm">
                 Tỉnh/Thành Phố
               </th>
-              <th className="py-4.5 px-6 text-blue-200 font-black uppercase text-xs md:text-sm tracking-widest hidden lg:table-cell font-heading">
+              <th className="font-heading hidden px-6 py-4.5 text-xs font-black tracking-widest text-blue-200 uppercase md:text-sm lg:table-cell">
                 Số Học Sinh
               </th>
-              <th className="py-4.5 px-6 text-blue-200 font-black uppercase text-xs md:text-sm tracking-widest text-right font-heading">
+              <th className="font-heading px-6 py-4.5 text-right text-xs font-black tracking-widest text-blue-200 uppercase md:text-sm">
                 Tổng Điểm
               </th>
             </tr>
           </thead>
           <tbody>
-            {schoolRankingData.map((school) => {
-              const isTop1 = school.rank === 1;
-              const isTop2 = school.rank === 2;
-              const isTop3 = school.rank === 3;
+            {items.map((school, index) => {
+              const isTop1 = school.rank === 1
+              const isTop2 = school.rank === 2
+              const isTop3 = school.rank === 3
 
               return (
                 <tr
-                  key={school.rank}
+                  key={`${school.schoolId}-${index}`}
                   className={cn(
-                    "border-b border-white/5 transition-colors hover:bg-game-input-focus-shadow/40 group",
-                    isTop1 && "bg-gradient-to-r from-yellow-500/10 via-yellow-500/5 to-transparent border-l-4 border-yellow-400",
-                    isTop2 && "bg-gradient-to-r from-slate-400/10 via-slate-400/5 to-transparent border-l-4 border-slate-400",
-                    isTop3 && "bg-gradient-to-r from-orange-900/15 via-orange-900/5 to-transparent border-l-4 border-orange-800"
+                    'hover:bg-game-input-focus-shadow/40 group border-b border-white/5 transition-colors',
+                    isTop1 &&
+                      'border-l-4 border-yellow-400 bg-gradient-to-r from-yellow-500/10 via-yellow-500/5 to-transparent',
+                    isTop2 &&
+                      'border-l-4 border-slate-400 bg-gradient-to-r from-slate-400/10 via-slate-400/5 to-transparent',
+                    isTop3 &&
+                      'border-l-4 border-orange-800 bg-gradient-to-r from-orange-900/15 via-orange-900/5 to-transparent',
                   )}
                 >
                   {/* Rank Column with 3D Medals */}
-                  <td className="py-4 px-6 text-center">
+                  <td className="px-6 py-4 text-center">
                     {isTop1 ? (
-                      <div className="w-9 h-9 mx-auto bg-gradient-to-b from-yellow-350 to-amber-500 rounded-full flex items-center justify-center border-2 border-yellow-200 shadow-[0_3px_6px_rgba(234,179,8,0.4)] transform hover:scale-105 transition-transform">
-                        <Trophy className="w-5 h-5 text-yellow-950 drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]" />
+                      <div className="from-yellow-350 mx-auto flex h-9 w-9 transform items-center justify-center rounded-full border-2 border-yellow-200 bg-gradient-to-b to-amber-500 shadow-[0_3px_6px_rgba(234,179,8,0.4)] transition-transform hover:scale-105">
+                        <Trophy className="h-5 w-5 text-yellow-950 drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]" />
                       </div>
                     ) : isTop2 ? (
-                      <div className="w-9 h-9 mx-auto bg-gradient-to-b from-slate-200 to-slate-400 rounded-full flex items-center justify-center border-2 border-slate-100 shadow-[0_3px_6px_rgba(156,163,175,0.3)] transform hover:scale-105 transition-transform">
-                        <Trophy className="w-5 h-5 text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]" />
+                      <div className="mx-auto flex h-9 w-9 transform items-center justify-center rounded-full border-2 border-slate-100 bg-gradient-to-b from-slate-200 to-slate-400 shadow-[0_3px_6px_rgba(156,163,175,0.3)] transition-transform hover:scale-105">
+                        <Trophy className="h-5 w-5 text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]" />
                       </div>
                     ) : isTop3 ? (
-                      <div className="w-9 h-9 mx-auto bg-gradient-to-b from-orange-800 to-amber-900 rounded-full flex items-center justify-center border-2 border-orange-600 shadow-[0_3px_6px_rgba(154,52,18,0.4)] transform hover:scale-105 transition-transform">
-                        <Trophy className="w-5 h-5 text-orange-100 drop-shadow-[0_1px_1px_rgba(255,255,255,0.2)]" />
+                      <div className="mx-auto flex h-9 w-9 transform items-center justify-center rounded-full border-2 border-orange-600 bg-gradient-to-b from-orange-800 to-amber-900 shadow-[0_3px_6px_rgba(154,52,18,0.4)] transition-transform hover:scale-105">
+                        <Trophy className="h-5 w-5 text-orange-100 drop-shadow-[0_1px_1px_rgba(255,255,255,0.2)]" />
                       </div>
                     ) : (
-                      <span className="text-white/50 font-black text-base md:text-lg font-heading">{school.rank}</span>
+                      <span className="font-heading text-base font-black text-white/50 md:text-lg">
+                        {school.rank}
+                      </span>
                     )}
                   </td>
 
                   {/* School Column */}
-                  <td className="py-4 px-6">
+                  <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
-                      <div className={cn(
-                        "rounded-full overflow-hidden border-2 shrink-0 bg-game-input-focus-shadow shadow-md",
-                        isTop1 ? "w-12 h-12 border-yellow-400 ring-2 ring-yellow-400/20" : 
-                        isTop2 ? "w-11 h-11 border-slate-300 ring-2 ring-slate-350/20" : 
-                        isTop3 ? "w-11 h-11 border-orange-700 ring-2 ring-orange-700/20" : 
-                        "w-9 h-9 border-blue-500/30"
-                      )}>
+                      <div
+                        className={cn(
+                          'bg-game-input-focus-shadow shrink-0 overflow-hidden rounded-full border-2 shadow-md',
+                          isTop1
+                            ? 'h-12 w-12 border-yellow-400 ring-2 ring-yellow-400/20'
+                            : isTop2
+                              ? 'ring-slate-350/20 h-11 w-11 border-slate-300 ring-2'
+                              : isTop3
+                                ? 'h-11 w-11 border-orange-700 ring-2 ring-orange-700/20'
+                                : 'h-9 w-9 border-blue-500/30',
+                        )}
+                      >
                         <div
-                          className="w-full h-full flex items-center justify-center"
-                          style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.3), rgba(88,28,135,0.5))" }}
+                          className="flex h-full w-full items-center justify-center"
+                          style={{
+                            background:
+                              'linear-gradient(135deg, rgba(59,130,246,0.3), rgba(88,28,135,0.5))',
+                          }}
                         >
-                          <GraduationCap className="w-3/5 h-3/5 text-white/90" />
+                          <GraduationCap className="h-3/5 w-3/5 text-white/90" />
                         </div>
                       </div>
-                      <span className={cn(
-                        "font-extrabold transition-colors group-hover:text-blue-300",
-                        isTop1 ? "text-base md:text-lg text-yellow-350 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" : 
-                        isTop2 ? "text-sm md:text-base text-slate-200" : 
-                        isTop3 ? "text-sm md:text-base text-orange-300" : "text-sm text-white/90"
-                      )}>
+                      <span
+                        className={cn(
+                          'font-extrabold transition-colors group-hover:text-blue-300',
+                          isTop1
+                            ? 'text-yellow-350 text-base drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] md:text-lg'
+                            : isTop2
+                              ? 'text-sm text-slate-200 md:text-base'
+                              : isTop3
+                                ? 'text-sm text-orange-300 md:text-base'
+                                : 'text-sm text-white/90',
+                        )}
+                      >
                         {school.name}
                       </span>
                     </div>
                   </td>
 
                   {/* Location Column */}
-                  <td className="py-4 px-6 hidden md:table-cell">
-                    <span className="text-white/70 font-semibold text-sm">{school.location}</span>
+                  <td className="hidden px-6 py-4 md:table-cell">
+                    <span className="text-sm font-semibold text-white/70">{school.city}</span>
                   </td>
 
                   {/* Student Count Column */}
-                  <td className="py-4 px-6 hidden lg:table-cell">
-                    <span className="text-white/70 font-semibold text-sm">{school.studentCount}</span>
+                  <td className="hidden px-6 py-4 lg:table-cell">
+                    <span className="text-sm font-semibold text-white/70">
+                      {school.studentCount}
+                    </span>
                   </td>
 
                   {/* Score Column */}
-                  <td className="py-4 px-6 text-right">
-                    <span className={cn(
-                      "font-black tracking-widest font-heading",
-                      isTop1 ? "text-2xl md:text-3xl text-yellow-350 drop-shadow-[0_2px_4px_rgba(234,179,8,0.4)]" : 
-                      isTop2 ? "text-xl md:text-2xl text-slate-200 drop-shadow-[0_2px_4px_rgba(156,163,175,0.3)]" : 
-                      isTop3 ? "text-lg md:text-xl text-orange-300 drop-shadow-[0_2px_4px_rgba(154,52,18,0.3)]" : "text-base md:text-lg text-white"
-                    )}>
-                      {formatScore(school.score)}
+                  <td className="px-6 py-4 text-right">
+                    <span
+                      className={cn(
+                        'font-heading font-black tracking-widest',
+                        isTop1
+                          ? 'text-yellow-350 text-2xl drop-shadow-[0_2px_4px_rgba(234,179,8,0.4)] md:text-3xl'
+                          : isTop2
+                            ? 'text-xl text-slate-200 drop-shadow-[0_2px_4px_rgba(156,163,175,0.3)] md:text-2xl'
+                            : isTop3
+                              ? 'text-lg text-orange-300 drop-shadow-[0_2px_4px_rgba(154,52,18,0.3)] md:text-xl'
+                              : 'text-base text-white md:text-lg',
+                      )}
+                    >
+                      {formatScore(school.totalPoints)}
                     </span>
                   </td>
                 </tr>
-              );
+              )
             })}
           </tbody>
         </table>
       </div>
-      
+
       {/* Table Footer with custom game design */}
-      <div className="p-4.5 bg-game-input-focus-shadow border-t-2 border-ranking-table-border text-center shadow-inner">
-        <p className="text-yellow-400 font-black text-xs md:text-sm tracking-wider uppercase font-heading flex items-center justify-center gap-2">
+      <div className="bg-game-input-focus-shadow border-ranking-table-border border-t-2 p-4.5 text-center shadow-inner">
+        <p className="font-heading flex items-center justify-center gap-2 text-xs font-black tracking-wider text-yellow-400 uppercase md:text-sm">
           <span>✨</span>
           <span>Những Ngôi Trường “nhà Du Hành” Sôi Nổi Nhất Cuộc Thi</span>
           <span>✨</span>
         </p>
       </div>
     </div>
-  );
+  )
 }

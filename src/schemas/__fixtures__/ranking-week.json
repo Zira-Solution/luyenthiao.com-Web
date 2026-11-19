@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "rank": 1,
+      "displayName": "Chi L.",
+      "schoolName": "Trường Tiểu học Trần Phú",
+      "totalPoints": 60
+    },
+    {
+      "rank": 1,
+      "displayName": "Huy V.",
+      "schoolName": "Trường Tiểu học Trần Phú",
+      "totalPoints": 60
+    },
+    {
+      "rank": 3,
+      "displayName": "Bình T.",
+      "schoolName": "Trường Tiểu học Lê Quý Đôn",
+      "totalPoints": 55
+    },
+    {
+      "rank": 3,
+      "displayName": "Giang H.",
+      "schoolName": "Trường Tiểu học Lê Quý Đôn",
+      "totalPoints": 55
+    },
+    {
+      "rank": 5,
+      "displayName": "An N.",
+      "schoolName": "Trường Tiểu học Kim Đồng",
+      "totalPoints": 40
+    }
+  ],
+  "total": 6
+}

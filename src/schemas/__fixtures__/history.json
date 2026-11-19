@@ -1,0 +1,44 @@
+[
+  {
+    "id": "d01f6a58-c682-4a06-a3ae-f3d87cb4dd74",
+    "kind": "EXAM",
+    "title": "Movers — Đề luyện tổng hợp 1",
+    "levelSlug": "movers",
+    "score": 60,
+    "maxScore": 100,
+    "status": "pending",
+    "correctCount": 2,
+    "totalQuestions": 4,
+    "timeSpentSec": 900,
+    "createdAt": "2026-11-17T02:13:29.485Z",
+    "detailUrl": "/testresult?attemptId=d01f6a58-c682-4a06-a3ae-f3d87cb4dd74&examId=6f0a1c2e-1b3d-4e5f-8a9b-0c1d2e3f4a01"
+  },
+  {
+    "id": "7f2c6fd6-f563-48a0-bd44-a592a1ee9abc",
+    "kind": "EXAM",
+    "title": "Movers Thách Đấu Luyện Tập",
+    "levelSlug": "movers",
+    "score": 73,
+    "maxScore": 100,
+    "status": "passed",
+    "correctCount": 15,
+    "totalQuestions": 20,
+    "timeSpentSec": 660,
+    "createdAt": "2026-11-17T02:13:29.393Z",
+    "detailUrl": "/testresult?attemptId=7f2c6fd6-f563-48a0-bd44-a592a1ee9abc&examId=challenge-exam-movers"
+  },
+  {
+    "id": "255aff70-ceed-40c0-8963-94cbb7ed8f8a",
+    "kind": "EXAM",
+    "title": "Starters Thách Đấu Luyện Tập",
+    "levelSlug": "starters",
+    "score": 50,
+    "maxScore": 100,
+    "status": "passed",
+    "correctCount": 10,
+    "totalQuestions": 20,
+    "timeSpentSec": 600,
+    "createdAt": "2026-11-17T02:13:29.298Z",
+    "detailUrl": "/testresult?attemptId=255aff70-ceed-40c0-8963-94cbb7ed8f8a&examId=challenge-exam-starters"
+  }
+]

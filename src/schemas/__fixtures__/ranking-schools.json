@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "rank": 1,
+      "schoolId": 4,
+      "name": "Trường Tiểu học Trần Phú",
+      "city": "Đà Nẵng",
+      "studentCount": 2,
+      "totalPoints": 120
+    },
+    {
+      "rank": 2,
+      "schoolId": 3,
+      "name": "Trường Tiểu học Lê Quý Đôn",
+      "city": "TP. Hồ Chí Minh",
+      "studentCount": 2,
+      "totalPoints": 110
+    },
+    {
+      "rank": 3,
+      "schoolId": 2,
+      "name": "Trường Tiểu học Kim Đồng",
+      "city": "Hà Nội",
+      "studentCount": 2,
+      "totalPoints": 80
+    }
+  ],
+  "total": 3
+}
