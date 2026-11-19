@@ -85,6 +85,15 @@ and [Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/use
   - `ApiError(message, status, code, fromApi)` in `lib/api-client.ts`: `fromApi` is true only for a NestJS error body (numeric `statusCode` + string/string[] `message`) with status < 500 (Nest's default 500 body is English and meaningless to students); show `message` to users only then. Otherwise `message` is `GENERIC_ERROR_MESSAGE` ('Không thể kết nối máy chủ, vui lòng thử lại sau.'). A network failure gives status 0; a 2xx with a non-JSON body also becomes a generic `ApiError`. `code` is the body's `code`, else Nest's `error` reason phrase.
   - HTML strings render only through `<SafeHtml>` (`components/common/safe-html.tsx`) → `sanitizeHtml` (`lib/safe-html.ts`, `sanitize-html` 2.18.2 pinned; pure JS so SSR and browser output match — DOMPurify returns its input unchanged without a DOM). Allow-list: formatting, lists, tables, `img`/`a`/`audio`/`source`; only `style` (regex-limited properties), no `class`/`id`; `data:` URLs for `img` only; links forced to `target=_blank rel=noopener noreferrer`. `lib/no-raw-html.test.ts` fails on any other `dangerouslySetInnerHTML`.
 
+### Data layer
+
+Plan: `.claude/superpowers/plans/2026-11-18-read-only-screens.md`. Screens on the API: dashboard planets, student ranking (+ "Hạng của tôi"), school ranking, notifications (+ Topbar unread badge), tasks, history, notebook. Exams, test levels, check-point, placement test, writing/speaking, challenges and admin still use `src/mocks/`, `localStorage` or page constants.
+
+- **Public data** (guests included): `lib/api/public.ts` is `server-only`, uses `fetch(..., { next: { revalidate: 60 } })` with a 5 s timeout, never throws and returns a `PublicResult` (`lib/api/public-result.ts`, importable from client code); failures are logged as `[public-api] <path>`. Pages render an error/empty state from the result instead of crashing, so the build also succeeds without a backend.
+- **Private data**: `lib/api/<domain>.ts` (authFetch + `parseOrThrow` from `lib/api/parse.ts`) + `schemas/<domain>.ts` (zod schema of the backend shape + mapper to the view type) + `hooks/use-<domain>.ts` (TanStack Query, `enabled` only when authenticated, `retryTransient` from `lib/private-query.ts`).
+- **Query keys** live in `lib/query-keys.ts` and are all rooted at `'me'`. `providers/private-data-cleanup.tsx` (`PrivateDataCleanup`) removes the `'me'` queries when the session ends and resets them when another user signs in, so one account never sees another's cached data.
+- **Fixtures** in `schemas/__fixtures__/` are real payloads captured from the backend on 2026-11-18; tests use them instead of hand-written shapes. Recapture them when the backend contract changes.
+
 ## `src/` structure
 
 | Directory | Contents |

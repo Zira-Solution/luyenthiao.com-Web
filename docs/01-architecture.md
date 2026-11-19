@@ -92,3 +92,22 @@ protections, which improve safety and user experience but must never be relied o
   `class`/`id` are dropped, `style` is limited by regex, `data:` URLs are allowed for images only, and links get
   `target="_blank" rel="noopener noreferrer"`. `lib/no-raw-html.test.ts` fails on any other
   `dangerouslySetInnerHTML`.
+
+## Data layer
+
+Screens on the API: dashboard planets, student ranking (with the "Hạng của tôi" card), school ranking,
+notifications (with the Topbar unread badge), tasks, history and notebook. Exams, test levels, check-point,
+placement test, writing/speaking, challenges and admin still read `src/mocks/`, `localStorage` or page constants.
+
+- **Public data.** `lib/api/public.ts` is `server-only`. It calls `fetch(..., { next: { revalidate: 60 } })` with a
+  5 second timeout, never throws, and returns a `PublicResult` (`lib/api/public-result.ts`, importable from client
+  code). Failures are logged as `[public-api] <path>`; pages render an error or empty state, so the build also
+  succeeds without a backend.
+- **Private data.** Each domain has `lib/api/<domain>.ts` (authFetch + `parseOrThrow`), `schemas/<domain>.ts` (a zod
+  schema of the backend shape plus a mapper to the view type) and `hooks/use-<domain>.ts` (TanStack Query, enabled
+  only when authenticated, with `retryTransient`).
+- **Query keys.** All private keys live in `lib/query-keys.ts` and are rooted at `'me'`. `PrivateDataCleanup`
+  (`providers/private-data-cleanup.tsx`) removes the `'me'` queries when the session ends and resets them when
+  another user signs in.
+- **Fixtures.** `schemas/__fixtures__/` holds real payloads captured from the backend on 2026-11-18. Tests use them;
+  recapture them when the backend contract changes.
