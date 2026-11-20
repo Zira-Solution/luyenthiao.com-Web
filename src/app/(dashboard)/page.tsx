@@ -17,7 +17,18 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function DashboardPage(): Promise<React.ReactElement> {
-  const result = await getPlanets()
-  return <DashboardView planets={result.ok ? result.data : null} />
+interface DashboardPageProps {
+  searchParams?: Promise<{ planet?: string }>
+}
+
+export default async function DashboardPage({
+  searchParams,
+}: DashboardPageProps): Promise<React.ReactElement> {
+  const [result, resolvedParams] = await Promise.all([
+    getPlanets(),
+    searchParams ? searchParams : Promise.resolve(undefined),
+  ])
+  return (
+    <DashboardView planets={result.ok ? result.data : null} initialSlug={resolvedParams?.planet} />
+  )
 }

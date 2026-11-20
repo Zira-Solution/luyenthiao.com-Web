@@ -1,8 +1,8 @@
-import { Sparkles, ArrowLeft } from "lucide-react"
+import { Sparkles, ArrowLeft } from 'lucide-react'
 
-import { WritingStoryImage } from "./writing-story-image"
+import { WritingStoryImage } from './writing-story-image'
 
-import type { WritingAttempt } from "@/types/writing"
+import type { WritingAttempt } from '@/types/writing'
 
 interface WritingReviewProps {
   attempt: WritingAttempt
@@ -30,16 +30,14 @@ function FeedbackCard({
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50 px-4 py-3">
         {icon}
-        <span className="text-sm font-black uppercase tracking-wider text-slate-800">
-          {title}
-        </span>
+        <span className="text-sm font-black tracking-wider text-slate-800 uppercase">{title}</span>
       </div>
       <div className="px-4 py-4 text-sm leading-relaxed text-slate-600">{children}</div>
     </div>
   )
 }
 
-/** Trang Xem lại bài: chấm điểm + nhận xét chi tiết từ FLYER AI. */
+/** Trang Xem lại bài: chấm điểm + nhận xét chi tiết từ Luyện Thi Ảo AI. */
 export function WritingReview({
   attempt,
   onBack,
@@ -60,15 +58,17 @@ export function WritingReview({
           <ArrowLeft className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-sm font-black uppercase tracking-wide">
+          <h1 className="text-sm font-black tracking-wide uppercase">
             Flyers - [FLYERS] Bài thi Viết 1
           </h1>
-          <p className="text-xs text-slate-500">Điểm và nhận xét từ FLYER AI cho phần viết</p>
+          <p className="text-xs text-slate-500">
+            Điểm và nhận xét từ Luyện Thi Ảo AI cho phần viết
+          </p>
         </div>
         <button
           type="button"
           onClick={onExitReview}
-          className="ml-auto cursor-pointer rounded-full bg-gradient-to-b from-purple-500 to-purple-700 px-5 py-2 text-xs font-black uppercase tracking-wider text-white shadow transition-transform hover:scale-[1.03] active:scale-95"
+          className="ml-auto cursor-pointer rounded-full bg-gradient-to-b from-purple-500 to-purple-700 px-5 py-2 text-xs font-black tracking-wider text-white uppercase shadow transition-transform hover:scale-[1.03] active:scale-95"
         >
           Xem lại bài thi của bạn
         </button>
@@ -78,15 +78,15 @@ export function WritingReview({
         {/* Tổng điểm */}
         <section className="rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 p-6 text-white shadow-lg">
           <div className="flex flex-col items-center text-center">
-            <span className="text-sm font-bold uppercase tracking-widest text-purple-100">
+            <span className="text-sm font-bold tracking-widest text-purple-100 uppercase">
               Tổng điểm toàn bài
             </span>
             <div className="mt-2 flex items-end gap-1">
-              <span className="text-6xl font-black leading-none drop-shadow">{score}</span>
+              <span className="text-6xl leading-none font-black drop-shadow">{score}</span>
               <span className="pb-1 text-2xl font-black text-purple-200">/{maxScore}</span>
             </div>
             <p className="mt-1 text-xs font-medium text-purple-100">
-              điểm và nhận xét từ FLYER AI cho phần viết
+              điểm và nhận xét từ Luyện Thi Ảo AI cho phần viết
             </p>
           </div>
         </section>
@@ -94,11 +94,11 @@ export function WritingReview({
         {/* Phần 1 */}
         <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h2 className="text-sm font-black uppercase tracking-wider text-slate-800">
+            <h2 className="text-sm font-black tracking-wider text-slate-800 uppercase">
               {prompt.title}
             </h2>
           </div>
-          <p className="mt-3 text-sm font-medium leading-relaxed text-slate-700">
+          <p className="mt-3 text-sm leading-relaxed font-medium text-slate-700">
             {prompt.instruction}
           </p>
 
@@ -110,34 +110,32 @@ export function WritingReview({
 
           {/* Gợi ý (đáp án mẫu) */}
           <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
-            <span className="text-xs font-black uppercase tracking-wider text-emerald-700">
+            <span className="text-xs font-black tracking-wider text-emerald-700 uppercase">
               Gợi ý
             </span>
-            <p className="mt-2 text-sm leading-relaxed text-emerald-900">
-              {prompt.sampleAnswer}
-            </p>
+            <p className="mt-2 text-sm leading-relaxed text-emerald-900">{prompt.sampleAnswer}</p>
           </div>
 
           {/* Câu trả lời của thí sinh */}
           <div className="mt-4 rounded-2xl border border-slate-200 p-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-slate-700">
+              <span className="text-xs font-black tracking-wider text-slate-700 uppercase">
                 Câu trả lời của bạn
               </span>
               <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-black text-purple-700">
                 Số từ: {countWords(userAnswer)}
               </span>
             </div>
-            <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-600">
-              {userAnswer.trim() ? userAnswer : "(Chưa có câu trả lời)"}
+            <p className="mt-2 text-sm leading-relaxed whitespace-pre-wrap text-slate-600">
+              {userAnswer.trim() ? userAnswer : '(Chưa có câu trả lời)'}
             </p>
           </div>
         </section>
 
-        {/* Nhận xét FLYER AI */}
+        {/* Nhận xét Luyện Thi Ảo AI */}
         <section className="grid gap-4 lg:grid-cols-3">
           <FeedbackCard
-            title="Nhận xét của FLYER AI"
+            title="Nhận xét của Luyện Thi Ảo AI"
             icon={<Sparkles className="h-4 w-4 text-purple-600" />}
           >
             {feedback.comment}
@@ -160,14 +158,14 @@ export function WritingReview({
           <button
             type="button"
             onClick={onRetake}
-            className="cursor-pointer rounded-2xl border-2 border-slate-200 bg-white py-3 text-sm font-black uppercase tracking-wider text-slate-600 transition hover:bg-slate-50"
+            className="cursor-pointer rounded-2xl border-2 border-slate-200 bg-white py-3 text-sm font-black tracking-wider text-slate-600 uppercase transition hover:bg-slate-50"
           >
             Làm lại bài
           </button>
           <button
             type="button"
             onClick={onExitReview}
-            className="cursor-pointer rounded-2xl bg-gradient-to-b from-purple-500 to-purple-700 py-3 text-sm font-black uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+            className="cursor-pointer rounded-2xl bg-gradient-to-b from-purple-500 to-purple-700 py-3 text-sm font-black tracking-wider text-white uppercase shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
           >
             Làm bài tiếp theo
           </button>

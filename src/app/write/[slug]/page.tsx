@@ -1,47 +1,45 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
-import { WritingFlow } from "@/components/writing";
-import { writingTestMock } from "@/mocks/writing";
-import type { WritingTest } from "@/types/writing";
-
-
+import { WritingFlow } from '@/components/writing'
+import { writingTestMock } from '@/mocks/writing'
+import type { WritingTest } from '@/types/writing'
 
 const writingData: WritingTest = writingTestMock
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = await params
   if (slug !== writingData.id) {
     return {
-      title: "Không tìm thấy bài viết",
-      description: "Bài thi viết không tồn tại.",
-      keywords: ["tieng anh", "luyen thi", "flyer", "bai viet"],
+      title: 'Không tìm thấy bài viết',
+      description: 'Bài thi viết không tồn tại.',
+      keywords: ['tieng anh', 'luyen thi', 'luyenthiao', 'bai viet'],
       alternates: { canonical: `/write/${slug}` },
       openGraph: {
-        title: "Không tìm thấy bài viết",
-        description: "Bài thi viết không tồn tại.",
+        title: 'Không tìm thấy bài viết',
+        description: 'Bài thi viết không tồn tại.',
       },
-    };
+    }
   }
   return {
     title: `${writingData.name} - Luyện thi`,
-    description: "Bài thi viết theo chủ đề FLYER — viết câu chuyện dựa trên ba bức tranh.",
-    keywords: ["tieng anh", "luyen thi", "flyer", "bai viet", "writing"],
+    description: 'Bài thi viết theo chủ đề Luyện Thi Ảo — viết câu chuyện dựa trên ba bức tranh.',
+    keywords: ['tieng anh', 'luyen thi', 'luyenthiao', 'bai viet', 'writing'],
     alternates: { canonical: `/write/${slug}` },
     openGraph: {
       title: `${writingData.name} - Luyện thi`,
-      description: "Bài thi viết theo chủ đề FLYER.",
+      description: 'Bài thi viết theo chủ đề Luyện Thi Ảo.',
     },
-  };
+  }
 }
 
 export default async function WritingTestPage({ params }: PageProps): Promise<React.ReactElement> {
-  const { slug } = await params;
-  if (slug !== writingData.id) notFound();
+  const { slug } = await params
+  if (slug !== writingData.id) notFound()
 
-  return <WritingFlow test={writingData} />;
+  return <WritingFlow test={writingData} />
 }

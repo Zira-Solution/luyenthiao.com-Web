@@ -25,7 +25,7 @@ interface FlatQuestion {
 }
 
 /**
- * Phòng thi Nói — khung gỗ + asset thật của Flyer. Header cố định, hiển thị
+ * Phòng thi Nói — khung gỗ + asset thật của Luyện Thi Ảo. Header cố định, hiển thị
  * từng câu, mũi tên sang câu tiếp; câu cuối → mở hộp xác nhận nộp bài.
  */
 export function SpeakingWorkbench({

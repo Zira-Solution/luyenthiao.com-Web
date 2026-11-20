@@ -11,7 +11,7 @@ export interface WritingStoryImage {
 export interface WritingPrompt {
   /** Tên phần, VD: "Phần 1". */
   title: string
-  /** Gợi ý viết gốc từ đề FLYER. */
+  /** Gợi ý viết gốc từ đề Luyện Thi Ảo. */
   instruction: string
   /** Ảnh minh hoạ câu chuyện (3 tấm). */
   images: WritingStoryImage[]
@@ -20,7 +20,7 @@ export interface WritingPrompt {
 }
 
 export interface WritingFeedback {
-  /** Nhận xét chung từ FLYER AI. */
+  /** Nhận xét chung từ Luyện Thi Ảo AI. */
   comment: string
   /** Danh sách lỗi sai (dạng đoạn text). */
   errors: string
@@ -39,7 +39,7 @@ export interface WritingAttempt {
   score: number
   prompt: WritingPrompt
   userAnswer: string
-  /** Điểm và nhận xét từ FLYER AI cho phần viết. */
+  /** Điểm và nhận xét từ Luyện Thi Ảo AI cho phần viết. */
   feedback: WritingFeedback
   /** Thời lượng làm bài (phút) hiển thị trên đồng hồ. */
   minutes: number

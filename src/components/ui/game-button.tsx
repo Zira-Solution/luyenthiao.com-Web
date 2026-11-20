@@ -10,7 +10,7 @@ export interface GameButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 export const GameButton = React.forwardRef<HTMLButtonElement, GameButtonProps>(
   ({ className, children, variant = "primary", ...props }, ref) => {
     
-    // 3D Claymorphic game design colors matching Flyer's vibrant theme
+    // 3D Claymorphic game design colors matching Luyện Thi Ảo's vibrant theme
     const themeStyles = {
       primary: {
         shadow: "bg-game-primary-shadow", // Dark brick-red base

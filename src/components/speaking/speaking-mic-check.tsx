@@ -9,7 +9,7 @@ interface SpeakingMicCheckProps {
   onDone: () => void
 }
 
-/** Bảng kiểm tra micro trước khi thi (copy + asset thật của Flyer). */
+/** Bảng kiểm tra micro trước khi thi (copy + asset thật của Luyện Thi Ảo). */
 export function SpeakingMicCheck({
   onSkip,
   onDone,
