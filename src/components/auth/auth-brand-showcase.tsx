@@ -15,40 +15,55 @@ import Image from 'next/image'
 export function AuthBrandShowcase(): React.ReactElement {
   return (
     <div className="flex w-full flex-col items-center select-none lg:items-start">
-      {/* 1. MASCOT & WELCOME BUBBLE DIORAMA */}
+      {/* 1. MASCOT & WELCOME BUBBLE DIORAMA ON FLOATING SANCTUARY DAIS */}
       <div className="relative flex flex-col items-center lg:items-start">
-        {/* Soft Ambient Golden Aura behind the mascot */}
+        {/* Soft Ambient Golden Aura behind the sanctuary */}
         <div
-          className="pointer-events-none absolute -top-8 -left-8 -z-10 h-64 w-64 rounded-full opacity-60 blur-3xl sm:h-72 sm:w-72"
+          className="pointer-events-none absolute -top-10 -left-10 -z-10 h-72 w-72 rounded-full opacity-60 blur-3xl sm:h-80 sm:w-80"
           style={{
             background:
-              'radial-gradient(circle, rgba(254, 215, 170, 0.85) 0%, rgba(253, 230, 138, 0.4) 50%, transparent 70%)',
+              'radial-gradient(circle, rgba(254, 215, 170, 0.85) 0%, rgba(253, 230, 138, 0.45) 50%, transparent 70%)',
           }}
         />
 
-        {/* Mascot + Floating Speech Bubble Container */}
-        <div className="relative flex items-center gap-3 sm:items-end sm:gap-4">
-          {/* Living 3D Baby Lion Mascot */}
-          <div className="relative animate-[floating_6s_ease-in-out_infinite]">
-            <Image
-              src="/clone-assets/mascot/mascot_sitting_wink.png"
-              alt="Luyện Thi Ảo Lion Mascot"
-              width={260}
-              height={280}
-              priority
-              className="short-landscape-mascot w-[75px] drop-shadow-[0_16px_28px_rgba(30,58,138,0.25)] transition-transform duration-500 hover:scale-105 sm:w-[150px] md:w-[180px] lg:w-[220px]"
-            />
-            {/* Soft Contact Shadow beneath mascot */}
-            <div className="pointer-events-none absolute -bottom-2 left-1/2 -z-10 h-2.5 w-3/4 -translate-x-1/2 rounded-full bg-indigo-950/20 blur-md sm:h-3.5" />
+        {/* Floating Sanctuary Stage (Mascot standing on 3D Pedestal Dais) */}
+        <div className="relative flex items-center gap-2 sm:items-end sm:gap-4">
+          {/* Unified Floating Island Group */}
+          <div className="relative flex flex-col items-center animate-[floating_6s_ease-in-out_infinite]">
+            {/* Living 3D Baby Lion Cub Hero (Interactive separate layer, NOT baked into background) */}
+            <div className="relative z-10 -mb-[26%] transition-transform duration-500 hover:scale-105 active:scale-95 sm:-mb-[28%] md:-mb-[30%]">
+              <Image
+                src="/clone-assets/mascot/mascot_hero_standing.png"
+                alt="Luyện Thi Ảo Lion Mascot"
+                width={260}
+                height={358}
+                priority
+                className="short-landscape-mascot w-[95px] drop-shadow-[0_12px_24px_rgba(234,88,12,0.22)] sm:w-[145px] md:w-[175px] lg:w-[205px]"
+              />
+              {/* Natural Contact Shadow on the stone dais */}
+              <div className="pointer-events-none absolute -bottom-1 left-1/2 -z-10 h-2.5 w-3/5 -translate-x-1/2 rounded-full bg-amber-950/30 blur-[2px] sm:h-3.5" />
 
-            {/* Little floating star sparkle near lion ear */}
-            <div className="pointer-events-none absolute -top-1.5 -right-1 animate-pulse text-xs text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)] sm:text-sm">
-              ★
+              {/* Magical star sparkle near lion's ear */}
+              <div className="pointer-events-none absolute -top-1 -right-1 animate-pulse text-xs text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.9)] sm:text-sm">
+                ★
+              </div>
+            </div>
+
+            {/* 3D Whimsical Floating Pedestal Dais (Stone ring, lush grass, golden runes, clouds) */}
+            <div className="relative z-0 select-none">
+              <Image
+                src="/clone-assets/mascot/mascot_pedestal_stage.png"
+                alt="Floating Sanctuary Pedestal"
+                width={360}
+                height={342}
+                priority
+                className="w-[155px] drop-shadow-[0_18px_32px_rgba(30,58,138,0.22)] sm:w-[235px] md:w-[285px] lg:w-[330px]"
+              />
             </div>
           </div>
 
           {/* Welcoming Explorer Speech Bubble (Desktop/Tablet prominent, compact on mobile) */}
-          <div className="relative hidden max-w-[210px] rounded-2xl border-2 border-white/90 bg-white/90 p-3 shadow-[0_8px_24px_rgba(100,110,180,0.14)] backdrop-blur-md transition-transform hover:-translate-y-1 sm:block sm:max-w-[230px] sm:p-3.5 lg:mb-6">
+          <div className="relative hidden max-w-[210px] rounded-2xl border-2 border-white/90 bg-white/90 p-3 shadow-[0_8px_24px_rgba(100,110,180,0.14)] backdrop-blur-md transition-transform hover:-translate-y-1 sm:block sm:max-w-[230px] sm:p-3.5 lg:mb-12">
             <div className="flex items-center gap-1.5 text-xs font-black text-amber-600 sm:text-sm">
               <Sparkles
                 className="h-4 w-4 shrink-0 animate-spin text-amber-500"
