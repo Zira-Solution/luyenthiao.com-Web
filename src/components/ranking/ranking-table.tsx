@@ -142,7 +142,7 @@ export function RankingTable({ items }: RankingTableProps): React.ReactElement {
       <div className="bg-game-input-focus-shadow border-ranking-table-border border-t-2 p-4.5 text-center shadow-inner">
         <p className="font-heading flex items-center justify-center gap-2 text-xs font-black tracking-wider text-yellow-400 uppercase md:text-sm">
           <span>✨</span>
-          <span>Bảng Xếp Hạng “nhà Du Hành” Xuất Sắc Của Cuộc Thi Phá Đảo Cùng Flyer</span>
+          <span>Bảng Xếp Hạng “nhà Du Hành” Xuất Sắc Của Cuộc Thi Phá Đảo Cùng Luyện Thi Ảo</span>
           <span>✨</span>
         </p>
       </div>

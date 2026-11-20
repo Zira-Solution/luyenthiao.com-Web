@@ -1,3 +1,5 @@
-export * from "./bingo-onboarding";
-export * from "./planet-card";
-export { DashboardView } from "./dashboard-view";
+export * from './bingo-onboarding'
+export * from './planet-card'
+export * from './planet-diorama'
+export * from './dreamy-sky-background'
+export { DashboardView } from './dashboard-view'

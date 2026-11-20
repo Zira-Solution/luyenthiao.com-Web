@@ -1,36 +1,36 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
-import { LevelHeader, LevelMap } from "@/components/testlevels";
-import levelData from "@/mocks/testlevels.json";
+import { LevelHeader, LevelMap } from '@/components/testlevels'
+import levelData from '@/mocks/testlevels.json'
 
-type LevelKey = keyof typeof levelData;
+type LevelKey = keyof typeof levelData
 
 interface PageProps {
-  params: Promise<{ level: string }>;
+  params: Promise<{ level: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { level } = await params;
-  const data = levelData[level as LevelKey];
-  
+  const { level } = await params
+  const data = levelData[level as LevelKey]
+
   if (!data) {
     return {
-      title: "Không tìm thấy cấp độ",
-      description: "Cấp độ học không tồn tại.",
-      keywords: ["tieng anh", "luyen thi", "flyer", "movers"],
+      title: 'Không tìm thấy cấp độ',
+      description: 'Cấp độ học không tồn tại.',
+      keywords: ['tieng anh', 'luyen thi', 'luyenthiao', 'movers'],
       alternates: { canonical: `/testlevels/${level}` },
       openGraph: {
-        title: "Không tìm thấy cấp độ",
-        description: "Cấp độ học không tồn tại.",
+        title: 'Không tìm thấy cấp độ',
+        description: 'Cấp độ học không tồn tại.',
       },
-    };
+    }
   }
 
   return {
     title: `${data.name} - Luyện thi`,
     description: `Chọn thử thách cho bộ đề ${data.name}`,
-    keywords: ["tieng anh", "luyen thi", "flyer", "movers", data.name.toLowerCase()],
+    keywords: ['tieng anh', 'luyen thi', 'luyenthiao', 'movers', data.name.toLowerCase()],
     alternates: { canonical: `/testlevels/${level}` },
     openGraph: {
       title: `${data.name} - Luyện thi`,
@@ -44,19 +44,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
       ],
     },
-  };
+  }
 }
 
 export default async function TestLevelsPage({ params }: PageProps): Promise<React.ReactElement> {
-  const { level } = await params;
-  const data = levelData[level as LevelKey];
-  
-  if (!data) notFound();
+  const { level } = await params
+  const data = levelData[level as LevelKey]
+
+  if (!data) notFound()
 
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-page-bg">
+    <main className="bg-page-bg relative min-h-screen w-full overflow-x-hidden">
       <LevelHeader levelName={data.name} />
       <LevelMap level={data} />
     </main>
-  );
+  )
 }

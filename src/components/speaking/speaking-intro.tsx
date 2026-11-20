@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image from 'next/image'
 
 interface SpeakingIntroProps {
   name: string
@@ -29,13 +29,10 @@ function GuidelineRow({
   )
 }
 
-/** Màn hướng dẫn chung trước khi bắt đầu ghi âm (copy + asset thật của Flyer). */
-export function SpeakingIntro({
-  name,
-  onStart,
-}: SpeakingIntroProps): React.ReactElement {
+/** Màn hướng dẫn chung trước khi bắt đầu ghi âm (copy + asset thật của Luyện Thi Ảo). */
+export function SpeakingIntro({ name, onStart }: SpeakingIntroProps): React.ReactElement {
   return (
-    <div className="relative flex min-h-[100dvh] w-full flex-col items-center overflow-y-auto bg-page-bg px-4 py-6">
+    <div className="bg-page-bg relative flex min-h-[100dvh] w-full flex-col items-center overflow-y-auto px-4 py-6">
       <Image
         src="/clone-assets/speaking/bg.894c95ef.png"
         alt=""
@@ -47,22 +44,34 @@ export function SpeakingIntro({
       {/* Header: TRỞ VỀ + timer + kim cương */}
       <header className="relative z-10 flex w-full max-w-4xl items-center justify-between">
         <button type="button" className="flex cursor-pointer items-center gap-1">
-          <Image src="/clone-assets/speaking/btn-out.94d0dd6c.png" alt="" width={112} height={46} className="h-11 w-auto object-contain" />
+          <Image
+            src="/clone-assets/speaking/btn-out.94d0dd6c.png"
+            alt=""
+            width={112}
+            height={46}
+            className="h-11 w-auto object-contain"
+          />
         </button>
         <div className="flex items-center gap-1">
-          <Image src="/clone-assets/speaking/box-time.2ac9e25e.png" alt="" width={112} height={44} className="h-11 w-auto object-contain" />
+          <Image
+            src="/clone-assets/speaking/box-time.2ac9e25e.png"
+            alt=""
+            width={112}
+            height={44}
+            className="h-11 w-auto object-contain"
+          />
         </div>
       </header>
 
       <div className="relative z-10 mt-8 w-full max-w-[680px] flex-1">
         <div className="flex flex-col items-center text-center">
-          <span className="rounded-2xl bg-[#e63a2e] px-5 py-1.5 text-sm font-black uppercase tracking-wider text-white shadow">
+          <span className="rounded-2xl bg-[#e63a2e] px-5 py-1.5 text-sm font-black tracking-wider text-white uppercase shadow">
             {name}
           </span>
           <h1 className="mt-3 text-4xl font-black tracking-wide text-slate-900 drop-shadow-sm">
             Bài thi Nói
           </h1>
-          <p className="mt-2 text-sm font-bold uppercase tracking-widest text-amber-600">
+          <p className="mt-2 text-sm font-bold tracking-widest text-amber-600 uppercase">
             Hướng dẫn chung
           </p>
         </div>
@@ -90,9 +99,15 @@ export function SpeakingIntro({
 
         {/* Yêu cầu chấm bài */}
         <div className="mt-5 flex items-center justify-center gap-3 rounded-2xl border-2 border-amber-300 bg-white px-5 py-3 shadow-sm">
-          <Image src="/clone-assets/speaking/un-check.1f84877f.png" alt="" width={24} height={24} className="h-6 w-6" />
+          <Image
+            src="/clone-assets/speaking/un-check.1f84877f.png"
+            alt=""
+            width={24}
+            height={24}
+            className="h-6 w-6"
+          />
           <span className="text-base font-semibold text-slate-700">
-            Yêu cầu FLYER AI chấm bài
+            Yêu cầu Luyện Thi Ảo AI chấm bài
           </span>
         </div>
 
@@ -100,13 +115,25 @@ export function SpeakingIntro({
           <button
             type="button"
             onClick={onStart}
-            className="flex cursor-pointer items-center gap-3 rounded-full bg-gradient-to-b from-[#ff7a2f] to-[#e8530a] px-14 py-4 text-lg font-black uppercase tracking-widest text-white shadow-xl ring-4 ring-orange-300/60 transition-transform hover:scale-105 active:scale-95"
+            className="flex cursor-pointer items-center gap-3 rounded-full bg-gradient-to-b from-[#ff7a2f] to-[#e8530a] px-14 py-4 text-lg font-black tracking-widest text-white uppercase shadow-xl ring-4 ring-orange-300/60 transition-transform hover:scale-105 active:scale-95"
           >
             <span>Bước tiếp theo</span>
-            <Image src="/clone-assets/speaking/next-step.c3496d88.png" alt="" width={30} height={22} className="h-6 w-auto" />
+            <Image
+              src="/clone-assets/speaking/next-step.c3496d88.png"
+              alt=""
+              width={30}
+              height={22}
+              className="h-6 w-auto"
+            />
           </button>
           <div className="mt-4 flex items-center gap-2">
-            <Image src="/clone-assets/speaking/icon-diamonds.580d8a36.png" alt="" width={24} height={22} className="h-6 w-auto" />
+            <Image
+              src="/clone-assets/speaking/icon-diamonds.580d8a36.png"
+              alt=""
+              width={24}
+              height={22}
+              className="h-6 w-auto"
+            />
             <span className="text-sm font-bold text-slate-600">0</span>
           </div>
         </div>

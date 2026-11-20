@@ -78,7 +78,7 @@ export function SpeakingPreview({
           <div className="flex-1">
             <h1 className="text-lg font-black text-slate-900">{attempt.testTitle}</h1>
             <p className="text-sm text-slate-500">
-              {attempt.userName} · Flyer ID: {attempt.flyerId}
+              {attempt.userName} · Luyện Thi Ảo ID: {attempt.flyerId}
             </p>
           </div>
           <div className="relative h-16 w-16">
