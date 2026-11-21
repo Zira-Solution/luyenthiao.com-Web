@@ -6,18 +6,12 @@ import { planetsSchema, toPlanets } from '@/schemas/planet'
 describe('planets', () => {
   it('parses the real payload and maps it in sortOrder', () => {
     const result = toPlanets(planetsSchema.parse(planets))
-    expect(result.map((p) => p.slug)).toEqual([
-      'ioe',
-      'starters',
-      'movers',
-      'flyers',
-      'toefl_primary',
-    ])
-    expect(result[1]).toEqual({
+    expect(result.map((p) => p.slug)).toEqual(['starters', 'movers', 'flyers', 'toefl_primary'])
+    expect(result[0]).toEqual({
       slug: 'starters',
       name: planets[1]?.name,
-      description: planets[1]?.subtitle,
-      image: planets[1]?.image,
+      description: 'Đấu Trường Tri Thức',
+      image: '/clone-assets/media/planet_ioe.png',
       glowColor: planets[1]?.glowColor,
       ribbonFrom: planets[1]?.ribbonFrom,
       ribbonTo: planets[1]?.ribbonTo,
@@ -26,10 +20,18 @@ describe('planets', () => {
     })
   })
 
-  it('uses linkUrl when set and marks /challenges as coming soon', () => {
-    const [ioe] = toPlanets(planetsSchema.parse(planets))
-    expect(ioe?.href).toBe('/challenges')
-    expect(ioe?.comingSoon).toBe(true)
+  it('uses a safe linkUrl as href and marks /challenges as coming soon', () => {
+    const rows = planetsSchema.parse(planets)
+    const starters = rows.find((row) => row.slug === 'starters')
+    if (!starters) throw new Error('fixture has no starters row')
+    const [planet] = toPlanets([{ ...starters, linkUrl: '/challenges' }])
+    expect(planet?.href).toBe('/challenges')
+    expect(planet?.comingSoon).toBe(true)
+  })
+
+  it('drops the ioe planet', () => {
+    const result = toPlanets(planetsSchema.parse(planets))
+    expect(result.some((p) => p.slug === 'ioe')).toBe(false)
   })
 
   it.each([

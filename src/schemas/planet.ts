@@ -29,8 +29,20 @@ export interface Planet {
   comingSoon: boolean
 }
 
+/** Slugs the dashboard never shows. */
+const HIDDEN_PLANET_SLUGS: readonly string[] = ['ioe']
+
+/** Per-slug image/description that win over the API row values. */
+const PLANET_OVERRIDES: Record<string, Partial<Pick<Planet, 'image' | 'description'>>> = {
+  starters: {
+    image: '/clone-assets/media/planet_ioe.png',
+    description: 'Đấu Trường Tri Thức',
+  },
+}
+
 export function toPlanets(rows: z.output<typeof planetsSchema>): Planet[] {
-  return [...rows]
+  return rows
+    .filter((row) => !HIDDEN_PLANET_SLUGS.includes(row.slug))
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .map((row) => {
       const href =
@@ -42,6 +54,7 @@ export function toPlanets(rows: z.output<typeof planetsSchema>): Planet[] {
         name: row.name,
         description: row.subtitle,
         image: row.image,
+        ...PLANET_OVERRIDES[row.slug],
         glowColor: row.glowColor,
         ribbonFrom: row.ribbonFrom,
         ribbonTo: row.ribbonTo,

@@ -75,14 +75,7 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
-      {/* Dynamic Background Glow based on active planet - Enlarged Aura */}
-      <div
-        className="pointer-events-none absolute top-1/2 left-1/2 z-0 h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-55 mix-blend-screen transition-all duration-700 ease-in-out sm:h-[700px] sm:w-[700px] md:h-[880px] md:w-[880px] md:opacity-70"
-        style={{
-          background: `radial-gradient(circle, ${planets[activePlanetIndex]?.glowColor || '#7c3aed'} 0%, rgba(254, 240, 138, 0.4) 40%, transparent 70%)`,
-          filter: 'blur(90px)',
-        }}
-      />
+      {/* Dynamic Background Glow REMOVED: Center stays crystal clear */}
 
       {/* Custom Prev Button with Frosted Pearl Gold Capsule Style */}
       <button

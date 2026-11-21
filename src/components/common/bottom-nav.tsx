@@ -6,79 +6,120 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 
-const NAV_LEFT = [
-  {
-    href: '/',
-    label: 'TẤT CẢ\nCẤP ĐỘ',
-    icon: 'level-filter.337790ac.png',
-    dropdown: true,
-    pillClass:
-      'bg-white/85 text-purple-950 border border-purple-200/80 shadow-[0_4px_12px_rgba(147,51,234,0.08)] hover:bg-white',
-  },
-  {
-    href: '/placement-test',
-    label: 'KIỂM TRA TRÌNH ĐỘ',
-    icon: 'map.30295c2a.png',
-    hideOnMobile: true,
-    pillClass:
-      'bg-gradient-to-r from-[#fb7185] to-[#f43f5e] text-white border-b-2 border-[#be123c] shadow-[0_4px_12px_rgba(244,63,94,0.25)] hover:brightness-105',
-  },
-  {
-    href: '/notebook',
-    label: 'SỔ TAY',
-    icon: 'icon_target.87047c90.png',
-    badge: 'MỚI',
-    pillClass:
-      'bg-gradient-to-r from-[#34d399] to-[#10b981] text-white border-b-2 border-[#047857] shadow-[0_4px_12px_rgba(16,185,129,0.25)] hover:brightness-105',
-  },
-]
-
-const NAV_RIGHT = [
-  {
-    href: '#',
-    label: 'KÍCH HOẠT TÀI KHOẢN',
-    icon: 'icon_trophy.32089636.png',
-    notification: true,
-    pillClass:
-      'bg-gradient-to-r from-[#60a5fa] to-[#3b82f6] text-white border-b-2 border-[#1d4ed8] shadow-[0_4px_12px_rgba(59,130,246,0.25)] hover:brightness-105',
-  },
-  {
-    href: '#',
-    label: 'THẦY CÔ/PHỤ HUYNH',
-    icon: 'ic_free.7a24c735.png',
-    hideOnTablet: true,
-    pillClass:
-      'bg-gradient-to-r from-[#818cf8] to-[#6366f1] text-white border-b-2 border-[#4338ca] shadow-[0_4px_12px_rgba(99,102,241,0.25)] hover:brightness-105',
-  },
-  {
-    href: '#',
-    label: 'Mời\nbạn bè',
-    icon: 'icon_bag.b6e8d7e3.png',
-    hideOnMobile: true,
-    pillClass:
-      'bg-white/85 text-indigo-950 border border-indigo-200/80 shadow-[0_4px_12px_rgba(99,102,241,0.08)] hover:bg-white',
-  },
-]
-
 interface NavItemData {
   href: string
-  label: string
+  labelLine1: string
+  labelLine2?: string
   icon: string
   dropdown?: boolean
   badge?: string
   notification?: boolean
-  pillClass?: string
+  palette: {
+    bg: string
+    border: string
+    text: string
+    shadow: string
+    activeBorder: string
+  }
   hideOnMobile?: boolean
   hideOnTablet?: boolean
 }
 
-const NavItem = ({ item, pathname }: { item: NavItemData; pathname: string }) => {
+const NAV_ITEMS_LEFT: NavItemData[] = [
+  {
+    href: '/',
+    labelLine1: 'TẤT CẢ',
+    labelLine2: 'CẤP ĐỘ',
+    icon: 'level-filter.337790ac.png',
+    dropdown: true,
+    palette: {
+      bg: 'bg-gradient-to-b from-[#fffef7] via-[#fffbeb] to-[#fef3c7]',
+      border: 'border-t-white border-x-[#fde68a]/80 border-b-[#d97706]',
+      text: 'text-[#92400e]',
+      shadow: 'shadow-[0_2px_6px_rgba(217,119,6,0.16)]',
+      activeBorder: 'ring-2 ring-amber-400',
+    },
+  },
+  {
+    href: '/placement-test',
+    labelLine1: 'KIỂM TRA',
+    labelLine2: 'TRÌNH ĐỘ',
+    icon: 'map.30295c2a.png',
+    hideOnTablet: true,
+    palette: {
+      bg: 'bg-gradient-to-b from-[#fff1f2] via-[#ffe4e6] to-[#fecdd3]',
+      border: 'border-t-white border-x-[#fecdd3]/80 border-b-[#e11d48]',
+      text: 'text-[#be123c]',
+      shadow: 'shadow-[0_2px_6px_rgba(225,29,72,0.16)]',
+      activeBorder: 'ring-2 ring-rose-400',
+    },
+  },
+  {
+    href: '/notebook',
+    labelLine1: 'SỔ TAY',
+    icon: 'icon_target.87047c90.png',
+    badge: 'MỚI',
+    palette: {
+      bg: 'bg-gradient-to-b from-[#f0fdf4] via-[#dcfce7] to-[#bbf7d0]',
+      border: 'border-t-white border-x-[#bbf7d0]/80 border-b-[#059669]',
+      text: 'text-[#065f46]',
+      shadow: 'shadow-[0_2px_6px_rgba(5,150,105,0.16)]',
+      activeBorder: 'ring-2 ring-emerald-400',
+    },
+  },
+]
+
+const NAV_ITEMS_RIGHT: NavItemData[] = [
+  {
+    href: '#',
+    labelLine1: 'KÍCH HOẠT',
+    labelLine2: 'TÀI KHOẢN',
+    icon: 'icon_trophy.32089636.png',
+    notification: true,
+    palette: {
+      bg: 'bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#bae6fd]',
+      border: 'border-t-white border-x-[#bae6fd]/80 border-b-[#0284c7]',
+      text: 'text-[#0369a1]',
+      shadow: 'shadow-[0_2px_6px_rgba(2,132,199,0.16)]',
+      activeBorder: 'ring-2 ring-sky-400',
+    },
+  },
+  {
+    href: '#',
+    labelLine1: 'THẦY CÔ',
+    labelLine2: 'PHỤ HUYNH',
+    icon: 'ic_free.7a24c735.png',
+    hideOnTablet: true,
+    palette: {
+      bg: 'bg-gradient-to-b from-[#f5f3ff] via-[#ede9fe] to-[#ddd6fe]',
+      border: 'border-t-white border-x-[#ddd6fe]/80 border-b-[#7c3aed]',
+      text: 'text-[#6d28d9]',
+      shadow: 'shadow-[0_2px_6px_rgba(124,58,237,0.16)]',
+      activeBorder: 'ring-2 ring-purple-400',
+    },
+  },
+  {
+    href: '#',
+    labelLine1: 'MỜI',
+    labelLine2: 'BẠN BÈ',
+    icon: 'icon_bag.b6e8d7e3.png',
+    hideOnMobile: true,
+    palette: {
+      bg: 'bg-gradient-to-b from-[#fffbf5] via-[#fef7ee] to-[#ffedd5]',
+      border: 'border-t-white border-x-[#fed7aa]/80 border-b-[#ea580c]',
+      text: 'text-[#9a3412]',
+      shadow: 'shadow-[0_2px_6px_rgba(234,88,12,0.16)]',
+      activeBorder: 'ring-2 ring-orange-400',
+    },
+  },
+]
+
+const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) => {
   const isActive = pathname === item.href
   const isLinkable = item.href !== '#'
 
   return (
     <Link
-      key={item.href}
       href={item.href}
       onClick={(e) => {
         if (!isLinkable) {
@@ -86,43 +127,68 @@ const NavItem = ({ item, pathname }: { item: NavItemData; pathname: string }) =>
         }
       }}
       className={cn(
-        'group relative flex cursor-pointer items-center gap-1 rounded-full px-2 py-1 transition-all duration-200 select-none sm:gap-1.5 sm:px-3 sm:py-1.5 md:gap-2 md:px-4',
-        item.hideOnMobile && 'hidden sm:flex',
-        item.hideOnTablet && 'hidden lg:flex',
-        item.pillClass,
-        isActive
-          ? 'shadow-md ring-2 ring-amber-400'
-          : 'hover:-translate-y-0.5 active:translate-y-0',
-        !isLinkable && 'opacity-90 hover:opacity-100',
+        // Base structure & standardization
+        'group relative inline-flex shrink-0 items-center justify-center cursor-pointer select-none',
+        'h-8 sm:h-9 md:h-10 lg:h-10.5 xl:h-11',
+        'gap-1 sm:gap-1.5 md:gap-2',
+        'rounded-xl sm:rounded-full',
+        'px-2 sm:px-2.5 md:px-3 lg:px-3.5 xl:px-4',
+        'border-t border-b-[2.5px] border-x transition-all duration-200',
+        'hover:-translate-y-0.5 hover:shadow-md hover:brightness-[1.03] active:translate-y-[1px] active:border-b active:brightness-95',
+        item.palette.bg,
+        item.palette.border,
+        item.palette.shadow,
+        item.palette.text,
+        item.hideOnMobile && 'hidden sm:inline-flex',
+        item.hideOnTablet && 'hidden lg:inline-flex',
+        isActive && item.palette.activeBorder,
+        !isLinkable && 'opacity-95 hover:opacity-100',
       )}
     >
-      <div className="relative flex h-6 w-6 shrink-0 items-center justify-center sm:h-8 sm:w-8 md:h-9 md:w-9">
+      {/* Glossy top reflection highlight */}
+      <div className="pointer-events-none absolute inset-x-2 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/60 to-transparent" />
+
+      {/* Standardized Icon Container */}
+      <div className="relative flex h-4.5 w-4.5 sm:h-5.5 sm:w-5.5 md:h-6 md:w-6 lg:h-7 lg:w-7 shrink-0 items-center justify-center">
         <img
           src={`/clone-assets/media/${item.icon}`}
-          alt={item.label}
-          className="relative z-10 h-full w-full object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] transition-all duration-200 group-hover:scale-110"
+          alt={item.labelLine1}
+          className="relative z-10 h-full w-full object-contain drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.12)] transition-transform duration-200 group-hover:scale-105"
           onError={(e) => {
             ;(e.target as HTMLImageElement).src =
-              'https://api.dicebear.com/7.x/shapes/svg?seed=' + item.label
+              'https://api.dicebear.com/7.x/shapes/svg?seed=' + item.labelLine1
           }}
         />
+
+        {/* Red Alert Notification Badge */}
         {item.notification && (
-          <div className="absolute top-0 right-0 z-20 flex h-3 w-3 animate-pulse items-center justify-center rounded-full border border-white bg-rose-500 shadow-xs sm:h-3.5 sm:w-3.5">
-            <span className="text-[7px] leading-none font-black text-white sm:text-[8px]">!</span>
-          </div>
+          <span className="absolute -top-1 -right-1 z-20 flex h-3 w-3 sm:h-3.5 sm:w-3.5 items-center justify-center rounded-full border border-white bg-rose-500 shadow-xs">
+            <span className="text-[6.5px] sm:text-[7.5px] leading-none font-black text-white">!</span>
+          </span>
         )}
+
+        {/* 'MỚI' Emerald Badge */}
         {item.badge && (
-          <div className="py-0.2 absolute -top-1.5 -right-3 z-20 rotate-12 transform rounded-full border border-white/60 bg-emerald-500 px-1 text-[6.5px] font-black tracking-wider text-white uppercase shadow-xs sm:-top-2 sm:-right-4 sm:px-1.5 sm:text-[7.5px]">
+          <span className="absolute -top-1 -right-2 sm:-top-1.5 sm:-right-2.5 z-20 rounded-full border border-white/80 bg-emerald-500 px-1 py-0.2 text-[6px] sm:text-[7px] font-black tracking-wider text-white uppercase shadow-xs">
             {item.badge}
-          </div>
+          </span>
         )}
       </div>
+
+      {/* Strictly 1 or 2 Line Standardized Label with whitespace-nowrap */}
       <div className="flex items-center gap-0.5">
-        <span className="text-center text-[8px] leading-tight font-black tracking-wider whitespace-pre-line uppercase sm:text-[9px] md:text-left md:text-[10px]">
-          {item.label}
-        </span>
+        <div className="flex flex-col justify-center text-left leading-[1.05] whitespace-nowrap">
+          <span className="text-[7.5px] sm:text-[9px] md:text-[10px] lg:text-[10.5px] font-black tracking-wide uppercase whitespace-nowrap">
+            {item.labelLine1}
+          </span>
+          {item.labelLine2 && (
+            <span className="text-[7.5px] sm:text-[9px] md:text-[10px] lg:text-[10.5px] font-black tracking-wide uppercase opacity-95 whitespace-nowrap">
+              {item.labelLine2}
+            </span>
+          )}
+        </div>
         {item.dropdown && (
-          <ChevronDown className="mt-0.5 h-2.5 w-2.5 shrink-0 self-center opacity-70 group-hover:opacity-100 sm:h-3 sm:w-3" />
+          <ChevronDown className="h-2.5 w-2.5 sm:h-3 sm:w-3 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
         )}
       </div>
     </Link>
@@ -134,109 +200,115 @@ export function BottomNav() {
   const router = useRouter()
 
   return (
-    <div className="relative z-50 flex w-full justify-center px-2 pb-2 select-none sm:px-4 sm:pb-3 md:pb-5">
-      <div className="relative flex w-full max-w-6xl justify-center">
-        {/* Floating Cloud Dock Bar */}
-        <div className="relative flex h-[58px] w-full max-w-5xl items-center justify-between px-1.5 sm:h-[72px] sm:px-3 md:h-[80px] md:px-6">
-          {/* Authentic Pure Vector Organic Cloud Dock Background - Enlarged & Puffy */}
-          <div className="pointer-events-none absolute -inset-x-3 -top-6 -bottom-3 -z-10 sm:-inset-x-6 sm:-top-9 sm:-bottom-4 md:-inset-x-8 md:-top-11 md:-bottom-5">
-            <svg
-              viewBox="0 0 1024 135"
-              className="h-full w-full overflow-visible drop-shadow-[0_12px_28px_rgba(30,58,138,0.12)]"
-              preserveAspectRatio="none"
-              fill="none"
-            >
-              <defs>
-                <linearGradient id="cloud-dock-gradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.99" />
-                  <stop offset="45%" stopColor="#ffffff" stopOpacity="0.97" />
-                  <stop offset="100%" stopColor="#f3f6fc" stopOpacity="0.95" />
-                </linearGradient>
-                <linearGradient id="cloud-dock-back" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#f8faff" stopOpacity="0.85" />
-                  <stop offset="100%" stopColor="#e8effc" stopOpacity="0.7" />
-                </linearGradient>
-              </defs>
-              {/* Secondary Back Cloud Layer for 3D Volume & Loft */}
-              <path
-                d="M 30 55 C 50 18 90 18 115 48 C 140 15 185 15 210 48 C 235 12 280 12 305 48 C 330 18 375 18 400 48 C 430 8 480 8 512 35 C 544 8 594 8 624 48 C 649 18 694 18 719 48 C 744 12 789 12 814 48 C 839 15 884 15 909 48 C 934 18 974 18 994 55 C 1018 62 1024 85 1024 135 L 0 135 C 0 85 6 62 30 55 Z"
-                fill="url(#cloud-dock-back)"
-                opacity="0.75"
-              />
-              {/* Primary Foreground Puffy Cloud Dock */}
-              <path
-                d="M 35 60 C 55 25 95 25 120 56 C 145 22 190 22 215 56 C 240 18 285 18 310 56 C 335 24 375 24 400 56 C 428 15 475 15 500 48 C 512 38 528 38 540 48 C 565 15 612 15 640 56 C 665 24 705 24 730 56 C 755 18 800 18 825 56 C 850 22 895 22 920 56 C 945 25 985 25 1005 60 C 1020 70 1024 95 1024 135 L 0 135 C 0 95 4 70 35 60 Z"
-                fill="url(#cloud-dock-gradient)"
-                stroke="rgba(255,255,255,0.98)"
-                strokeWidth="2"
-              />
-            </svg>
-          </div>
+    <div className="relative z-50 flex w-full justify-center px-2 pb-2 sm:px-4 sm:pb-3 md:pb-4 select-none">
+      <div className="relative flex w-full max-w-fit items-center justify-center">
+        {/* Soft Ambient Sky Glow beneath the Dock */}
+        <div className="pointer-events-none absolute -inset-x-3 -bottom-2 top-2 -z-20 rounded-full bg-sky-200/25 blur-xl" />
 
-          {/* Left Nav Tabs */}
-          <div className="flex flex-1 items-center justify-start gap-1 sm:gap-1.5 md:gap-2">
-            {NAV_LEFT.map((item) => (
-              <NavItem key={item.label} item={item} pathname={pathname} />
-            ))}
-          </div>
+        {/* Premium Floating Game Dock Bar — Single Unified Rhythmic Flex Row */}
+        <div
+          className={cn(
+            'relative flex items-center justify-center',
+            'h-[52px] sm:h-[62px] md:h-[68px] lg:h-[72px]',
+            'px-2 sm:px-3.5 md:px-5 lg:px-5 xl:px-6 2xl:px-7',
+            'gap-1.5 sm:gap-2.5 md:gap-3 lg:gap-3.5 xl:gap-5 2xl:gap-6',
+            'rounded-2xl sm:rounded-3xl lg:rounded-full',
+            // Surface & subtle 3D depth
+            'bg-gradient-to-b from-white/96 via-[#fcfdff]/94 to-[#edf3ff]/92',
+            'backdrop-blur-xl',
+            'border-t border-white/95 border-x border-white/70 border-b-[2.5px] border-[#cddbf2]/80',
+            'shadow-[0_12px_36px_rgba(28,45,100,0.12),0_2px_8px_rgba(0,0,0,0.03),inset_0_1.5px_1px_rgba(255,255,255,0.95)]',
+          )}
+        >
+          {/* Left 3 Action Buttons */}
+          {NAV_ITEMS_LEFT.map((item) => (
+            <NavButton key={item.labelLine1} item={item} pathname={pathname} />
+          ))}
 
-          {/* Center Interactive Hub: Chat FAB + Mascot + Call FAB */}
-          <div className="relative mx-1 -mt-6 flex shrink-0 items-center justify-center gap-1 sm:mx-2 sm:-mt-8 sm:gap-1.5 md:mx-4 md:-mt-10 md:gap-2.5">
-            {/* Chat FAB (left of mascot) */}
-            <button
-              onClick={() => window.open('https://zalo.me', '_blank')}
-              aria-label="Chat hỗ trợ"
-              className="flex h-7 w-7 -translate-y-1.5 cursor-pointer items-center justify-center rounded-full border-2 border-amber-300 bg-gradient-to-b from-[#f59e0b] to-[#d97706] shadow-[0_4px_12px_rgba(217,119,6,0.35)] transition-all duration-200 hover:scale-110 active:scale-95 sm:h-9 sm:w-9 sm:-translate-y-2 md:h-10 md:w-10"
-            >
+          {/* Left Companion: Chat FAB */}
+          <button
+            onClick={() => window.open('https://zalo.me', '_blank')}
+            aria-label="Chat hỗ trợ"
+            className={cn(
+              'group/chat relative flex h-6.5 w-6.5 sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
+              'border-t border-white/90 border-b-[2px] border-[#d97706] border-x border-amber-200/80',
+              'bg-gradient-to-b from-[#fffbeb] via-[#fef3c7] to-[#fde68a]',
+              'shadow-[0_3px_10px_rgba(217,119,6,0.22)]',
+              'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
+            )}
+          >
+            <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
+            <img
+              src="/clone-assets/media/icon-chat.fa14d2f7.png"
+              alt="Chat"
+              className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] group-hover/chat:scale-110 transition-transform"
+            />
+          </button>
+
+          {/* Center Elevated Lion Mascot Perch */}
+          <div
+            className="group/mascot relative shrink-0 cursor-pointer -mt-5 sm:-mt-7 md:-mt-8 lg:-mt-9"
+            onClick={() => router.push('/')}
+          >
+            {/* Elevated circular cradle / podium disc */}
+            <div className="pointer-events-none absolute -inset-1 sm:-inset-1.5 rounded-full bg-gradient-to-b from-white/90 via-[#f0f5ff]/70 to-[#dce8fd]/80 shadow-[0_6px_20px_rgba(30,58,138,0.12)] border border-white/90 -z-10" />
+
+            {/* Lion Character Container */}
+            <div className="relative h-14 w-14 sm:h-18 sm:w-18 md:h-22 md:w-22 lg:h-24 lg:w-24 transition-transform duration-200 group-hover/mascot:scale-105 group-active/mascot:scale-95">
+              {/* Contact shadow beneath paws */}
+              <div className="pointer-events-none absolute bottom-1 left-1/2 -z-0 h-1.5 sm:h-2 w-3/4 -translate-x-1/2 rounded-full bg-slate-900/15 blur-[2px]" />
+
+              {/* Baby Lion Mascot */}
               <img
-                src="/clone-assets/media/icon-chat.fa14d2f7.png"
-                alt="Chat"
-                className="h-full w-full object-contain p-0.5 sm:p-1"
+                src="/clone-assets/mascot/mascot_standing_front.png"
+                alt="Luyện Thi Ảo Mascot"
+                className="relative z-10 h-full w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)]"
+                onError={(e) => {
+                  ;(e.target as HTMLImageElement).src =
+                    '/clone-assets/media/ic-challenge.9b2229cb.png'
+                }}
               />
-            </button>
 
-            {/* Center Mascot Button with 3D Levitation */}
-            <div className="group relative cursor-pointer" onClick={() => router.push('/')}>
-              <div className="relative h-15 w-15 transform animate-[float-slow_4s_ease-in-out_infinite] transition-all duration-300 group-hover:-translate-y-1.5 group-hover:scale-110 group-active:scale-95 sm:h-20 sm:w-20 md:h-24 md:w-24">
-                {/* Soft radiant glow halo behind mascot */}
-                <div className="pointer-events-none absolute -inset-2 -top-4 h-18 w-18 rounded-full bg-gradient-to-t from-pink-400/40 via-purple-300/35 to-amber-200/45 opacity-85 blur-xl transition-opacity group-hover:opacity-100 sm:-inset-3 sm:-top-5 sm:h-24 sm:w-24 sm:blur-2xl md:-inset-5 md:-top-7 md:h-32 md:w-32" />
-                {/* Official Baby Lion Mascot */}
-                <img
-                  src="/clone-assets/mascot/mascot_standing_front.png"
-                  alt="Luyện Thi Ảo Mascot"
-                  className="relative z-10 h-full w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.28)] filter"
-                  onError={(e) => {
-                    ;(e.target as HTMLImageElement).src =
-                      '/clone-assets/media/ic-challenge.9b2229cb.png'
-                  }}
-                />
-                {/* Luyện Thi Ảo text banner below mascot */}
-                <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 -rotate-2 transform rounded-full border border-white bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 px-1.5 py-0.2 text-[7.5px] font-black tracking-wider whitespace-nowrap text-white uppercase italic shadow-md select-none sm:-bottom-3 sm:border-2 sm:px-2.5 sm:py-0.5 sm:text-[9px] sm:tracking-widest md:-bottom-3.5 md:px-3.5 md:text-xs">
-                  LUYỆN THI ẢO
-                </div>
+              {/* 'LUYỆN THI ẢO' 3D Level Badge */}
+              <div
+                className={cn(
+                  'absolute -bottom-1.5 sm:-bottom-2 md:-bottom-2.5 lg:-bottom-3 left-1/2 -translate-x-1/2 z-20',
+                  'rounded-full px-2 py-0.5 sm:px-2.5 sm:py-0.5 md:px-3 md:py-0.5 lg:px-3.5 lg:py-1',
+                  'border border-t-white border-b-2 border-purple-800 border-x-purple-400',
+                  'bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#8b5cf6]',
+                  'text-[7.5px] sm:text-[8.5px] md:text-[9.5px] lg:text-[10.5px] font-black tracking-wider text-white uppercase whitespace-nowrap',
+                  'shadow-[0_3px_10px_rgba(109,40,217,0.35)]',
+                )}
+              >
+                LUYỆN THI ẢO
               </div>
             </div>
-
-            {/* Call FAB (right of mascot) */}
-            <a
-              href="tel:19001234"
-              aria-label="Hotline tư vấn"
-              className="flex h-7 w-7 -translate-y-1.5 cursor-pointer items-center justify-center rounded-full border-2 border-sky-300 bg-gradient-to-b from-[#38bdf8] to-[#0284c7] shadow-[0_4px_12px_rgba(2,132,199,0.35)] transition-all duration-200 hover:scale-110 active:scale-95 sm:h-9 sm:w-9 sm:-translate-y-2 md:h-10 md:w-10"
-            >
-              <img
-                src="/clone-assets/media/icon-call.c4ff351b.png"
-                alt="Call Hotline"
-                className="h-full w-full object-contain p-0.5 sm:p-1"
-              />
-            </a>
           </div>
 
-          {/* Right Nav Tabs */}
-          <div className="flex flex-1 items-center justify-end gap-1.5 md:gap-2">
-            {NAV_RIGHT.map((item) => (
-              <NavItem key={item.label} item={item} pathname={pathname} />
-            ))}
-          </div>
+          {/* Right Companion: Call FAB */}
+          <a
+            href="tel:19001234"
+            aria-label="Hotline tư vấn"
+            className={cn(
+              'group/call relative flex h-6.5 w-6.5 sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
+              'border-t border-white/90 border-b-[2px] border-[#0284c7] border-x-sky-200/80',
+              'bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#bae6fd]',
+              'shadow-[0_3px_10px_rgba(2,132,199,0.22)]',
+              'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
+            )}
+          >
+            <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
+            <img
+              src="/clone-assets/media/icon-call.c4ff351b.png"
+              alt="Call Hotline"
+              className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] group-hover/call:scale-110 transition-transform"
+            />
+          </a>
+
+          {/* Right 3 Action Buttons */}
+          {NAV_ITEMS_RIGHT.map((item) => (
+            <NavButton key={item.labelLine1} item={item} pathname={pathname} />
+          ))}
         </div>
       </div>
     </div>

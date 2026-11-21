@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, Compass, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -57,7 +57,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
       className={cn(
         'short-diorama-scale group relative flex h-full w-full cursor-pointer flex-col items-center justify-center transition-all duration-700 ease-out select-none',
         isActive
-          ? 'z-30 scale-100 opacity-100'
+          ? 'z-30 scale-[1.12] sm:scale-[1.15] opacity-100'
           : isVisible
             ? 'z-10 scale-[0.78] opacity-65 hover:opacity-85'
             : 'pointer-events-none scale-60 opacity-0',
@@ -65,18 +65,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 1. THEMATIC AURA & SOFT ATMOSPHERIC GLOW */}
-      <div
-        className={cn(
-          'pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-1000 ease-in-out',
-          isActive
-            ? 'h-[360px] w-[360px] opacity-75 blur-[65px] md:h-[450px] md:w-[450px] md:opacity-85 md:blur-[85px]'
-            : 'h-[220px] w-[220px] opacity-30 blur-[40px]',
-        )}
-        style={{
-          background: `radial-gradient(circle, ${planet.glowColor || planet.ribbonFrom} 0%, rgba(254, 240, 138, 0.35) 45%, transparent 70%)`,
-        }}
-      />
+      {/* 1. THEMATIC AURA REMOVED: Planets remain sharp & crisp against clean sky */}
 
       {/* 2. PLANET CORE & DETACHED FLOATING ELEMENTS CONTAINER */}
       <div className="relative flex flex-col items-center justify-center">
@@ -278,44 +267,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
           )}
         </div>
 
-        {/* 4D. "KHÁM PHÁ NGAY" Emerald 3D Jelly Capsule Button (Matching Image 4) */}
-        {!planet.comingSoon && (
-          <div className="mt-2.5 flex items-center justify-center sm:mt-3">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                onSelect?.()
-              }}
-              className={cn(
-                'group/btn relative inline-flex cursor-pointer items-center gap-1.5 rounded-full sm:gap-2',
-                'border-t border-emerald-200/90 border-b-[3.5px] border-[#047857]',
-                'bg-gradient-to-b from-[#34d399] via-[#10b981] to-[#059669]',
-                'px-4 py-1.5 text-xs font-black tracking-wider text-white uppercase sm:px-6 sm:py-2.5 sm:text-sm',
-                'shadow-[0_6px_18px_rgba(16,185,129,0.35)]',
-                'transition-all duration-200 ease-out',
-                'hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(16,185,129,0.48)] hover:brightness-105',
-                'active:translate-y-[2px] active:border-b-2 active:brightness-95',
-              )}
-            >
-              {/* Shiny glossy pill reflex highlight */}
-              <div className="pointer-events-none absolute inset-x-3 top-0.5 h-[40%] rounded-full bg-gradient-to-b from-white/45 to-transparent" />
 
-              {/* White circular compass icon */}
-              <span className="relative flex h-4.5 w-4.5 items-center justify-center rounded-full bg-white/20 shadow-xs sm:h-5 sm:w-5">
-                <Compass className="h-3 w-3 text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] sm:h-3.5 sm:w-3.5" />
-              </span>
-
-              {/* Button text */}
-              <span className="relative font-black tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
-                Khám phá ngay
-              </span>
-
-              {/* Chevron Right */}
-              <ChevronRight className="relative h-3.5 w-3.5 stroke-[3] text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] transition-transform duration-200 group-hover/btn:translate-x-0.5 sm:h-4 sm:w-4" />
-            </button>
-          </div>
-        )}
       </div>
     </div>
   )
