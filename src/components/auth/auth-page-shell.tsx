@@ -107,7 +107,7 @@ function AmbientFairyMotesCanvas(): React.ReactElement {
  * - Ambient living motes: Canvas fairy dust motes drifting upward
  * - Navigation: Back-to-home pill at top-left
  * - Desktop: Two-zone layout (Left: Learning Garden Diorama, Right: Login Form)
- * - Mobile/Tablet: Compact mascot island above form, touch-friendly, zero horizontal overflow
+ * - Mobile/Tablet: Centered auth card with clear spacing, touch-friendly, zero horizontal overflow
  */
 export function AuthPageShell({ children }: AuthPageShellProps): React.ReactElement {
   return (
@@ -382,25 +382,10 @@ export function AuthPageShell({ children }: AuthPageShellProps): React.ReactElem
       </div>
 
       {/* 4. Two-Zone Seamless Layout (56% / 44% Split) */}
-      <div className="relative z-10 my-auto flex w-full max-w-[1280px] flex-col items-center justify-center py-4 lg:min-h-[calc(100vh-4rem)] lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-0">
+      <div className="relative z-10 my-auto flex w-full max-w-[1280px] flex-col items-center justify-center pt-14 pb-4 sm:pt-16 sm:pb-6 lg:min-h-[calc(100vh-4rem)] lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-0">
         {/* ================= DESKTOP LEFT ZONE (~56%): LEARNING GARDEN DIORAMA ================= */}
         <div className="hidden w-full flex-col items-center justify-center lg:flex lg:w-[56%] lg:translate-x-0 lg:items-start xl:translate-x-12 2xl:translate-x-20">
           <LearningGardenScene />
-        </div>
-
-        {/* ================= MOBILE / TABLET COMPACT MASCOT HEADER (< 1024px) ================= */}
-        <div className="flex w-full flex-col items-center justify-center pt-2 pb-3 lg:hidden">
-          <div className="xs:w-[160px] relative aspect-[875/734] w-[140px] animate-[float-slow_6s_ease-in-out_infinite] motion-reduce:animate-none sm:w-[200px]">
-            <Image
-              src="/assets/learning-garden/island/garden_island_diorama.png"
-              alt="Linh vật Luyện Thi Ảo"
-              fill
-              priority
-              unoptimized
-              sizes="(max-width: 640px) 160px, 200px"
-              className="pointer-events-none object-contain drop-shadow-[0_12px_24px_rgba(20,60,140,0.16)] select-none"
-            />
-          </div>
         </div>
 
         {/* ================= RIGHT ZONE (~44%): POLISHED LOGIN PANEL ================= */}

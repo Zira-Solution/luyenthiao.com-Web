@@ -80,9 +80,9 @@ export function DreamySkyBackground(): React.ReactElement {
 
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden select-none">
-      {/* High-Resolution Illustrated Fantasy Daytime Sky Artwork */}
+      {/* Semi-Realistic High-Resolution Fantasy Daytime Sky Artwork */}
       <Image
-        src="/assets/homepage/background/homepage_sky_illustrated.webp"
+        src="/assets/homepage/background/universe-background.webp"
         alt="Bầu trời diệu kỳ Luyện Thi Ảo"
         fill
         unoptimized
