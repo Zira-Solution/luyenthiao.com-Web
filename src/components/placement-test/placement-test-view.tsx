@@ -1,169 +1,192 @@
-"use client";
+'use client'
 
-import { ChevronLeft, Clock, CheckCircle, XCircle, ArrowRight, Star, HelpCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import {
+  ChevronLeft,
+  Clock,
+  CheckCircle,
+  XCircle,
+  ArrowRight,
+  Star,
+  HelpCircle,
+} from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect, useRef } from 'react'
 
-import { LEVEL_TESTS, MOCK_QUESTIONS, type Question } from "./placement-test-data";
-import { playBeep } from "./placement-test-sound";
+import { LEVEL_TESTS, MOCK_QUESTIONS, type Question } from './placement-test-data'
+import { playBeep } from './placement-test-sound'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 export function PlacementTestView(): React.ReactElement {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [gameState, setGameState] = useState<"lobby" | "quiz" | "result">("lobby");
-  const [selectedLevel, setSelectedLevel] = useState<typeof LEVEL_TESTS[0] | null>(null);
-  
+  const [gameState, setGameState] = useState<'lobby' | 'quiz' | 'result'>('lobby')
+  const [selectedLevel, setSelectedLevel] = useState<(typeof LEVEL_TESTS)[0] | null>(null)
+
   // Quiz states
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
-  
-  // Timer states
-  const [timeLeft, setTimeLeft] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false)
+  const [score, setScore] = useState(0)
 
-  const currentQuestion = questions[currentIndex] || { id: 0, text: "", options: [], correct: 0, explanation: "" };
+  // Timer states
+  const [timeLeft, setTimeLeft] = useState(0)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const currentQuestion = questions[currentIndex] || {
+    id: 0,
+    text: '',
+    options: [],
+    correct: 0,
+    explanation: '',
+  }
 
   // Handle level select
-  const startTest = (level: typeof LEVEL_TESTS[0]) => {
-    playBeep("click");
-    setSelectedLevel(level);
-    setQuestions(MOCK_QUESTIONS[level.id] || []);
-    setCurrentIndex(0);
-    setSelectedAnswer(null);
-    setIsAnswerSubmitted(false);
-    setScore(0);
-    setTimeLeft(level.timeLimit);
-    setGameState("quiz");
-  };
+  const startTest = (level: (typeof LEVEL_TESTS)[0]) => {
+    playBeep('click')
+    setSelectedLevel(level)
+    setQuestions(MOCK_QUESTIONS[level.id] || [])
+    setCurrentIndex(0)
+    setSelectedAnswer(null)
+    setIsAnswerSubmitted(false)
+    setScore(0)
+    setTimeLeft(level.timeLimit)
+    setGameState('quiz')
+  }
 
   const submitTest = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    playBeep("victory");
-    setGameState("result");
-  };
+    if (timerRef.current) clearTimeout(timerRef.current)
+    playBeep('victory')
+    setGameState('result')
+  }
 
   // Timer Effect
   useEffect(() => {
-    if (gameState === "quiz" && timeLeft > 0) {
+    if (gameState === 'quiz' && timeLeft > 0) {
       timerRef.current = setTimeout(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0 && gameState === "quiz") {
-      setTimeout(() => submitTest(), 0);
+        setTimeLeft((prev) => prev - 1)
+      }, 1000)
+    } else if (timeLeft === 0 && gameState === 'quiz') {
+      setTimeout(() => submitTest(), 0)
     }
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [timeLeft, gameState]);
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [timeLeft, gameState])
 
   // Answer Select
   const handleSelectAnswer = (idx: number) => {
-    if (isAnswerSubmitted) return;
-    playBeep("click");
-    setSelectedAnswer(idx);
-  };
+    if (isAnswerSubmitted) return
+    playBeep('click')
+    setSelectedAnswer(idx)
+  }
 
   // Submit current answer
   const handleSubmitAnswer = () => {
-    if (selectedAnswer === null || isAnswerSubmitted) return;
-    
-    const isCorrect = selectedAnswer === currentQuestion.correct;
+    if (selectedAnswer === null || isAnswerSubmitted) return
+
+    const isCorrect = selectedAnswer === currentQuestion.correct
     if (isCorrect) {
-      playBeep("correct");
-      setScore((prev) => prev + 1);
+      playBeep('correct')
+      setScore((prev) => prev + 1)
     } else {
-      playBeep("incorrect");
+      playBeep('incorrect')
     }
 
-    setIsAnswerSubmitted(true);
-  };
+    setIsAnswerSubmitted(true)
+  }
 
   // Next question or view result
   const handleNext = () => {
-    playBeep("click");
+    playBeep('click')
     if (currentIndex < questions.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-      setSelectedAnswer(null);
-      setIsAnswerSubmitted(false);
+      setCurrentIndex((prev) => prev + 1)
+      setSelectedAnswer(null)
+      setIsAnswerSubmitted(false)
     } else {
-      submitTest();
+      submitTest()
     }
-  };
+  }
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6 pb-[120px] flex flex-col items-center z-10 animate-in fade-in duration-500 text-shadow-game-title">
-      
+    <div className="animate-in fade-in text-shadow-game-title z-10 mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-4 pb-[120px] duration-500 md:px-8 md:py-6">
       {/* Header section */}
-      <div className="w-full flex items-center justify-between mb-5 text-shadow-game-title">
-        <button 
+      <div className="text-shadow-game-title mb-5 flex w-full items-center justify-between">
+        <button
           onClick={() => {
-            playBeep("click");
-            if (gameState !== "lobby") {
-              if (confirm("Bạn có muốn hủy bài kiểm tra và quay lại sảnh không?")) {
-                setGameState("lobby");
+            playBeep('click')
+            if (gameState !== 'lobby') {
+              if (confirm('Bạn có muốn hủy bài kiểm tra và quay lại sảnh không?')) {
+                setGameState('lobby')
               }
             } else {
-              router.push("/");
+              router.push('/')
             }
           }}
-          className="flex items-center gap-1.5 md:gap-2 px-4 py-2 rounded-2xl bg-topbar-blue-bg/80 border-2 border-blue-500/30 hover:bg-topbar-blue-hover active:translate-y-[2px] transition-all text-white font-black text-xs md:text-sm tracking-wider uppercase cursor-pointer text-shadow-game-title"
+          className="bg-topbar-blue-bg/80 hover:bg-topbar-blue-hover text-shadow-game-title flex cursor-pointer items-center gap-1.5 rounded-2xl border-2 border-blue-500/30 px-4 py-2 text-xs font-black tracking-wider text-white uppercase transition-all active:translate-y-[2px] md:gap-2 md:text-sm"
         >
-          <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-yellow-450 text-shadow-game-title" />
+          <ChevronLeft className="text-yellow-450 text-shadow-game-title h-4 w-4 md:h-5 md:w-5" />
           <span>Quay lại</span>
         </button>
 
-        <h1 
-          className="text-3xl md:text-5xl font-black text-white uppercase tracking-wider drop-shadow-lg font-heading hidden sm:block text-shadow-game-title"
-          
-        >
-          {gameState === "quiz" ? "Đang thi" : gameState === "result" ? "Kết quả" : "Kiểm tra trình độ"}
+        <h1 className="font-heading text-shadow-game-title hidden text-3xl font-black tracking-wider text-white uppercase drop-shadow-lg sm:block md:text-5xl">
+          {gameState === 'quiz'
+            ? 'Đang thi'
+            : gameState === 'result'
+              ? 'Kết quả'
+              : 'Kiểm tra trình độ'}
         </h1>
 
-        <div className="bg-topbar-blue-bg/80 border-2 border-blue-500/30 rounded-2xl px-4 py-1.5 flex items-center gap-2 text-shadow-game-title">
-          <Star className="w-5 h-5 text-yellow-450 fill-yellow-450 animate-pulse text-shadow-game-title" />
-          <span className="text-white font-black text-xs md:text-sm text-shadow-game-title">Trial Account</span>
+        <div className="bg-topbar-blue-bg/80 text-shadow-game-title flex items-center gap-2 rounded-2xl border-2 border-blue-500/30 px-4 py-1.5">
+          <Star className="text-yellow-450 fill-yellow-450 text-shadow-game-title h-5 w-5 animate-pulse" />
+          <span className="text-shadow-game-title text-xs font-black text-white md:text-sm">
+            Trial Account
+          </span>
         </div>
       </div>
 
-      {gameState === "lobby" && (
+      {gameState === 'lobby' && (
         /* LOBBY VIEW - Test Selection */
-        <div className="w-full flex flex-col items-center text-shadow-game-title">
-          <div className="text-center max-w-2xl mb-6 text-shadow-game-title">
-            <h2 className="text-white font-black text-xl md:text-3xl mb-3 uppercase font-heading tracking-wider text-shadow-game-title">
+        <div className="text-shadow-game-title flex w-full flex-col items-center">
+          <div className="text-shadow-game-title mb-6 max-w-2xl text-center">
+            <h2 className="font-heading text-shadow-game-title mb-3 text-xl font-black tracking-wider text-white uppercase md:text-3xl">
               Chọn cấp độ của bạn
             </h2>
-            <p className="text-blue-200 font-bold text-xs md:text-sm leading-relaxed text-shadow-game-title">
-              Hãy hoàn thành bài thi thử ngắn 3 câu để kiểm tra ngay trình độ ngoại ngữ của bản thân và nhận huân chương tri thức!
+            <p className="text-shadow-game-title text-xs leading-relaxed font-bold text-blue-200 md:text-sm">
+              Hãy hoàn thành bài thi thử ngắn 3 câu để kiểm tra ngay trình độ ngoại ngữ của bản thân
+              và nhận huân chương tri thức!
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl text-shadow-game-title">
+          <div className="text-shadow-game-title grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
             {LEVEL_TESTS.map((test) => (
-              <div 
+              <div
                 key={test.id}
                 onClick={() => startTest(test)}
-                className="bg-ranking-table-bg hover:bg-placement-hover-bg border-3 border-ranking-table-border hover:border-yellow-400 rounded-3xl p-6 shadow-[0_8px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_24px_rgba(234,179,8,0.2)] transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex gap-4 group text-shadow-game-title"
+                className="bg-ranking-table-bg hover:bg-placement-hover-bg border-ranking-table-border group text-shadow-game-title flex transform cursor-pointer gap-4 rounded-3xl border-3 p-6 shadow-[0_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300 hover:-translate-y-1 hover:border-yellow-400 hover:shadow-[0_12px_24px_rgba(234,179,8,0.2)]"
               >
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-blue-500/20 flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform text-shadow-game-title">
+                <div className="text-shadow-game-title flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-2 border-blue-500/20 bg-gradient-to-b from-slate-800 to-slate-900 text-3xl transition-transform group-hover:scale-110">
                   {test.icon}
                 </div>
-                <div className="flex flex-col justify-between text-shadow-game-title">
+                <div className="text-shadow-game-title flex flex-col justify-between">
                   <div>
-                    <h3 className="text-white font-black text-base md:text-lg uppercase tracking-wide group-hover:text-yellow-350 transition-colors text-shadow-game-title">
+                    <h3 className="group-hover:text-yellow-350 text-shadow-game-title text-base font-black tracking-wide text-white uppercase transition-colors md:text-lg">
                       {test.name}
                     </h3>
-                    <p className="text-blue-300 font-semibold text-xs mt-1 leading-relaxed text-shadow-game-title">
+                    <p className="text-shadow-game-title mt-1 text-xs leading-relaxed font-semibold text-blue-300">
                       {test.desc}
                     </p>
                   </div>
-                  <div className="flex items-center gap-4 mt-3 text-[10px] font-black text-white/50 group-hover:text-white/80 transition-colors uppercase tracking-widest text-shadow-game-title">
-                    <span className="flex items-center gap-1 text-shadow-game-title"><Clock className="w-3.5 h-3.5 text-blue-400 text-shadow-game-title" /> {test.timeLimit}s</span>
-                    <span className="flex items-center gap-1 text-shadow-game-title"><HelpCircle className="w-3.5 h-3.5 text-orange-400 text-shadow-game-title" /> {test.questionsCount} câu hỏi</span>
+                  <div className="text-shadow-game-title mt-3 flex items-center gap-4 text-[10px] font-black tracking-widest text-white/50 uppercase transition-colors group-hover:text-white/80">
+                    <span className="text-shadow-game-title flex items-center gap-1">
+                      <Clock className="text-shadow-game-title h-3.5 w-3.5 text-blue-400" />{' '}
+                      {test.timeLimit}s
+                    </span>
+                    <span className="text-shadow-game-title flex items-center gap-1">
+                      <HelpCircle className="text-shadow-game-title h-3.5 w-3.5 text-orange-400" />{' '}
+                      {test.questionsCount} câu hỏi
+                    </span>
                   </div>
                 </div>
               </div>
@@ -172,60 +195,67 @@ export function PlacementTestView(): React.ReactElement {
         </div>
       )}
 
-      {gameState === "quiz" && selectedLevel && questions.length > 0 && (
+      {gameState === 'quiz' && selectedLevel && questions.length > 0 && (
         /* QUIZ VIEW - Active quiz playing */
-        <div className="w-full max-w-3xl flex flex-col items-center text-shadow-game-title">
+        <div className="text-shadow-game-title flex w-full max-w-3xl flex-col items-center">
           {/* Progress bar and countdown timer */}
-          <div className="w-full bg-ranking-table-bg/90 border-3 border-ranking-table-border rounded-[2rem] p-4 flex items-center justify-between gap-6 mb-6 text-shadow-game-title">
-            <div className="flex-1 text-shadow-game-title">
-              <div className="flex justify-between text-white font-black text-[10px] md:text-xs mb-1.5 uppercase tracking-wider text-shadow-game-title">
-                <span>Tiến trình: Câu {currentIndex + 1}/{questions.length}</span>
+          <div className="bg-ranking-table-bg/90 border-ranking-table-border text-shadow-game-title mb-6 flex w-full items-center justify-between gap-6 rounded-[2rem] border-3 p-4">
+            <div className="text-shadow-game-title flex-1">
+              <div className="text-shadow-game-title mb-1.5 flex justify-between text-[10px] font-black tracking-wider text-white uppercase md:text-xs">
+                <span>
+                  Tiến trình: Câu {currentIndex + 1}/{questions.length}
+                </span>
                 <span>{Math.round(((currentIndex + 1) / questions.length) * 100)}%</span>
               </div>
-              <div className="w-full h-3 bg-blue-950 rounded-full overflow-hidden border border-blue-500/20 text-shadow-game-title">
-                <div 
-                  className="h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-300 text-shadow-game-title"
+              <div className="text-shadow-game-title h-3 w-full overflow-hidden rounded-full border border-blue-500/20 bg-blue-950">
+                <div
+                  className="text-shadow-game-title h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-300"
                   style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }} // clone-gate-ignore
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-2 bg-topbar-orange-bg border-2 border-topbar-orange-border px-4 py-2 rounded-2xl shadow-md text-white font-black text-sm shrink-0 text-shadow-game-title">
-              <Clock className="w-4 h-4 animate-spin text-shadow-game-title" />
+            <div className="bg-topbar-orange-bg border-topbar-orange-border text-shadow-game-title flex shrink-0 items-center gap-2 rounded-2xl border-2 px-4 py-2 text-sm font-black text-white shadow-md">
+              <Clock className="text-shadow-game-title h-4 w-4 animate-spin" />
               <span>{timeLeft}s</span>
             </div>
           </div>
 
           {/* Question Card */}
-          <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] p-6 md:p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] text-shadow-game-title">
-            <span className="px-3 py-1 bg-yellow-450/15 border border-yellow-400/30 text-yellow-400 font-black text-[10px] uppercase tracking-widest rounded-lg text-shadow-game-title">
+          <div className="bg-ranking-table-bg border-ranking-table-border text-shadow-game-title w-full rounded-[2.2rem] border-3 p-6 shadow-[0_15px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm md:p-8">
+            <span className="bg-yellow-450/15 text-shadow-game-title rounded-lg border border-yellow-400/30 px-3 py-1 text-[10px] font-black tracking-widest text-yellow-400 uppercase">
               {selectedLevel.name} Test
             </span>
-            <h2 className="text-white font-black text-lg md:text-2xl mt-4 mb-6 leading-relaxed font-heading text-shadow-game-title">
+            <h2 className="font-heading text-shadow-game-title mt-4 mb-6 text-lg leading-relaxed font-black text-white md:text-2xl">
               {currentQuestion.text}
             </h2>
 
             {/* Answer Options Grid */}
-            <div className="flex flex-col gap-4 text-shadow-game-title">
+            <div className="text-shadow-game-title flex flex-col gap-4">
               {currentQuestion.options.map((opt, idx) => {
-                const isSelected = selectedAnswer === idx;
-                const isCorrectAns = currentQuestion.correct === idx;
-                
-                let btnStyles = "bg-game-input-focus-shadow hover:bg-game-input-hover-bg border-ranking-table-border text-white";
-                let statusIcon = null;
+                const isSelected = selectedAnswer === idx
+                const isCorrectAns = currentQuestion.correct === idx
+
+                let btnStyles =
+                  'bg-game-input-focus-shadow hover:bg-game-input-hover-bg border-ranking-table-border text-white'
+                let statusIcon = null
 
                 if (isAnswerSubmitted) {
                   if (isCorrectAns) {
-                    btnStyles = "bg-green-500/20 border-green-500 text-green-400";
-                    statusIcon = <CheckCircle className="w-5 h-5 text-green-400 shrink-0 text-shadow-game-title" />;
+                    btnStyles = 'bg-green-500/20 border-green-500 text-green-400'
+                    statusIcon = (
+                      <CheckCircle className="text-shadow-game-title h-5 w-5 shrink-0 text-green-400" />
+                    )
                   } else if (isSelected) {
-                    btnStyles = "bg-red-500/20 border-red-500 text-red-400";
-                    statusIcon = <XCircle className="w-5 h-5 text-red-400 shrink-0 text-shadow-game-title" />;
+                    btnStyles = 'bg-red-500/20 border-red-500 text-red-400'
+                    statusIcon = (
+                      <XCircle className="text-shadow-game-title h-5 w-5 shrink-0 text-red-400" />
+                    )
                   } else {
-                    btnStyles = "bg-blue-950/20 border-blue-950/40 text-white/30";
+                    btnStyles = 'bg-blue-950/20 border-blue-950/40 text-white/30'
                   }
                 } else if (isSelected) {
-                  btnStyles = "bg-blue-600/35 border-blue-400 text-yellow-350 shadow-inner";
+                  btnStyles = 'bg-blue-600/35 border-blue-400 text-yellow-350 shadow-inner'
                 }
 
                 return (
@@ -234,51 +264,59 @@ export function PlacementTestView(): React.ReactElement {
                     disabled={isAnswerSubmitted}
                     onClick={() => handleSelectAnswer(idx)}
                     className={cn(
-                      "w-full flex items-center justify-between rounded-2xl border-2 px-5 py-4 font-bold text-sm md:text-base text-left transition-all cursor-pointer",
-                      btnStyles
+                      'flex w-full cursor-pointer items-center justify-between rounded-2xl border-2 px-5 py-4 text-left text-sm font-bold transition-all md:text-base',
+                      btnStyles,
                     )}
                   >
-                    <div className="flex items-center gap-3 text-shadow-game-title">
-                      <span className={cn(
-                        "w-7 h-7 rounded-xl flex items-center justify-center font-black text-xs border shrink-0",
-                        isSelected ? "bg-blue-500 text-white border-blue-300" : "bg-blue-950/40 text-blue-300 border-blue-500/20"
-                      )}>
+                    <div className="text-shadow-game-title flex items-center gap-3">
+                      <span
+                        className={cn(
+                          'flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border text-xs font-black',
+                          isSelected
+                            ? 'border-blue-300 bg-blue-500 text-white'
+                            : 'border-blue-500/20 bg-blue-950/40 text-blue-300',
+                        )}
+                      >
                         {String.fromCharCode(65 + idx)}
                       </span>
                       <span>{opt}</span>
                     </div>
                     {statusIcon}
                   </button>
-                );
+                )
               })}
             </div>
 
             {/* Answer Explanation (Appears after submission) */}
             {isAnswerSubmitted && (
-              <div className="mt-6 p-4 rounded-2xl bg-blue-500/10 border border-blue-400/20 text-xs md:text-sm text-blue-200 leading-relaxed animate-in fade-in slide-in-from-top-2 text-shadow-game-title">
-                <span className="font-black text-yellow-450 uppercase block mb-1 text-shadow-game-title">💡 Hướng dẫn đáp án:</span>
+              <div className="animate-in fade-in slide-in-from-top-2 text-shadow-game-title mt-6 rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4 text-xs leading-relaxed text-blue-200 md:text-sm">
+                <span className="text-yellow-450 text-shadow-game-title mb-1 block font-black uppercase">
+                  💡 Hướng dẫn đáp án:
+                </span>
                 {currentQuestion.explanation}
               </div>
             )}
 
             {/* Submit / Next Button */}
-            <div className="mt-8 flex justify-end text-shadow-game-title">
+            <div className="text-shadow-game-title mt-8 flex justify-end">
               {!isAnswerSubmitted ? (
                 <button
                   onClick={handleSubmitAnswer}
                   disabled={selectedAnswer === null}
-                  className="px-6 py-3 rounded-2xl border-2 bg-gradient-to-b from-green-400 to-green-600 border-green-800 disabled:opacity-50 text-white font-black text-xs md:text-sm uppercase tracking-widest cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-md flex items-center gap-2 text-shadow-game-title"
+                  className="text-shadow-game-title flex cursor-pointer items-center gap-2 rounded-2xl border-2 border-green-800 bg-gradient-to-b from-green-400 to-green-600 px-6 py-3 text-xs font-black tracking-widest text-white uppercase shadow-md transition-all hover:scale-105 active:scale-95 disabled:opacity-50 md:text-sm"
                 >
                   <span>Kiểm tra</span>
-                  <CheckCircle className="w-4 h-4 text-shadow-game-title" />
+                  <CheckCircle className="text-shadow-game-title h-4 w-4" />
                 </button>
               ) : (
                 <button
                   onClick={handleNext}
-                  className="px-6 py-3 rounded-2xl border-2 bg-gradient-to-b from-blue-400 to-blue-600 border-blue-800 text-white font-black text-xs md:text-sm uppercase tracking-widest cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-md flex items-center gap-2 text-shadow-game-title"
+                  className="text-shadow-game-title flex cursor-pointer items-center gap-2 rounded-2xl border-2 border-blue-800 bg-gradient-to-b from-blue-400 to-blue-600 px-6 py-3 text-xs font-black tracking-widest text-white uppercase shadow-md transition-all hover:scale-105 active:scale-95 md:text-sm"
                 >
-                  <span>{currentIndex === questions.length - 1 ? "Xem kết quả" : "Câu tiếp theo"}</span>
-                  <ArrowRight className="w-4 h-4 text-shadow-game-title" />
+                  <span>
+                    {currentIndex === questions.length - 1 ? 'Xem kết quả' : 'Câu tiếp theo'}
+                  </span>
+                  <ArrowRight className="text-shadow-game-title h-4 w-4" />
                 </button>
               )}
             </div>
@@ -286,79 +324,87 @@ export function PlacementTestView(): React.ReactElement {
         </div>
       )}
 
-      {gameState === "result" && selectedLevel && (
+      {gameState === 'result' && selectedLevel && (
         /* RESULT VIEW - Test finished details */
-        <div className="w-full max-w-md flex flex-col items-center text-shadow-game-title">
-          <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] flex flex-col items-center text-center text-shadow-game-title">
-            
+        <div className="text-shadow-game-title flex w-full max-w-md flex-col items-center">
+          <div className="bg-ranking-table-bg border-ranking-table-border text-shadow-game-title flex w-full flex-col items-center rounded-[2.2rem] border-3 p-8 text-center shadow-[0_15px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm">
             {/* Trophy Icon */}
-            <div className="w-24 h-24 bg-gradient-to-b from-yellow-400 to-amber-500 rounded-3xl border-3 border-white flex items-center justify-center text-5xl shadow-lg mb-6 animate-bounce text-shadow-game-title">
+            <div className="text-shadow-game-title mb-6 flex h-24 w-24 animate-bounce items-center justify-center rounded-3xl border-3 border-white bg-gradient-to-b from-yellow-400 to-amber-500 text-5xl shadow-lg">
               🏆
             </div>
 
-            <span className="text-yellow-450 font-black text-[10px] uppercase tracking-widest text-shadow-game-title">
+            <span className="text-yellow-450 text-shadow-game-title text-[10px] font-black tracking-widest uppercase">
               Hoàn thành kiểm tra
             </span>
-            <h2 className="text-white font-black text-2xl md:text-3xl mt-1 mb-4 font-heading uppercase tracking-wide text-shadow-game-title">
+            <h2 className="font-heading text-shadow-game-title mt-1 mb-4 text-2xl font-black tracking-wide text-white uppercase md:text-3xl">
               {selectedLevel.name}
             </h2>
 
             {/* Score circle */}
-            <div className="relative w-36 h-36 rounded-full bg-blue-950/40 border-4 border-blue-500/30 flex flex-col items-center justify-center mb-6 text-shadow-game-title">
-              <span className="text-white/60 font-black text-xs uppercase tracking-wider text-shadow-game-title">Đúng</span>
-              <span className="text-5xl font-black text-yellow-350 drop-shadow-md my-0.5 text-shadow-game-title">
+            <div className="text-shadow-game-title relative mb-6 flex h-36 w-36 flex-col items-center justify-center rounded-full border-4 border-blue-500/30 bg-blue-950/40">
+              <span className="text-shadow-game-title text-xs font-black tracking-wider text-white/60 uppercase">
+                Đúng
+              </span>
+              <span className="text-yellow-350 text-shadow-game-title my-0.5 text-5xl font-black drop-shadow-md">
                 {score}/{questions.length}
               </span>
-              <span className="text-green-400 font-extrabold text-xs uppercase text-shadow-game-title">
+              <span className="text-shadow-game-title text-xs font-extrabold text-green-400 uppercase">
                 +{score * 20} Coins
               </span>
             </div>
 
             {/* Assessment feedback */}
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 w-full mb-6 text-xs md:text-sm text-blue-200 font-semibold leading-relaxed text-shadow-game-title">
+            <div className="text-shadow-game-title mb-6 w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-xs leading-relaxed font-semibold text-blue-200 md:text-sm">
               {score === questions.length ? (
-                <span>🎉 Tuyệt vời! Bạn đã đạt điểm tuyệt đối. Trình độ của bạn rất phù hợp để tiếp tục phá đảo hành tinh tiếp theo!</span>
+                <span>
+                  🎉 Tuyệt vời! Bạn đã đạt điểm tuyệt đối. Trình độ của bạn rất phù hợp để tiếp tục
+                  khám phá thế giới tiếp theo!
+                </span>
               ) : score >= 1 ? (
-                <span>👍 Tốt lắm! Bạn có nền tảng vững vàng, hãy cố gắng ôn tập thêm các câu sai để bứt phá nhé.</span>
+                <span>
+                  👍 Tốt lắm! Bạn có nền tảng vững vàng, hãy cố gắng ôn tập thêm các câu sai để bứt
+                  phá nhé.
+                </span>
               ) : (
-                <span>🎯 Bạn cần cố gắng học tập nhiều hơn. Hãy bắt đầu ôn tập từ các cấp độ cơ bản nhất nhé!</span>
+                <span>
+                  🎯 Bạn cần cố gắng học tập nhiều hơn. Hãy bắt đầu ôn tập từ các cấp độ cơ bản nhất
+                  nhé!
+                </span>
               )}
             </div>
 
             {/* Action buttons */}
-            <div className="flex flex-col gap-3 w-full text-shadow-game-title">
-              <button 
+            <div className="text-shadow-game-title flex w-full flex-col gap-3">
+              <button
                 onClick={() => startTest(selectedLevel)}
-                className="w-full py-3 rounded-2xl border-2 bg-gradient-to-b from-topbar-orange-bg to-placement-btn-to border-topbar-orange-hover text-white font-black text-xs md:text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer text-shadow-game-title"
+                className="from-topbar-orange-bg to-placement-btn-to border-topbar-orange-hover text-shadow-game-title w-full cursor-pointer rounded-2xl border-2 bg-gradient-to-b py-3 text-xs font-black tracking-widest text-white uppercase shadow-md transition-all hover:scale-105 active:scale-95 md:text-sm"
               >
                 Làm lại bài thi
               </button>
 
-              <button 
+              <button
                 onClick={() => {
-                  playBeep("click");
-                  setGameState("lobby");
+                  playBeep('click')
+                  setGameState('lobby')
                 }}
-                className="w-full py-3 rounded-2xl border-2 bg-gradient-to-b from-blue-400 to-blue-600 border-blue-800 text-white font-black text-xs md:text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer text-shadow-game-title"
+                className="text-shadow-game-title w-full cursor-pointer rounded-2xl border-2 border-blue-800 bg-gradient-to-b from-blue-400 to-blue-600 py-3 text-xs font-black tracking-widest text-white uppercase shadow-md transition-all hover:scale-105 active:scale-95 md:text-sm"
               >
                 Chọn cấp độ khác
               </button>
 
-              <button 
+              <button
                 onClick={() => {
-                  playBeep("click");
-                  router.push("/");
+                  playBeep('click')
+                  router.push('/')
                 }}
-                className="w-full py-3 rounded-2xl bg-topbar-blue-bg/80 hover:bg-topbar-blue-hover border-2 border-blue-500/30 text-white font-black text-xs md:text-sm uppercase tracking-widest active:scale-95 transition-all cursor-pointer text-shadow-game-title"
+                className="bg-topbar-blue-bg/80 hover:bg-topbar-blue-hover text-shadow-game-title w-full cursor-pointer rounded-2xl border-2 border-blue-500/30 py-3 text-xs font-black tracking-widest text-white uppercase transition-all active:scale-95 md:text-sm"
               >
                 Về trang chủ
               </button>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
-  );
+  )
 }

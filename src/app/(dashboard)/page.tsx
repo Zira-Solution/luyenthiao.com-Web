@@ -6,12 +6,12 @@ import { getPlanets } from '@/lib/api/public'
 
 export const metadata: Metadata = {
   title: 'Trang chủ',
-  description: 'Chọn hành tinh và bắt đầu luyện thi tiếng Anh theo từng cấp độ.',
-  keywords: ['luyện thi tiếng Anh', 'học tiếng Anh', 'thi thử', 'trang chủ'],
+  description: 'Khám Phá Các Thế Giới Diệu Kỳ và bắt đầu luyện thi tiếng Anh theo từng cấp độ.',
+  keywords: ['luyện thi tiếng Anh', 'học tiếng Anh', 'thi thử', 'trang chủ', 'thế giới diệu kỳ'],
   alternates: { canonical: ROUTES.HOME },
   openGraph: {
-    title: 'Trang chủ | luyenthiao.com',
-    description: 'Chọn hành tinh và bắt đầu luyện thi tiếng Anh theo từng cấp độ.',
+    title: 'Khám Phá Các Thế Giới Diệu Kỳ | luyenthiao.com',
+    description: 'Khám Phá Các Thế Giới Diệu Kỳ và bắt đầu luyện thi tiếng Anh theo từng cấp độ.',
     url: ROUTES.HOME,
     type: 'website',
   },
