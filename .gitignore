@@ -47,6 +47,8 @@ volumes/
 .claude/projects/*
 .codegraph/*
 .superpowers/
+.agents/
+scratch/
 
 # Code graph indexes
 graphify-out/
