@@ -17,7 +17,7 @@ export function getPlanetLevelBadges(
   planet: Planet,
 ): { label: string; bg: string; border: string }[] {
   const slug = planet.slug.toLowerCase()
-  if (slug === 'starters') {
+  if (slug === 'starters' || slug === 'candy') {
     return [{ label: 'Pre A1', bg: 'from-[#fb7185] to-[#f43f5e]', border: 'border-[#be123c]' }]
   }
   if (slug === 'movers') {
@@ -31,6 +31,18 @@ export function getPlanetLevelBadges(
       { label: 'A2', bg: 'from-[#fb923c] to-[#ea580c]', border: 'border-[#c2410c]' },
       { label: 'B1', bg: 'from-[#4ade80] to-[#16a34a]', border: 'border-[#15803d]' },
     ]
+  }
+  if (slug === 'toefl_junior' || slug === 'time' || slug === 'time_oasis') {
+    return [
+      { label: 'A2', bg: 'from-[#fb923c] to-[#ea580c]', border: 'border-[#c2410c]' },
+      { label: 'B2', bg: 'from-[#a855f7] to-[#7e22ce]', border: 'border-[#6b21a8]' },
+    ]
+  }
+  if (slug === 'ket' || slug === 'frosty') {
+    return [{ label: 'A2', bg: 'from-[#38bdf8] to-[#0284c7]', border: 'border-[#0369a1]' }]
+  }
+  if (slug === 'pet' || slug === 'coral') {
+    return [{ label: 'B1', bg: 'from-[#4ade80] to-[#16a34a]', border: 'border-[#15803d]' }]
   }
   if (slug === 'ioe') {
     return [{ label: 'Cấp 1 - 2', bg: 'from-[#60a5fa] to-[#2563eb]', border: 'border-[#1d4ed8]' }]
@@ -57,7 +69,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
       className={cn(
         'short-diorama-scale group relative flex h-full w-full cursor-pointer flex-col items-center justify-center transition-all duration-700 ease-out select-none',
         isActive
-          ? 'z-30 scale-[1.12] sm:scale-[1.15] opacity-100'
+          ? 'z-30 scale-[1.25] opacity-100 sm:scale-[1.30] md:scale-[1.34] lg:scale-[1.36]'
           : isVisible
             ? 'z-10 scale-[0.78] opacity-65 hover:opacity-85'
             : 'pointer-events-none scale-60 opacity-0',
@@ -180,7 +192,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
           </span>
         </div>
 
-        {/* 4A. World Name: Playful Arched 3D Display Typography (Cong cong & chạm hẳn vào tinh cầu) */}
+        {/* 4A. World Name: Playful Arched 3D Display Typography (Cong cong & ôm chân thế giới 3D) */}
         <h2
           className={cn(
             'font-heading relative flex items-center justify-center text-center leading-none font-black uppercase select-none',
@@ -247,27 +259,18 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
 
         {/* 4C. Collectible Gold Charm Token Level Badge(s) */}
         <div className="mt-1.5 flex items-center justify-center gap-2 sm:mt-2">
-          {planet.comingSoon ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-300/80 bg-gradient-to-r from-purple-100 to-indigo-100 px-3.5 py-1 text-[10px] font-black tracking-wider text-purple-900 uppercase shadow-xs sm:text-[11px]">
-              <Sparkles className="h-3 w-3 text-purple-600" />
-              Sắp ra mắt
-            </span>
-          ) : (
-            getPlanetLevelBadges(planet).map((badge) => (
-              <span
-                key={badge.label}
-                className="inline-flex items-center gap-1.5 rounded-full border-t border-b-[2.5px] border-[#b45309] border-amber-200/90 bg-gradient-to-b from-[#fef08a] via-[#facc15] to-[#f59e0b] px-3.5 py-1 text-[10px] font-black tracking-wider text-[#78350f] uppercase shadow-[0_4px_12px_rgba(245,158,11,0.35)] transition-transform hover:scale-105 sm:text-xs"
-              >
-                <span className="text-[11px] leading-none text-amber-700 drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] sm:text-[12px]">
-                  ★
-                </span>
-                <span>{badge.label}</span>
+          {getPlanetLevelBadges(planet).map((badge) => (
+            <span
+              key={badge.label}
+              className="inline-flex items-center gap-1.5 rounded-full border-t border-b-[2.5px] border-[#b45309] border-amber-200/90 bg-gradient-to-b from-[#fef08a] via-[#facc15] to-[#f59e0b] px-3.5 py-1 text-[10px] font-black tracking-wider text-[#78350f] uppercase shadow-[0_4px_12px_rgba(245,158,11,0.35)] transition-transform hover:scale-105 sm:text-xs"
+            >
+              <span className="text-[11px] leading-none text-amber-700 drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] sm:text-[12px]">
+                ★
               </span>
-            ))
-          )}
+              <span>{badge.label}</span>
+            </span>
+          ))}
         </div>
-
-
       </div>
     </div>
   )

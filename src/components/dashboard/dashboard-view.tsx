@@ -66,7 +66,7 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
       <div className="relative flex min-h-full w-full flex-col items-center justify-center overflow-hidden">
         <p className="z-10 px-6 text-center text-lg font-bold text-slate-700">
           {planets
-            ? 'Chưa có hành tinh nào.'
+            ? 'Chưa có thế giới nào.'
             : 'Tạm thời không tải được dữ liệu, vui lòng thử lại sau.'}
         </p>
       </div>
@@ -81,7 +81,7 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
       <button
         className="absolute top-1/2 left-3 z-30 -translate-y-1/2 cursor-pointer transition-all hover:scale-110 focus:outline-none active:scale-95 sm:left-6 md:left-8"
         onClick={() => swiperRef.current?.slidePrev()}
-        aria-label="Hành tinh trước"
+        aria-label="Thế giới trước"
       >
         <div className="relative flex h-11 w-11 items-center justify-center rounded-full border-2 border-amber-300/80 bg-white/85 shadow-[0_8px_20px_rgba(245,158,11,0.2)] backdrop-blur-md transition-colors hover:bg-amber-50 active:translate-y-[2px] md:h-13 md:w-13">
           <span className="-translate-x-[2px] text-base font-black text-amber-600 select-none md:text-2xl">
@@ -155,7 +155,7 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
       <button
         className="absolute top-1/2 right-3 z-30 -translate-y-1/2 cursor-pointer transition-all hover:scale-110 focus:outline-none active:scale-95 sm:right-6 md:right-8"
         onClick={() => swiperRef.current?.slideNext()}
-        aria-label="Hành tinh tiếp theo"
+        aria-label="Thế giới tiếp theo"
       >
         <div className="relative flex h-11 w-11 items-center justify-center rounded-full border-2 border-amber-300/80 bg-white/85 shadow-[0_8px_20px_rgba(245,158,11,0.2)] backdrop-blur-md transition-colors hover:bg-amber-50 active:translate-y-[2px] md:h-13 md:w-13">
           <span className="translate-x-[2px] text-base font-black text-amber-600 select-none md:text-2xl">

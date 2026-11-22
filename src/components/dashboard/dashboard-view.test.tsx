@@ -47,7 +47,6 @@ describe('DashboardView', () => {
         planets={[{ ...first, name: 'SOON', href: '/challenges', comingSoon: true }]}
       />,
     )
-    expect(screen.getByText('Sắp ra mắt')).toBeTruthy()
     fireEvent.click(screen.getAllByText('SOON')[0] as HTMLElement)
     expect(push).not.toHaveBeenCalled()
   })

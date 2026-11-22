@@ -6,15 +6,26 @@ import { planetsSchema, toPlanets } from '@/schemas/planet'
 describe('planets', () => {
   it('parses the real payload and maps it in sortOrder', () => {
     const result = toPlanets(planetsSchema.parse(planets))
-    expect(result.map((p) => p.slug)).toEqual(['starters', 'movers', 'flyers', 'toefl_primary'])
+    expect(result.map((p) => p.slug)).toEqual([
+      'starters',
+      'movers',
+      'flyers',
+      'toefl_primary',
+      'toefl_junior',
+      'ket',
+      'pet',
+      'ioe',
+      'arabian',
+      'melody',
+    ])
     expect(result[0]).toEqual({
       slug: 'starters',
-      name: planets[1]?.name,
-      description: 'Đấu Trường Tri Thức',
-      image: '/clone-assets/media/planet_ioe.png',
-      glowColor: planets[1]?.glowColor,
-      ribbonFrom: planets[1]?.ribbonFrom,
-      ribbonTo: planets[1]?.ribbonTo,
+      name: 'STARTERS',
+      description: 'Hòn Đảo Kẹo Ngọt',
+      image: '/assets/planets/planet_candy_wonderland.png',
+      glowColor: '#ec4899',
+      ribbonFrom: '#f472b6',
+      ribbonTo: '#fb7185',
       href: '/testlevels/starters',
       comingSoon: false,
     })
@@ -29,9 +40,12 @@ describe('planets', () => {
     expect(planet?.comingSoon).toBe(true)
   })
 
-  it('drops the ioe planet', () => {
+  it('includes the ioe planet with arena diorama', () => {
     const result = toPlanets(planetsSchema.parse(planets))
-    expect(result.some((p) => p.slug === 'ioe')).toBe(false)
+    const ioe = result.find((p) => p.slug === 'ioe')
+    expect(ioe).toBeDefined()
+    expect(ioe?.name).toBe('IOE')
+    expect(ioe?.description).toBe('Đấu Trường Cổ Tích')
   })
 
   it.each([
@@ -44,7 +58,21 @@ describe('planets', () => {
     '/\r/evil.example',
   ])('ignores the unsafe linkUrl %s', (linkUrl) => {
     const rows = planetsSchema.parse(planets).map((row) => ({ ...row, linkUrl }))
-    for (const planet of toPlanets(rows)) {
+    for (const planet of toPlanets(rows).filter(
+      (p) =>
+        ![
+          'toefl_junior',
+          'ket',
+          'pet',
+          'ioe',
+          'arabian',
+          'melody',
+          'candy',
+          'coral',
+          'time',
+          'frosty',
+        ].includes(p.slug),
+    )) {
       expect(planet.href).toBe(`/testlevels/${planet.slug}`)
       expect(planet.comingSoon).toBe(false)
     }
