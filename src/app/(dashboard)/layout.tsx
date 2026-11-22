@@ -24,9 +24,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Report Bug Button on Right Edge */}
       <div className="absolute right-0 bottom-44 z-50 hidden md:flex">
-        <button className="writing-vertical-rl flex flex-col items-center gap-2 rounded-l-xl border-y-2 border-l-2 border-amber-400 bg-amber-300/90 px-1.5 py-4 text-[10px] font-black tracking-widest text-amber-950 uppercase shadow-[-4px_0_12px_rgba(245,158,11,0.25)] backdrop-blur-md transition-all hover:scale-105 hover:bg-amber-300 active:scale-95">
-          <span>BÁO CÁO LỖI</span>
-          <span className="mt-1 rotate-90 transform text-sm">🚀</span>
+        <button
+          aria-label="Báo cáo lỗi"
+          className="group cursor-pointer transition-transform duration-200 hover:-translate-x-1 hover:brightness-105 active:translate-x-0"
+        >
+          <img
+            src="/clone-assets/exam/button_feedback_vi.5162d6f8.png"
+            alt="Báo cáo lỗi"
+            className="h-[110px] w-auto object-contain drop-shadow-[-3px_4px_10px_rgba(0,0,0,0.2)] lg:h-[120px]"
+          />
         </button>
       </div>
     </div>

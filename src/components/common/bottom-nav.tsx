@@ -128,12 +128,12 @@ const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) 
       }}
       className={cn(
         // Base structure & standardization
-        'group relative inline-flex shrink-0 items-center justify-center cursor-pointer select-none',
+        'group relative inline-flex shrink-0 cursor-pointer items-center justify-center select-none',
         'h-8 sm:h-9 md:h-10 lg:h-10.5 xl:h-11',
         'gap-1 sm:gap-1.5 md:gap-2',
         'rounded-xl sm:rounded-full',
         'px-2 sm:px-2.5 md:px-3 lg:px-3.5 xl:px-4',
-        'border-t border-b-[2.5px] border-x transition-all duration-200',
+        'border-x border-t border-b-[2.5px] transition-all duration-200',
         'hover:-translate-y-0.5 hover:shadow-md hover:brightness-[1.03] active:translate-y-[1px] active:border-b active:brightness-95',
         item.palette.bg,
         item.palette.border,
@@ -149,7 +149,7 @@ const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) 
       <div className="pointer-events-none absolute inset-x-2 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/60 to-transparent" />
 
       {/* Standardized Icon Container */}
-      <div className="relative flex h-4.5 w-4.5 sm:h-5.5 sm:w-5.5 md:h-6 md:w-6 lg:h-7 lg:w-7 shrink-0 items-center justify-center">
+      <div className="relative flex h-4.5 w-4.5 shrink-0 items-center justify-center sm:h-5.5 sm:w-5.5 md:h-6 md:w-6 lg:h-7 lg:w-7">
         <img
           src={`/clone-assets/media/${item.icon}`}
           alt={item.labelLine1}
@@ -162,14 +162,16 @@ const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) 
 
         {/* Red Alert Notification Badge */}
         {item.notification && (
-          <span className="absolute -top-1 -right-1 z-20 flex h-3 w-3 sm:h-3.5 sm:w-3.5 items-center justify-center rounded-full border border-white bg-rose-500 shadow-xs">
-            <span className="text-[6.5px] sm:text-[7.5px] leading-none font-black text-white">!</span>
+          <span className="absolute -top-1 -right-1 z-20 flex h-3 w-3 items-center justify-center rounded-full border border-white bg-rose-500 shadow-xs sm:h-3.5 sm:w-3.5">
+            <span className="text-[6.5px] leading-none font-black text-white sm:text-[7.5px]">
+              !
+            </span>
           </span>
         )}
 
         {/* 'MỚI' Emerald Badge */}
         {item.badge && (
-          <span className="absolute -top-1 -right-2 sm:-top-1.5 sm:-right-2.5 z-20 rounded-full border border-white/80 bg-emerald-500 px-1 py-0.2 text-[6px] sm:text-[7px] font-black tracking-wider text-white uppercase shadow-xs">
+          <span className="py-0.2 absolute -top-1 -right-2 z-20 rounded-full border border-white/80 bg-emerald-500 px-1 text-[6px] font-black tracking-wider text-white uppercase shadow-xs sm:-top-1.5 sm:-right-2.5 sm:text-[7px]">
             {item.badge}
           </span>
         )}
@@ -178,17 +180,17 @@ const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) 
       {/* Strictly 1 or 2 Line Standardized Label with whitespace-nowrap */}
       <div className="flex items-center gap-0.5">
         <div className="flex flex-col justify-center text-left leading-[1.05] whitespace-nowrap">
-          <span className="text-[7.5px] sm:text-[9px] md:text-[10px] lg:text-[10.5px] font-black tracking-wide uppercase whitespace-nowrap">
+          <span className="text-[7.5px] font-black tracking-wide whitespace-nowrap uppercase sm:text-[9px] md:text-[10px] lg:text-[10.5px]">
             {item.labelLine1}
           </span>
           {item.labelLine2 && (
-            <span className="text-[7.5px] sm:text-[9px] md:text-[10px] lg:text-[10.5px] font-black tracking-wide uppercase opacity-95 whitespace-nowrap">
+            <span className="text-[7.5px] font-black tracking-wide whitespace-nowrap uppercase opacity-95 sm:text-[9px] md:text-[10px] lg:text-[10.5px]">
               {item.labelLine2}
             </span>
           )}
         </div>
         {item.dropdown && (
-          <ChevronDown className="h-2.5 w-2.5 sm:h-3 sm:w-3 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
+          <ChevronDown className="h-2.5 w-2.5 shrink-0 opacity-70 transition-opacity group-hover:opacity-100 sm:h-3 sm:w-3" />
         )}
       </div>
     </Link>
@@ -200,10 +202,10 @@ export function BottomNav() {
   const router = useRouter()
 
   return (
-    <div className="relative z-50 flex w-full justify-center px-2 pb-2 sm:px-4 sm:pb-3 md:pb-4 select-none">
+    <div className="relative z-50 flex w-full justify-center px-2 pb-2 select-none sm:px-4 sm:pb-3 md:pb-4">
       <div className="relative flex w-full max-w-fit items-center justify-center">
         {/* Soft Ambient Sky Glow beneath the Dock */}
-        <div className="pointer-events-none absolute -inset-x-3 -bottom-2 top-2 -z-20 rounded-full bg-sky-200/25 blur-xl" />
+        <div className="pointer-events-none absolute -inset-x-3 top-2 -bottom-2 -z-20 rounded-full bg-sky-200/25 blur-xl" />
 
         {/* Premium Floating Game Dock Bar — Single Unified Rhythmic Flex Row */}
         <div
@@ -216,7 +218,7 @@ export function BottomNav() {
             // Surface & subtle 3D depth
             'bg-gradient-to-b from-white/96 via-[#fcfdff]/94 to-[#edf3ff]/92',
             'backdrop-blur-xl',
-            'border-t border-white/95 border-x border-white/70 border-b-[2.5px] border-[#cddbf2]/80',
+            'border-x border-t border-b-[2.5px] border-[#cddbf2]/80 border-white/70 border-white/95',
             'shadow-[0_12px_36px_rgba(28,45,100,0.12),0_2px_8px_rgba(0,0,0,0.03),inset_0_1.5px_1px_rgba(255,255,255,0.95)]',
           )}
         >
@@ -230,8 +232,8 @@ export function BottomNav() {
             onClick={() => window.open('https://zalo.me', '_blank')}
             aria-label="Chat hỗ trợ"
             className={cn(
-              'group/chat relative flex h-6.5 w-6.5 sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
-              'border-t border-white/90 border-b-[2px] border-[#d97706] border-x border-amber-200/80',
+              'group/chat relative flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center rounded-full sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9',
+              'border-x border-t border-b-[2px] border-[#d97706] border-amber-200/80 border-white/90',
               'bg-gradient-to-b from-[#fffbeb] via-[#fef3c7] to-[#fde68a]',
               'shadow-[0_3px_10px_rgba(217,119,6,0.22)]',
               'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
@@ -241,22 +243,22 @@ export function BottomNav() {
             <img
               src="/clone-assets/media/icon-chat.fa14d2f7.png"
               alt="Chat"
-              className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] group-hover/chat:scale-110 transition-transform"
+              className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/chat:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
             />
           </button>
 
-          {/* Center Elevated Lion Mascot Perch */}
+          {/* Center Slot: Elevated Baby Lion Mascot with Podium Disc */}
           <div
-            className="group/mascot relative shrink-0 cursor-pointer -mt-5 sm:-mt-7 md:-mt-8 lg:-mt-9"
+            className="group/mascot relative -mt-5 shrink-0 cursor-pointer sm:-mt-7 md:-mt-8 lg:-mt-9"
             onClick={() => router.push('/')}
           >
             {/* Elevated circular cradle / podium disc */}
-            <div className="pointer-events-none absolute -inset-1 sm:-inset-1.5 rounded-full bg-gradient-to-b from-white/90 via-[#f0f5ff]/70 to-[#dce8fd]/80 shadow-[0_6px_20px_rgba(30,58,138,0.12)] border border-white/90 -z-10" />
+            <div className="pointer-events-none absolute -inset-1 -z-10 rounded-full border border-white/90 bg-gradient-to-b from-white/90 via-[#f0f5ff]/70 to-[#dce8fd]/80 shadow-[0_6px_20px_rgba(30,58,138,0.12)] sm:-inset-1.5" />
 
             {/* Lion Character Container */}
-            <div className="relative h-14 w-14 sm:h-18 sm:w-18 md:h-22 md:w-22 lg:h-24 lg:w-24 transition-transform duration-200 group-hover/mascot:scale-105 group-active/mascot:scale-95">
+            <div className="relative h-14 w-14 transition-transform duration-200 group-hover/mascot:scale-105 group-active/mascot:scale-95 sm:h-18 sm:w-18 md:h-22 md:w-22 lg:h-24 lg:w-24">
               {/* Contact shadow beneath paws */}
-              <div className="pointer-events-none absolute bottom-1 left-1/2 -z-0 h-1.5 sm:h-2 w-3/4 -translate-x-1/2 rounded-full bg-slate-900/15 blur-[2px]" />
+              <div className="pointer-events-none absolute bottom-1 left-1/2 -z-0 h-1.5 w-3/4 -translate-x-1/2 rounded-full bg-slate-900/15 blur-[2px] sm:h-2" />
 
               {/* Baby Lion Mascot */}
               <img
@@ -272,11 +274,11 @@ export function BottomNav() {
               {/* 'LUYỆN THI ẢO' 3D Level Badge */}
               <div
                 className={cn(
-                  'absolute -bottom-1.5 sm:-bottom-2 md:-bottom-2.5 lg:-bottom-3 left-1/2 -translate-x-1/2 z-20',
+                  'absolute -bottom-1.5 left-1/2 z-20 -translate-x-1/2 sm:-bottom-2 md:-bottom-2.5 lg:-bottom-3',
                   'rounded-full px-2 py-0.5 sm:px-2.5 sm:py-0.5 md:px-3 md:py-0.5 lg:px-3.5 lg:py-1',
-                  'border border-t-white border-b-2 border-purple-800 border-x-purple-400',
+                  'border border-b-2 border-purple-800 border-x-purple-400 border-t-white',
                   'bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#8b5cf6]',
-                  'text-[7.5px] sm:text-[8.5px] md:text-[9.5px] lg:text-[10.5px] font-black tracking-wider text-white uppercase whitespace-nowrap',
+                  'text-[7.5px] font-black tracking-wider whitespace-nowrap text-white uppercase sm:text-[8.5px] md:text-[9.5px] lg:text-[10.5px]',
                   'shadow-[0_3px_10px_rgba(109,40,217,0.35)]',
                 )}
               >
@@ -290,8 +292,8 @@ export function BottomNav() {
             href="tel:19001234"
             aria-label="Hotline tư vấn"
             className={cn(
-              'group/call relative flex h-6.5 w-6.5 sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
-              'border-t border-white/90 border-b-[2px] border-[#0284c7] border-x-sky-200/80',
+              'group/call relative flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center rounded-full sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9',
+              'border-t border-b-[2px] border-[#0284c7] border-white/90 border-x-sky-200/80',
               'bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#bae6fd]',
               'shadow-[0_3px_10px_rgba(2,132,199,0.22)]',
               'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
@@ -301,7 +303,7 @@ export function BottomNav() {
             <img
               src="/clone-assets/media/icon-call.c4ff351b.png"
               alt="Call Hotline"
-              className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] group-hover/call:scale-110 transition-transform"
+              className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/call:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
             />
           </a>
 

@@ -1,5 +1,6 @@
 export * from './bottom-nav'
 export { ThemeProvider } from './theme-provider'
 export * from './topbar'
+export * from './floating-cloud-glass'
 export * from './not-found-view'
 export * from './safe-html'
