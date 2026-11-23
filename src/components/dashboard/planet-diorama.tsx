@@ -161,7 +161,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
         <div
           className={cn(
             'relative transition-all duration-500 ease-out',
-            'h-[min(170px,24vh)] w-[min(170px,24vh)] sm:h-[min(220px,28vh)] sm:w-[min(220px,28vh)] md:h-[min(270px,34vh)] md:w-[min(270px,34vh)] lg:h-[310px] lg:w-[310px]',
+            'h-[min(230px,30vh)] w-[min(230px,30vh)] sm:h-[min(240px,32vh)] sm:w-[min(240px,32vh)] md:h-[min(270px,34vh)] md:w-[min(270px,34vh)] lg:h-[310px] lg:w-[310px]',
             isActive ? 'animate-[floating_6s_ease-in-out_infinite]' : '',
             isHovered ? '-translate-y-2 scale-[1.03]' : '',
           )}
@@ -252,22 +252,25 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
                 return <span key={i} className="inline-block w-2.5 sm:w-3.5" />
               }
               const n = arr.length
+              const isShortWord = n <= 3
               const half = (n - 1) / 2 || 1
               // Normalized position t from -1 (leftmost) to +1 (rightmost)
               const t = (i - half) / half
-              // Dramatic convex arc hugging the bottom curve of the planet
-              const dy = Math.pow(Math.abs(t), 1.6) * (n > 6 ? 16 : 11)
-              // Outward rotation along the arc
-              const rot = t * (n > 6 ? 13 : 8.5)
-              // Bookends (ends) are slightly punchier
-              const scale = Math.abs(t) > 0.82 ? 1.05 : 1.0
+              // Dramatic convex arc hugging the bottom curve of the planet (straight for short words <= 3 chars like IOE, KET, PET)
+              const dy = isShortWord ? 0 : Math.pow(Math.abs(t), 1.6) * (n > 6 ? 16 : 11)
+              // Outward rotation along the arc (straight for short words)
+              const rot = isShortWord ? 0 : t * (n > 6 ? 13 : 8.5)
+              // Bookends (ends) are slightly punchier for curved words
+              const scale = isShortWord ? 1.0 : Math.abs(t) > 0.82 ? 1.05 : 1.0
 
               return (
                 <span
                   key={i}
                   className="inline-block transition-transform duration-200"
                   style={{
-                    transform: `translateY(${dy}px) rotate(${rot}deg) scale(${scale})`,
+                    transform: isShortWord
+                      ? undefined
+                      : `translateY(${dy}px) rotate(${rot}deg) scale(${scale})`,
                     transformOrigin: 'center bottom',
                     color: '#ffffff',
                     textShadow: `
@@ -294,12 +297,12 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
         </h2>
 
         {/* 4B. Subtitle with Em-Dashes in Deep Violet */}
-        <p className="font-heading mt-2 text-center text-xs font-extrabold tracking-wide text-[#581c87] drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)] select-none sm:text-sm md:text-base">
+        <p className="font-heading mt-5 text-center text-xs font-extrabold tracking-wide text-[#581c87] drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)] select-none sm:mt-6 sm:text-sm md:mt-7 md:text-base">
           — {planet.description} —
         </p>
 
         {/* 4C. Collectible Gold Charm Token Level Badge(s) */}
-        <div className="mt-1.5 flex items-center justify-center gap-2 sm:mt-2">
+        <div className="mt-2 flex items-center justify-center gap-2 sm:mt-2.5">
           {getPlanetLevelBadges(planet).map((badge) => (
             <span
               key={badge.label}

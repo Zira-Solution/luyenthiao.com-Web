@@ -105,13 +105,10 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
           preventClicks={false}
           preventClicksPropagation={false}
           centeredSlides={true}
-          slidesPerView={1.05}
+          slidesPerView={1}
           initialSlide={initialIndex}
           mousewheel={true}
           breakpoints={{
-            360: { slidesPerView: 1.15 },
-            480: { slidesPerView: 1.4 },
-            640: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
           coverflowEffect={{
