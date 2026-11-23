@@ -62,6 +62,11 @@ export function getPlanetLevelBadges(
 export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetDioramaProps) {
   const [isHovered, setIsHovered] = useState(false)
   const isInteracting = isActive || isHovered
+  const isTimeOasis =
+    planet.slug === 'toefl_junior' ||
+    planet.slug === 'time' ||
+    planet.slug === 'time_oasis' ||
+    Boolean(planet.image?.includes('time_oasis'))
 
   return (
     <div
@@ -165,6 +170,36 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
           />
           {/* Subtle 3D Island Contact Shadow */}
           <div className="pointer-events-none absolute -bottom-3 left-1/2 -z-10 h-4 w-3/4 -translate-x-1/2 rounded-full bg-indigo-950/15 blur-md" />
+
+          {/* Standalone Detached 3D Pocket Watches for Time Oasis */}
+          {isTimeOasis && (
+            <>
+              {/* Floating Pocket Watch - Left */}
+              <img
+                src="/assets/planets/time_oasis_watch_left.png"
+                alt=""
+                className="pointer-events-none absolute z-10 animate-[float-watch-left_4.2s_ease-in-out_infinite] drop-shadow-[0_6px_12px_rgba(30,58,138,0.2)] select-none motion-reduce:animate-none"
+                style={{
+                  top: '4.47%',
+                  left: '31.02%',
+                  width: '18.74%',
+                  height: '14.11%',
+                }}
+              />
+              {/* Floating Pocket Watch - Right */}
+              <img
+                src="/assets/planets/time_oasis_watch_right.png"
+                alt=""
+                className="pointer-events-none absolute z-10 animate-[float-watch-right_5s_ease-in-out_1.8s_infinite] drop-shadow-[0_6px_12px_rgba(30,58,138,0.2)] select-none motion-reduce:animate-none"
+                style={{
+                  top: '19.54%',
+                  left: '78.95%',
+                  width: '13.56%',
+                  height: '11.96%',
+                }}
+              />
+            </>
+          )}
         </div>
       </div>
 

@@ -308,6 +308,26 @@
   }
 }
 
+@keyframes float-watch-left {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-2.5deg);
+  }
+}
+
+@keyframes float-watch-right {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(2.5deg);
+  }
+}
+
 @keyframes wing-flap {
   0% {
     transform: scaleX(1);
