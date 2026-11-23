@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { DashboardView } from '@/components/dashboard'
 import { ROUTES } from '@/constants'
 import { getPlanets } from '@/lib/api/public'
+import fixturePlanets from '@/schemas/__fixtures__/planets.json'
+import { toPlanets } from '@/schemas/planet'
 
 export const metadata: Metadata = {
   title: 'Trang chủ',
@@ -28,7 +30,9 @@ export default async function DashboardPage({
     getPlanets(),
     searchParams ? searchParams : Promise.resolve(undefined),
   ])
-  return (
-    <DashboardView planets={result.ok ? result.data : null} initialSlug={resolvedParams?.planet} />
-  )
+
+  // Fallback gracefully to fixture data when backend is not running (e.g. mobile UI testing)
+  const planets = result.ok ? result.data : toPlanets(fixturePlanets)
+
+  return <DashboardView planets={planets} initialSlug={resolvedParams?.planet} />
 }
