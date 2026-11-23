@@ -59,6 +59,7 @@ const NAV_ITEMS_LEFT: NavItemData[] = [
     labelLine1: 'SỔ TAY',
     icon: 'icon_target.87047c90.png',
     badge: 'MỚI',
+    hideOnMobile: true,
     palette: {
       bg: 'bg-gradient-to-b from-[#f0fdf4] via-[#dcfce7] to-[#bbf7d0]',
       border: 'border-t-white border-x-[#bbf7d0]/80 border-b-[#059669]',
@@ -140,7 +141,7 @@ const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) 
         item.palette.shadow,
         item.palette.text,
         item.hideOnMobile && 'hidden sm:inline-flex',
-        item.hideOnTablet && 'hidden lg:inline-flex',
+        item.hideOnTablet && 'hidden xl:inline-flex',
         isActive && item.palette.activeBorder,
         !isLinkable && 'opacity-95 hover:opacity-100',
       )}
@@ -202,18 +203,18 @@ export function BottomNav() {
   const router = useRouter()
 
   return (
-    <div className="relative z-50 flex w-full justify-center px-2 pb-2 select-none sm:px-4 sm:pb-3 md:pb-4">
+    <div className="relative z-50 flex w-full justify-center px-2 pb-[max(0.75rem,calc(env(safe-area-inset-bottom)+8px))] select-none sm:px-4 sm:pb-3 md:pb-4">
       <div className="relative flex w-full max-w-fit items-center justify-center">
         {/* Soft Ambient Sky Glow beneath the Dock */}
         <div className="pointer-events-none absolute -inset-x-3 top-2 -bottom-2 -z-20 rounded-full bg-sky-200/25 blur-xl" />
 
-        {/* Premium Floating Game Dock Bar — Single Unified Rhythmic Flex Row */}
+        {/* Premium Floating Game Dock Bar — Mathematically Symmetrical 3-Column Grid */}
         <div
           className={cn(
-            'relative flex items-center justify-center',
+            'relative grid grid-cols-[1fr_auto_1fr] items-center',
             'h-[52px] sm:h-[62px] md:h-[68px] lg:h-[72px]',
             'px-2 sm:px-3.5 md:px-5 lg:px-5 xl:px-6 2xl:px-7',
-            'gap-1.5 sm:gap-2.5 md:gap-3 lg:gap-3.5 xl:gap-5 2xl:gap-6',
+            'gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-3',
             'rounded-2xl sm:rounded-3xl lg:rounded-full',
             // Surface & subtle 3D depth
             'bg-gradient-to-b from-white/96 via-[#fcfdff]/94 to-[#edf3ff]/92',
@@ -222,95 +223,101 @@ export function BottomNav() {
             'shadow-[0_12px_36px_rgba(28,45,100,0.12),0_2px_8px_rgba(0,0,0,0.03),inset_0_1.5px_1px_rgba(255,255,255,0.95)]',
           )}
         >
-          {/* Left 3 Action Buttons */}
-          {NAV_ITEMS_LEFT.map((item) => (
-            <NavButton key={item.labelLine1} item={item} pathname={pathname} />
-          ))}
+          {/* Left Wing: 3 Action Buttons + Chat FAB (Aligned to Center Mascot) */}
+          <div className="flex items-center justify-end gap-1.5 sm:gap-2.5 md:gap-3 lg:gap-3.5 xl:gap-5 2xl:gap-6">
+            {NAV_ITEMS_LEFT.map((item) => (
+              <NavButton key={item.labelLine1} item={item} pathname={pathname} />
+            ))}
 
-          {/* Left Companion: Chat FAB */}
-          <button
-            onClick={() => window.open('https://zalo.me', '_blank')}
-            aria-label="Chat hỗ trợ"
-            className={cn(
-              'group/chat relative flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center rounded-full sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9',
-              'border-x border-t border-b-[2px] border-[#d97706] border-amber-200/80 border-white/90',
-              'bg-gradient-to-b from-[#fffbeb] via-[#fef3c7] to-[#fde68a]',
-              'shadow-[0_3px_10px_rgba(217,119,6,0.22)]',
-              'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
-            )}
-          >
-            <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
-            <img
-              src="/clone-assets/media/icon-chat.fa14d2f7.png"
-              alt="Chat"
-              className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/chat:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
-            />
-          </button>
-
-          {/* Center Slot: Elevated Baby Lion Mascot with Podium Disc */}
-          <div
-            className="group/mascot relative -mt-5 shrink-0 cursor-pointer sm:-mt-7 md:-mt-8 lg:-mt-9"
-            onClick={() => router.push('/')}
-          >
-            {/* Elevated circular cradle / podium disc */}
-            <div className="pointer-events-none absolute -inset-1 -z-10 rounded-full border border-white/90 bg-gradient-to-b from-white/90 via-[#f0f5ff]/70 to-[#dce8fd]/80 shadow-[0_6px_20px_rgba(30,58,138,0.12)] sm:-inset-1.5" />
-
-            {/* Lion Character Container */}
-            <div className="relative h-14 w-14 transition-transform duration-200 group-hover/mascot:scale-105 group-active/mascot:scale-95 sm:h-18 sm:w-18 md:h-22 md:w-22 lg:h-24 lg:w-24">
-              {/* Contact shadow beneath paws */}
-              <div className="pointer-events-none absolute bottom-1 left-1/2 -z-0 h-1.5 w-3/4 -translate-x-1/2 rounded-full bg-slate-900/15 blur-[2px] sm:h-2" />
-
-              {/* Baby Lion Mascot */}
+            {/* Left Companion: Chat FAB */}
+            <button
+              onClick={() => window.open('https://zalo.me', '_blank')}
+              aria-label="Chat hỗ trợ"
+              className={cn(
+                'group/chat relative flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center rounded-full sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9',
+                'border-x border-t border-b-[2px] border-[#d97706] border-amber-200/80 border-white/90',
+                'bg-gradient-to-b from-[#fffbeb] via-[#fef3c7] to-[#fde68a]',
+                'shadow-[0_3px_10px_rgba(217,119,6,0.22)]',
+                'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
+              )}
+            >
+              <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
               <img
-                src="/clone-assets/mascot/mascot_standing_front.png"
-                alt="Luyện Thi Ảo Mascot"
-                className="relative z-10 h-full w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)]"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    '/clone-assets/media/ic-challenge.9b2229cb.png'
-                }}
+                src="/clone-assets/media/icon-chat.fa14d2f7.png"
+                alt="Chat"
+                className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/chat:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
               />
+            </button>
+          </div>
 
-              {/* 'LUYỆN THI ẢO' 3D Level Badge */}
-              <div
-                className={cn(
-                  'absolute -bottom-1.5 left-1/2 z-20 -translate-x-1/2 sm:-bottom-2 md:-bottom-2.5 lg:-bottom-3',
-                  'rounded-full px-2 py-0.5 sm:px-2.5 sm:py-0.5 md:px-3 md:py-0.5 lg:px-3.5 lg:py-1',
-                  'border border-b-2 border-purple-800 border-x-purple-400 border-t-white',
-                  'bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#8b5cf6]',
-                  'text-[7.5px] font-black tracking-wider whitespace-nowrap text-white uppercase sm:text-[8.5px] md:text-[9.5px] lg:text-[10.5px]',
-                  'shadow-[0_3px_10px_rgba(109,40,217,0.35)]',
-                )}
-              >
-                LUYỆN THI ẢO
+          {/* Center Slot: Elevated Baby Lion Mascot (Guaranteed 50% Horizontal Center) */}
+          <div className="flex items-center justify-center px-1 sm:px-1.5">
+            <div
+              className="group/mascot relative -mt-5 shrink-0 cursor-pointer sm:-mt-7 md:-mt-8 lg:-mt-9"
+              onClick={() => router.push('/')}
+            >
+              {/* Elevated circular cradle / podium disc */}
+              <div className="pointer-events-none absolute -inset-1 -z-10 rounded-full border border-white/90 bg-gradient-to-b from-white/90 via-[#f0f5ff]/70 to-[#dce8fd]/80 shadow-[0_6px_20px_rgba(30,58,138,0.12)] sm:-inset-1.5" />
+
+              {/* Lion Character Container */}
+              <div className="relative h-14 w-14 transition-transform duration-200 group-hover/mascot:scale-105 group-active/mascot:scale-95 sm:h-18 sm:w-18 md:h-22 md:w-22 lg:h-24 lg:w-24">
+                {/* Contact shadow beneath paws */}
+                <div className="pointer-events-none absolute bottom-1 left-1/2 -z-0 h-1.5 w-3/4 -translate-x-1/2 rounded-full bg-slate-900/15 blur-[2px] sm:h-2" />
+
+                {/* Baby Lion Mascot */}
+                <img
+                  src="/clone-assets/mascot/mascot_standing_front.png"
+                  alt="Luyện Thi Ảo Mascot"
+                  className="relative z-10 h-full w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)]"
+                  onError={(e) => {
+                    ;(e.target as HTMLImageElement).src =
+                      '/clone-assets/media/ic-challenge.9b2229cb.png'
+                  }}
+                />
+
+                {/* 'LUYỆN THI ẢO' 3D Level Badge */}
+                <div
+                  className={cn(
+                    'absolute -bottom-1.5 left-1/2 z-20 -translate-x-1/2 sm:-bottom-2 md:-bottom-2.5 lg:-bottom-3',
+                    'rounded-full px-2 py-0.5 sm:px-2.5 sm:py-0.5 md:px-3 md:py-0.5 lg:px-3.5 lg:py-1',
+                    'border border-b-2 border-purple-800 border-x-purple-400 border-t-white',
+                    'bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#8b5cf6]',
+                    'text-[7.5px] font-black tracking-wider whitespace-nowrap text-white uppercase sm:text-[8.5px] md:text-[9.5px] lg:text-[10.5px]',
+                    'shadow-[0_3px_10px_rgba(109,40,217,0.35)]',
+                  )}
+                >
+                  LUYỆN THI ẢO
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Companion: Call FAB */}
-          <a
-            href="tel:19001234"
-            aria-label="Hotline tư vấn"
-            className={cn(
-              'group/call relative flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center rounded-full sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9',
-              'border-t border-b-[2px] border-[#0284c7] border-white/90 border-x-sky-200/80',
-              'bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#bae6fd]',
-              'shadow-[0_3px_10px_rgba(2,132,199,0.22)]',
-              'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
-            )}
-          >
-            <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
-            <img
-              src="/clone-assets/media/icon-call.c4ff351b.png"
-              alt="Call Hotline"
-              className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/call:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
-            />
-          </a>
+          {/* Right Wing: Call FAB + 3 Action Buttons (Aligned to Center Mascot) */}
+          <div className="flex items-center justify-start gap-1.5 sm:gap-2.5 md:gap-3 lg:gap-3.5 xl:gap-5 2xl:gap-6">
+            {/* Right Companion: Call FAB */}
+            <a
+              href="tel:19001234"
+              aria-label="Hotline tư vấn"
+              className={cn(
+                'group/call relative flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center rounded-full sm:h-7.5 sm:w-7.5 md:h-8.5 md:w-8.5 lg:h-9 lg:w-9',
+                'border-t border-b-[2px] border-[#0284c7] border-white/90 border-x-sky-200/80',
+                'bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#bae6fd]',
+                'shadow-[0_3px_10px_rgba(2,132,199,0.22)]',
+                'transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 active:translate-y-[1px]',
+              )}
+            >
+              <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
+              <img
+                src="/clone-assets/media/icon-call.c4ff351b.png"
+                alt="Call Hotline"
+                className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/call:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
+              />
+            </a>
 
-          {/* Right 3 Action Buttons */}
-          {NAV_ITEMS_RIGHT.map((item) => (
-            <NavButton key={item.labelLine1} item={item} pathname={pathname} />
-          ))}
+            {NAV_ITEMS_RIGHT.map((item) => (
+              <NavButton key={item.labelLine1} item={item} pathname={pathname} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
