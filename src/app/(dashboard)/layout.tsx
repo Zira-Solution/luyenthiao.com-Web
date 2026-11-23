@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Top Header */}
       <Topbar />
 
-      <div className="short-landscape-layout-padding relative z-10 flex h-full flex-col pt-[58px] pb-[68px] sm:pt-[74px] sm:pb-[84px] md:pt-[90px] md:pb-[98px]">
+      <div className="short-landscape-layout-padding relative z-10 flex h-full flex-col pt-[58px] pb-[calc(76px+env(safe-area-inset-bottom,0px))] sm:pt-[74px] sm:pb-[84px] md:pt-[90px] md:pb-[98px]">
         {/* Main Content (Swiper Planets or Pages) */}
         <main className="scrollbar-game flex w-full flex-1 flex-col items-center justify-center overflow-hidden">
           {children}
