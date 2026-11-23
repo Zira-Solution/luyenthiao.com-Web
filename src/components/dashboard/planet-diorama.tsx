@@ -47,6 +47,12 @@ export function getPlanetLevelBadges(
   if (slug === 'ioe') {
     return [{ label: 'Cấp 1 - 2', bg: 'from-[#60a5fa] to-[#2563eb]', border: 'border-[#1d4ed8]' }]
   }
+  if (slug === 'arabian' || slug === 'set_primary') {
+    return [{ label: 'Lớp 3 - 5', bg: 'from-[#fbbf24] to-[#f59e0b]', border: 'border-[#d97706]' }]
+  }
+  if (slug === 'melody' || slug === 'set_junior') {
+    return [{ label: 'Lớp 6 - 9', bg: 'from-[#f472b6] to-[#ec4899]', border: 'border-[#db2777]' }]
+  }
   return [{ label: 'A1', bg: 'from-[#fb923c] to-[#ea580c]', border: 'border-[#c2410c]' }]
 }
 

@@ -42,8 +42,8 @@ const HIDDEN_PLANET_SLUGS: readonly string[] = []
  * 6. KET (A2) - Vương Quốc Băng Giá
  * 7. PET (B1) - Xứ Sở San Hô
  * 8. IOE (Cấp 1 - 2) - Đấu Trường Cổ Tích
- * 9. ARABIAN (Event/Challenge) - Ốc Đảo Nghìn Lẻ Một Đêm
- * 10. MELODY (Event/Challenge) - Hòn Đảo Giai Điệu
+ * 9. SET PRIMARY (Lớp 3 - 5) - Ốc Đảo Nghìn Lẻ Một Đêm
+ * 10. SET JUNIOR (Lớp 6 - 9) - Hòn Đảo Giai Điệu
  */
 const PLANET_OVERRIDES: Record<string, Partial<Pick<Planet, 'image' | 'description' | 'name'>>> = {
   starters: {
@@ -88,12 +88,22 @@ const PLANET_OVERRIDES: Record<string, Partial<Pick<Planet, 'image' | 'descripti
   },
   // Aliases & new fantasy worlds
   arabian: {
-    name: 'NGHÌN LẺ MỘT ĐÊM',
+    name: 'SET PRIMARY',
     image: '/assets/planets/planet_arabian_nights.png',
     description: 'Ốc Đảo Nghìn Lẻ Một Đêm',
   },
   melody: {
-    name: 'GIAI ĐIỆU',
+    name: 'SET JUNIOR',
+    image: '/assets/planets/planet_melody_island.png',
+    description: 'Hòn Đảo Giai Điệu',
+  },
+  set_primary: {
+    name: 'SET PRIMARY',
+    image: '/assets/planets/planet_arabian_nights.png',
+    description: 'Ốc Đảo Nghìn Lẻ Một Đêm',
+  },
+  set_junior: {
+    name: 'SET JUNIOR',
     image: '/assets/planets/planet_melody_island.png',
     description: 'Hòn Đảo Giai Điệu',
   },
@@ -171,7 +181,7 @@ export const ADVENTURE_WORLDS: readonly Planet[] = [
   },
   {
     slug: 'arabian',
-    name: 'NGHÌN LẺ MỘT ĐÊM',
+    name: 'SET PRIMARY',
     description: 'Ốc Đảo Nghìn Lẻ Một Đêm',
     image: '/assets/planets/planet_arabian_nights.png',
     glowColor: '#f59e0b',
@@ -182,7 +192,7 @@ export const ADVENTURE_WORLDS: readonly Planet[] = [
   },
   {
     slug: 'melody',
-    name: 'GIAI ĐIỆU',
+    name: 'SET JUNIOR',
     description: 'Hòn Đảo Giai Điệu',
     image: '/assets/planets/planet_melody_island.png',
     glowColor: '#ec4899',
