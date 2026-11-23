@@ -500,7 +500,7 @@ export function Topbar() {
         </div>
 
         {/* ================= CENTER GROUP (COIN - AUTH - KIM CƯƠNG) ================= */}
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-3 xl:gap-3.5 2xl:gap-5">
+        <div className="flex shrink-0 -translate-y-1 items-center gap-1.5 sm:-translate-y-1.5 sm:gap-2 md:-translate-y-2 md:gap-2.5 lg:gap-3 xl:gap-3.5 2xl:gap-5">
           {/* 6. COIN Counter */}
           <CurrencyCard
             iconSrc="/assets/topbar/ic_coin_3d.webp"
