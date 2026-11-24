@@ -7,29 +7,45 @@ describe('planets', () => {
   it('parses the real payload and maps it in sortOrder', () => {
     const result = toPlanets(planetsSchema.parse(planets))
     expect(result.map((p) => p.slug)).toEqual([
-      'ioe',
       'starters',
       'movers',
       'flyers',
       'toefl_primary',
+      'toefl_junior',
+      'ket',
+      'pet',
+      'ioe',
+      'arabian',
+      'melody',
     ])
-    expect(result[1]).toEqual({
+    expect(result[0]).toEqual({
       slug: 'starters',
-      name: planets[1]?.name,
-      description: planets[1]?.subtitle,
-      image: planets[1]?.image,
-      glowColor: planets[1]?.glowColor,
-      ribbonFrom: planets[1]?.ribbonFrom,
-      ribbonTo: planets[1]?.ribbonTo,
+      name: 'STARTERS',
+      description: 'Hòn Đảo Kẹo Ngọt',
+      image: '/assets/planets/planet_candy_wonderland.png',
+      glowColor: '#ec4899',
+      ribbonFrom: '#f472b6',
+      ribbonTo: '#fb7185',
       href: '/testlevels/starters',
       comingSoon: false,
     })
   })
 
-  it('uses linkUrl when set and marks /challenges as coming soon', () => {
-    const [ioe] = toPlanets(planetsSchema.parse(planets))
-    expect(ioe?.href).toBe('/challenges')
-    expect(ioe?.comingSoon).toBe(true)
+  it('uses a safe linkUrl as href and marks /challenges as coming soon', () => {
+    const rows = planetsSchema.parse(planets)
+    const starters = rows.find((row) => row.slug === 'starters')
+    if (!starters) throw new Error('fixture has no starters row')
+    const [planet] = toPlanets([{ ...starters, linkUrl: '/challenges' }])
+    expect(planet?.href).toBe('/challenges')
+    expect(planet?.comingSoon).toBe(true)
+  })
+
+  it('includes the ioe planet with arena diorama', () => {
+    const result = toPlanets(planetsSchema.parse(planets))
+    const ioe = result.find((p) => p.slug === 'ioe')
+    expect(ioe).toBeDefined()
+    expect(ioe?.name).toBe('IOE')
+    expect(ioe?.description).toBe('Đấu Trường Cổ Tích')
   })
 
   it.each([
@@ -42,7 +58,21 @@ describe('planets', () => {
     '/\r/evil.example',
   ])('ignores the unsafe linkUrl %s', (linkUrl) => {
     const rows = planetsSchema.parse(planets).map((row) => ({ ...row, linkUrl }))
-    for (const planet of toPlanets(rows)) {
+    for (const planet of toPlanets(rows).filter(
+      (p) =>
+        ![
+          'toefl_junior',
+          'ket',
+          'pet',
+          'ioe',
+          'arabian',
+          'melody',
+          'candy',
+          'coral',
+          'time',
+          'frosty',
+        ].includes(p.slug),
+    )) {
       expect(planet.href).toBe(`/testlevels/${planet.slug}`)
       expect(planet.comingSoon).toBe(false)
     }

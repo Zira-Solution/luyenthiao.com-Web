@@ -35,14 +35,19 @@ describe('DashboardView', () => {
 
   it('navigates to the level exam list', () => {
     render(<DashboardView planets={data} />)
-    fireEvent.click(screen.getAllByText(data[1]?.name ?? '')[0] as HTMLElement)
+    fireEvent.click(screen.getAllByText(data[0]?.name ?? '')[0] as HTMLElement)
     expect(push).toHaveBeenCalledWith('/testlevels/starters')
   })
 
-  it('marks the IOE planet as coming soon and does not navigate', () => {
-    render(<DashboardView planets={data} />)
-    expect(screen.getByText('Sắp ra mắt')).toBeTruthy()
-    fireEvent.click(screen.getAllByText(data[0]?.name ?? '')[0] as HTMLElement)
+  it('marks a coming-soon planet and does not navigate', () => {
+    const first = data[0]
+    if (!first) throw new Error('fixture empty')
+    render(
+      <DashboardView
+        planets={[{ ...first, name: 'SOON', href: '/challenges', comingSoon: true }]}
+      />,
+    )
+    fireEvent.click(screen.getAllByText('SOON')[0] as HTMLElement)
     expect(push).not.toHaveBeenCalled()
   })
 

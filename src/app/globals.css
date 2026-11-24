@@ -278,6 +278,16 @@
   }
 }
 
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
 @keyframes floating {
   0%,
   100% {
@@ -295,6 +305,26 @@
   }
   50% {
     transform: translateY(-8px) rotate(1.5deg);
+  }
+}
+
+@keyframes float-watch-left {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-2.5deg);
+  }
+}
+
+@keyframes float-watch-right {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(2.5deg);
   }
 }
 

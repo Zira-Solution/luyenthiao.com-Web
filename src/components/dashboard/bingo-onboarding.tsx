@@ -64,10 +64,10 @@ export function BingoOnboarding() {
             </h1>
 
             <div className="text-game-text-dark space-y-4 text-lg leading-relaxed font-bold md:text-[24px]">
-              <p>Xin chào! Mình là Bingo đến từ Hành tinh Luyện Thi Ảo.</p>
+              <p>Xin chào! Mình là Bingo đến từ Thế Giới Luyện Thi Ảo.</p>
               <p>
                 Một con quái vật đã lấy mất những Viên Đá Tri Thức của chúng mình. Không có chúng,
-                hành tinh của mình trở nên tăm tối!
+                thế giới của mình trở nên tăm tối!
               </p>
               <p>Mình không thể lấy lại chúng một mình…</p>
               <p>Bạn có muốn tham gia cuộc phiêu lưu với mình không?</p>

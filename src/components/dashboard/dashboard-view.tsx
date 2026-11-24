@@ -66,7 +66,7 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
       <div className="relative flex min-h-full w-full flex-col items-center justify-center overflow-hidden">
         <p className="z-10 px-6 text-center text-lg font-bold text-slate-700">
           {planets
-            ? 'Chưa có hành tinh nào.'
+            ? 'Chưa có thế giới nào.'
             : 'Tạm thời không tải được dữ liệu, vui lòng thử lại sau.'}
         </p>
       </div>
@@ -75,20 +75,13 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
-      {/* Dynamic Background Glow based on active planet - Enlarged Aura */}
-      <div
-        className="pointer-events-none absolute top-1/2 left-1/2 z-0 h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-55 mix-blend-screen transition-all duration-700 ease-in-out sm:h-[700px] sm:w-[700px] md:h-[880px] md:w-[880px] md:opacity-70"
-        style={{
-          background: `radial-gradient(circle, ${planets[activePlanetIndex]?.glowColor || '#7c3aed'} 0%, rgba(254, 240, 138, 0.4) 40%, transparent 70%)`,
-          filter: 'blur(90px)',
-        }}
-      />
+      {/* Dynamic Background Glow REMOVED: Center stays crystal clear */}
 
       {/* Custom Prev Button with Frosted Pearl Gold Capsule Style */}
       <button
         className="absolute top-1/2 left-3 z-30 -translate-y-1/2 cursor-pointer transition-all hover:scale-110 focus:outline-none active:scale-95 sm:left-6 md:left-8"
         onClick={() => swiperRef.current?.slidePrev()}
-        aria-label="Hành tinh trước"
+        aria-label="Thế giới trước"
       >
         <div className="relative flex h-11 w-11 items-center justify-center rounded-full border-2 border-amber-300/80 bg-white/85 shadow-[0_8px_20px_rgba(245,158,11,0.2)] backdrop-blur-md transition-colors hover:bg-amber-50 active:translate-y-[2px] md:h-13 md:w-13">
           <span className="-translate-x-[2px] text-base font-black text-amber-600 select-none md:text-2xl">
@@ -112,13 +105,10 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
           preventClicks={false}
           preventClicksPropagation={false}
           centeredSlides={true}
-          slidesPerView={1.05}
+          slidesPerView={1}
           initialSlide={initialIndex}
           mousewheel={true}
           breakpoints={{
-            360: { slidesPerView: 1.15 },
-            480: { slidesPerView: 1.4 },
-            640: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
           coverflowEffect={{
@@ -162,7 +152,7 @@ export function DashboardView({ planets, initialSlug }: DashboardViewProps): Rea
       <button
         className="absolute top-1/2 right-3 z-30 -translate-y-1/2 cursor-pointer transition-all hover:scale-110 focus:outline-none active:scale-95 sm:right-6 md:right-8"
         onClick={() => swiperRef.current?.slideNext()}
-        aria-label="Hành tinh tiếp theo"
+        aria-label="Thế giới tiếp theo"
       >
         <div className="relative flex h-11 w-11 items-center justify-center rounded-full border-2 border-amber-300/80 bg-white/85 shadow-[0_8px_20px_rgba(245,158,11,0.2)] backdrop-blur-md transition-colors hover:bg-amber-50 active:translate-y-[2px] md:h-13 md:w-13">
           <span className="translate-x-[2px] text-base font-black text-amber-600 select-none md:text-2xl">

@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, Compass, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -17,7 +17,7 @@ export function getPlanetLevelBadges(
   planet: Planet,
 ): { label: string; bg: string; border: string }[] {
   const slug = planet.slug.toLowerCase()
-  if (slug === 'starters') {
+  if (slug === 'starters' || slug === 'candy') {
     return [{ label: 'Pre A1', bg: 'from-[#fb7185] to-[#f43f5e]', border: 'border-[#be123c]' }]
   }
   if (slug === 'movers') {
@@ -32,8 +32,26 @@ export function getPlanetLevelBadges(
       { label: 'B1', bg: 'from-[#4ade80] to-[#16a34a]', border: 'border-[#15803d]' },
     ]
   }
+  if (slug === 'toefl_junior' || slug === 'time' || slug === 'time_oasis') {
+    return [
+      { label: 'A2', bg: 'from-[#fb923c] to-[#ea580c]', border: 'border-[#c2410c]' },
+      { label: 'B2', bg: 'from-[#a855f7] to-[#7e22ce]', border: 'border-[#6b21a8]' },
+    ]
+  }
+  if (slug === 'ket' || slug === 'frosty') {
+    return [{ label: 'A2', bg: 'from-[#38bdf8] to-[#0284c7]', border: 'border-[#0369a1]' }]
+  }
+  if (slug === 'pet' || slug === 'coral') {
+    return [{ label: 'B1', bg: 'from-[#4ade80] to-[#16a34a]', border: 'border-[#15803d]' }]
+  }
   if (slug === 'ioe') {
     return [{ label: 'Cấp 1 - 2', bg: 'from-[#60a5fa] to-[#2563eb]', border: 'border-[#1d4ed8]' }]
+  }
+  if (slug === 'arabian' || slug === 'set_primary') {
+    return [{ label: 'Lớp 3 - 5', bg: 'from-[#fbbf24] to-[#f59e0b]', border: 'border-[#d97706]' }]
+  }
+  if (slug === 'melody' || slug === 'set_junior') {
+    return [{ label: 'Lớp 6 - 9', bg: 'from-[#f472b6] to-[#ec4899]', border: 'border-[#db2777]' }]
   }
   return [{ label: 'A1', bg: 'from-[#fb923c] to-[#ea580c]', border: 'border-[#c2410c]' }]
 }
@@ -50,6 +68,11 @@ export function getPlanetLevelBadges(
 export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetDioramaProps) {
   const [isHovered, setIsHovered] = useState(false)
   const isInteracting = isActive || isHovered
+  const isTimeOasis =
+    planet.slug === 'toefl_junior' ||
+    planet.slug === 'time' ||
+    planet.slug === 'time_oasis' ||
+    Boolean(planet.image?.includes('time_oasis'))
 
   return (
     <div
@@ -57,7 +80,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
       className={cn(
         'short-diorama-scale group relative flex h-full w-full cursor-pointer flex-col items-center justify-center transition-all duration-700 ease-out select-none',
         isActive
-          ? 'z-30 scale-100 opacity-100'
+          ? 'z-30 scale-[1.25] opacity-100 sm:scale-[1.30] md:scale-[1.34] lg:scale-[1.36]'
           : isVisible
             ? 'z-10 scale-[0.78] opacity-65 hover:opacity-85'
             : 'pointer-events-none scale-60 opacity-0',
@@ -65,18 +88,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 1. THEMATIC AURA & SOFT ATMOSPHERIC GLOW */}
-      <div
-        className={cn(
-          'pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-1000 ease-in-out',
-          isActive
-            ? 'h-[360px] w-[360px] opacity-75 blur-[65px] md:h-[450px] md:w-[450px] md:opacity-85 md:blur-[85px]'
-            : 'h-[220px] w-[220px] opacity-30 blur-[40px]',
-        )}
-        style={{
-          background: `radial-gradient(circle, ${planet.glowColor || planet.ribbonFrom} 0%, rgba(254, 240, 138, 0.35) 45%, transparent 70%)`,
-        }}
-      />
+      {/* 1. THEMATIC AURA REMOVED: Planets remain sharp & crisp against clean sky */}
 
       {/* 2. PLANET CORE & DETACHED FLOATING ELEMENTS CONTAINER */}
       <div className="relative flex flex-col items-center justify-center">
@@ -149,7 +161,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
         <div
           className={cn(
             'relative transition-all duration-500 ease-out',
-            'h-[min(170px,24vh)] w-[min(170px,24vh)] sm:h-[min(220px,28vh)] sm:w-[min(220px,28vh)] md:h-[min(270px,34vh)] md:w-[min(270px,34vh)] lg:h-[310px] lg:w-[310px]',
+            'h-[min(230px,30vh)] w-[min(230px,30vh)] sm:h-[min(240px,32vh)] sm:w-[min(240px,32vh)] md:h-[min(270px,34vh)] md:w-[min(270px,34vh)] lg:h-[310px] lg:w-[310px]',
             isActive ? 'animate-[floating_6s_ease-in-out_infinite]' : '',
             isHovered ? '-translate-y-2 scale-[1.03]' : '',
           )}
@@ -164,6 +176,36 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
           />
           {/* Subtle 3D Island Contact Shadow */}
           <div className="pointer-events-none absolute -bottom-3 left-1/2 -z-10 h-4 w-3/4 -translate-x-1/2 rounded-full bg-indigo-950/15 blur-md" />
+
+          {/* Standalone Detached 3D Pocket Watches for Time Oasis */}
+          {isTimeOasis && (
+            <>
+              {/* Floating Pocket Watch - Left */}
+              <img
+                src="/assets/planets/time_oasis_watch_left.png"
+                alt=""
+                className="pointer-events-none absolute z-10 animate-[float-watch-left_4.2s_ease-in-out_infinite] drop-shadow-[0_6px_12px_rgba(30,58,138,0.2)] select-none motion-reduce:animate-none"
+                style={{
+                  top: '4.47%',
+                  left: '31.02%',
+                  width: '18.74%',
+                  height: '14.11%',
+                }}
+              />
+              {/* Floating Pocket Watch - Right */}
+              <img
+                src="/assets/planets/time_oasis_watch_right.png"
+                alt=""
+                className="pointer-events-none absolute z-10 animate-[float-watch-right_5s_ease-in-out_1.8s_infinite] drop-shadow-[0_6px_12px_rgba(30,58,138,0.2)] select-none motion-reduce:animate-none"
+                style={{
+                  top: '19.54%',
+                  left: '78.95%',
+                  width: '13.56%',
+                  height: '11.96%',
+                }}
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -191,7 +233,7 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
           </span>
         </div>
 
-        {/* 4A. World Name: Playful Arched 3D Display Typography (Cong cong & chạm hẳn vào tinh cầu) */}
+        {/* 4A. World Name: Playful Arched 3D Display Typography (Cong cong & ôm chân thế giới 3D) */}
         <h2
           className={cn(
             'font-heading relative flex items-center justify-center text-center leading-none font-black uppercase select-none',
@@ -210,22 +252,25 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
                 return <span key={i} className="inline-block w-2.5 sm:w-3.5" />
               }
               const n = arr.length
+              const isShortWord = n <= 3
               const half = (n - 1) / 2 || 1
               // Normalized position t from -1 (leftmost) to +1 (rightmost)
               const t = (i - half) / half
-              // Dramatic convex arc hugging the bottom curve of the planet
-              const dy = Math.pow(Math.abs(t), 1.6) * (n > 6 ? 16 : 11)
-              // Outward rotation along the arc
-              const rot = t * (n > 6 ? 13 : 8.5)
-              // Bookends (ends) are slightly punchier
-              const scale = Math.abs(t) > 0.82 ? 1.05 : 1.0
+              // Dramatic convex arc hugging the bottom curve of the planet (straight for short words <= 3 chars like IOE, KET, PET)
+              const dy = isShortWord ? 0 : Math.pow(Math.abs(t), 1.6) * (n > 6 ? 16 : 11)
+              // Outward rotation along the arc (straight for short words)
+              const rot = isShortWord ? 0 : t * (n > 6 ? 13 : 8.5)
+              // Bookends (ends) are slightly punchier for curved words
+              const scale = isShortWord ? 1.0 : Math.abs(t) > 0.82 ? 1.05 : 1.0
 
               return (
                 <span
                   key={i}
                   className="inline-block transition-transform duration-200"
                   style={{
-                    transform: `translateY(${dy}px) rotate(${rot}deg) scale(${scale})`,
+                    transform: isShortWord
+                      ? undefined
+                      : `translateY(${dy}px) rotate(${rot}deg) scale(${scale})`,
                     transformOrigin: 'center bottom',
                     color: '#ffffff',
                     textShadow: `
@@ -252,70 +297,24 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
         </h2>
 
         {/* 4B. Subtitle with Em-Dashes in Deep Violet */}
-        <p className="font-heading mt-2 text-center text-xs font-extrabold tracking-wide text-[#581c87] drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)] select-none sm:text-sm md:text-base">
+        <p className="font-heading mt-5 text-center text-xs font-extrabold tracking-wide text-[#581c87] drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)] select-none sm:mt-6 sm:text-sm md:mt-7 md:text-base">
           — {planet.description} —
         </p>
 
         {/* 4C. Collectible Gold Charm Token Level Badge(s) */}
-        <div className="mt-1.5 flex items-center justify-center gap-2 sm:mt-2">
-          {planet.comingSoon ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-300/80 bg-gradient-to-r from-purple-100 to-indigo-100 px-3.5 py-1 text-[10px] font-black tracking-wider text-purple-900 uppercase shadow-xs sm:text-[11px]">
-              <Sparkles className="h-3 w-3 text-purple-600" />
-              Sắp ra mắt
-            </span>
-          ) : (
-            getPlanetLevelBadges(planet).map((badge) => (
-              <span
-                key={badge.label}
-                className="inline-flex items-center gap-1.5 rounded-full border-t border-b-[2.5px] border-[#b45309] border-amber-200/90 bg-gradient-to-b from-[#fef08a] via-[#facc15] to-[#f59e0b] px-3.5 py-1 text-[10px] font-black tracking-wider text-[#78350f] uppercase shadow-[0_4px_12px_rgba(245,158,11,0.35)] transition-transform hover:scale-105 sm:text-xs"
-              >
-                <span className="text-[11px] leading-none text-amber-700 drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] sm:text-[12px]">
-                  ★
-                </span>
-                <span>{badge.label}</span>
-              </span>
-            ))
-          )}
-        </div>
-
-        {/* 4D. "KHÁM PHÁ NGAY" Emerald 3D Jelly Capsule Button (Matching Image 4) */}
-        {!planet.comingSoon && (
-          <div className="mt-2.5 flex items-center justify-center sm:mt-3">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                onSelect?.()
-              }}
-              className={cn(
-                'group/btn relative inline-flex cursor-pointer items-center gap-1.5 rounded-full sm:gap-2',
-                'border-t border-emerald-200/90 border-b-[3.5px] border-[#047857]',
-                'bg-gradient-to-b from-[#34d399] via-[#10b981] to-[#059669]',
-                'px-4 py-1.5 text-xs font-black tracking-wider text-white uppercase sm:px-6 sm:py-2.5 sm:text-sm',
-                'shadow-[0_6px_18px_rgba(16,185,129,0.35)]',
-                'transition-all duration-200 ease-out',
-                'hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(16,185,129,0.48)] hover:brightness-105',
-                'active:translate-y-[2px] active:border-b-2 active:brightness-95',
-              )}
+        <div className="mt-2 flex items-center justify-center gap-2 sm:mt-2.5">
+          {getPlanetLevelBadges(planet).map((badge) => (
+            <span
+              key={badge.label}
+              className="inline-flex items-center gap-1.5 rounded-full border-t border-b-[2.5px] border-[#b45309] border-amber-200/90 bg-gradient-to-b from-[#fef08a] via-[#facc15] to-[#f59e0b] px-3.5 py-1 text-[10px] font-black tracking-wider text-[#78350f] uppercase shadow-[0_4px_12px_rgba(245,158,11,0.35)] transition-transform hover:scale-105 sm:text-xs"
             >
-              {/* Shiny glossy pill reflex highlight */}
-              <div className="pointer-events-none absolute inset-x-3 top-0.5 h-[40%] rounded-full bg-gradient-to-b from-white/45 to-transparent" />
-
-              {/* White circular compass icon */}
-              <span className="relative flex h-4.5 w-4.5 items-center justify-center rounded-full bg-white/20 shadow-xs sm:h-5 sm:w-5">
-                <Compass className="h-3 w-3 text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] sm:h-3.5 sm:w-3.5" />
+              <span className="text-[11px] leading-none text-amber-700 drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] sm:text-[12px]">
+                ★
               </span>
-
-              {/* Button text */}
-              <span className="relative font-black tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
-                Khám phá ngay
-              </span>
-
-              {/* Chevron Right */}
-              <ChevronRight className="relative h-3.5 w-3.5 stroke-[3] text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] transition-transform duration-200 group-hover/btn:translate-x-0.5 sm:h-4 sm:w-4" />
-            </button>
-          </div>
-        )}
+              <span>{badge.label}</span>
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   )

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning Garden — Background Artwork Visual Review (Phase 2)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; font-family: system-ui, -apple-system, sans-serif; }
+    .viewport-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    .overlay-blueprint {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+    .control-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      padding: 10px 18px;
+      border-radius: 9999px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+      z-index: 50;
+      user-select: none;
+    }
+    .btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    .btn.active {
+      background: #0ea5e9;
+      border-color: #38bdf8;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(14, 165, 233, 0.5);
+    }
+    .btn.toggle-active {
+      background: #8b5cf6;
+      border-color: #a78bfa;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-container">
+    <img id="bgImg" class="bg" src="file:///D:/Zira/luyenthiao/web/src/public/clone-assets/media/learning_garden_sky_hd.webp" alt="Background Preview" />
+    <img id="bpOverlay" class="overlay-blueprint" src="file:///D:/Zira/luyenthiao/web/scratch/composition_preview_phase1.png" alt="Blueprint Overlay" />
+  </div>
+
+  <div class="control-bar">
+    <button id="btnOpt1" class="btn active" onclick="switchBackground(1)">Tùy chọn 1: Bầu trời Ban ngày (2560×1440 WebP)</button>
+    <button id="btnOpt2" class="btn" onclick="switchBackground(2)">Tùy chọn 2: Bầu trời Hừng đông (1920×1080 WebP)</button>
+    <button id="btnOverlay" class="btn" onclick="toggleOverlay()">Bật/Tắt Lớp kiểm tra Blueprint</button>
+  </div>
+
+  <script>
+    const bgImg = document.getElementById('bgImg');
+    const bpOverlay = document.getElementById('bpOverlay');
+    const btnOpt1 = document.getElementById('btnOpt1');
+    const btnOpt2 = document.getElementById('btnOpt2');
+    const btnOverlay = document.getElementById('btnOverlay');
+    let overlayVisible = false;
+
+    function switchBackground(opt) {
+      if (opt === 1) {
+        bgImg.src = 'file:///D:/Zira/luyenthiao/web/src/public/clone-assets/media/learning_garden_sky_hd.webp';
+        btnOpt1.classList.add('active');
+        btnOpt2.classList.remove('active');
+      } else {
+        bgImg.src = 'file:///D:/Zira/luyenthiao/web/src/public/clone-assets/media/login_sky_ai_hd.webp';
+        btnOpt2.classList.add('active');
+        btnOpt1.classList.remove('active');
+      }
+    }
+
+    function toggleOverlay() {
+      overlayVisible = !overlayVisible;
+      bpOverlay.style.opacity = overlayVisible ? '0.45' : '0';
+      if (overlayVisible) {
+        btnOverlay.classList.add('toggle-active');
+      } else {
+        btnOverlay.classList.remove('toggle-active');
+      }
+    }
+  </script>
+</body>
+</html>

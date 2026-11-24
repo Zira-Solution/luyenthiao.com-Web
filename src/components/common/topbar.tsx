@@ -1,63 +1,385 @@
 'use client'
 
-import { ChevronDown, Plus } from 'lucide-react'
+import { ChevronDown, LogOut, KeyRound, Menu } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
+import { MobileNavDrawer } from '@/components/common/mobile-nav-drawer'
 import { UnreadBadge } from '@/components/common/unread-badge'
 import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH } from '@/constants'
 import { useLogout } from '@/hooks'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/auth-store'
 
-// Sculpted Floating Pill Tile (Dream Worlds aesthetic)
-const CapsuleNavButton = ({
-  onClick,
-  className,
-  children,
-  variant = 'blue',
-  badgeText,
-  badgeColor = 'bg-[#10b981]',
-}: {
+interface GameNavButtonProps {
+  label: string
+  iconSrc: string
+  iconAlt: string
+  hasDropdown?: boolean
+  isOrange?: boolean
+  hasNewRibbon?: boolean
   onClick?: () => void
-  className?: string
-  children: React.ReactNode
-  variant?: 'blue' | 'orange' | 'yellow' | 'purple' | 'mint'
-  badgeText?: string
-  badgeColor?: string
-}) => {
-  const styles = {
-    blue: 'bg-gradient-to-b from-white/95 to-[#edf4fc] border-b-[3px] border-[#b9d5f3] hover:from-white hover:to-[#e2effd] active:to-[#d0e5fb] text-[#1e3a8a] shadow-[0_3px_8px_rgba(30,58,138,0.06)]',
-    orange:
-      'bg-gradient-to-b from-[#fb923c] to-[#ea580c] border-b-[3px] border-[#c2410c] hover:brightness-105 active:brightness-95 text-white shadow-[0_3px_8px_rgba(194,65,12,0.2)]',
-    yellow:
-      'bg-gradient-to-b from-[#fde047] to-[#eab308] border-b-[3px] border-[#ca8a04] hover:brightness-105 active:brightness-95 text-[#713f12] shadow-[0_3px_8px_rgba(202,138,4,0.2)]',
-    purple:
-      'bg-gradient-to-b from-[#a855f7] to-[#7e22ce] border-b-[3px] border-[#6b21a8] hover:brightness-105 active:brightness-95 text-white shadow-[0_3px_8px_rgba(107,33,168,0.2)]',
-    mint: 'bg-gradient-to-b from-[#34d399] to-[#059669] border-b-[3px] border-[#047857] hover:brightness-105 active:brightness-95 text-white shadow-[0_3px_8px_rgba(5,150,105,0.2)]',
-  }[variant]
+  active?: boolean
+  badge?: React.ReactNode
+  dropdownContent?: React.ReactNode
+  isDropdownOpen?: boolean
+  onToggleDropdown?: () => void
+}
+
+/**
+ * 3D Game Squircle Button
+ * Pixel-accurate recreation matching the approved reference:
+ * - Rounded-square game UI button
+ * - Thick lavender-purple frame (or warm amber for Luyện tập)
+ * - Multiple visible layers creating a 3D extruded appearance
+ * - Clearly visible darker purple bottom extrusion
+ * - Soft contact shadows beneath each button
+ * - Centered 3D icon overflowing above the top edge
+ */
+function GameNavButton({
+  label,
+  iconSrc,
+  iconAlt,
+  hasDropdown = false,
+  isOrange = false,
+  hasNewRibbon = false,
+  onClick,
+  active = false,
+  badge,
+  dropdownContent,
+  isDropdownOpen = false,
+  onToggleDropdown,
+}: GameNavButtonProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    if (hasDropdown && onToggleDropdown) {
+      e.stopPropagation()
+      onToggleDropdown()
+    } else if (onClick) {
+      onClick()
+    }
+  }
 
   return (
-    <button
+    <div className="relative shrink-0 select-none">
+      <button
+        type="button"
+        onClick={handleClick}
+        aria-label={label}
+        className={cn(
+          'group relative flex cursor-pointer flex-col items-center justify-end transition-all duration-200 select-none',
+          // Well-proportioned squircle dimensions (1:1 ratio matching reference)
+          'h-[54px] w-[54px] xl:h-[58px] xl:w-[58px] 2xl:h-[68px] 2xl:w-[68px]',
+          'rounded-[13px] xl:rounded-[15px] 2xl:rounded-[18px]',
+          'px-0.5 pb-1 xl:pb-1.5 2xl:pb-2',
+          isOrange
+            ? [
+                // Golden-orange 3D squircle button (Luyện tập)
+                'bg-gradient-to-b from-[#ffd147] via-[#ff9500] to-[#f06700]',
+                'border-[2px] border-[#ffe885] sm:border-[2.5px]',
+                'shadow-[0_4px_0_#9a3412,0_7px_12px_rgba(154,52,18,0.4),inset_0_2px_3px_rgba(255,255,255,0.85),inset_0_-2px_4px_rgba(180,50,0,0.5)]',
+                'hover:-translate-y-1 hover:shadow-[0_5px_0_#9a3412,0_9px_16px_rgba(154,52,18,0.48)] hover:brightness-105',
+                'active:translate-y-[2px] active:shadow-[0_2px_0_#9a3412,0_4px_8px_rgba(154,52,18,0.3)]',
+              ]
+            : [
+                // Soft lavender-purple 3D squircle button
+                'bg-gradient-to-b from-[#ffffff] via-[#f7f4ff] to-[#ebe4fb]',
+                'border-[2px] border-[#8e6fd8] sm:border-[2.5px]',
+                'shadow-[0_4px_0_#5a379e,0_7px_12px_rgba(90,55,158,0.32),inset_0_2px_2px_rgba(255,255,255,0.95),inset_0_-2px_3px_rgba(142,111,216,0.22)]',
+                'hover:-translate-y-1 hover:shadow-[0_5px_0_#5a379e,0_9px_16px_rgba(90,55,158,0.38)] hover:brightness-105',
+                'active:translate-y-[2px] active:shadow-[0_2px_0_#5a379e,0_4px_8px_rgba(90,55,158,0.25)]',
+                active &&
+                  'bg-gradient-to-b from-[#f3edff] via-[#e8defe] to-[#ddd0f8] shadow-[0_3px_0_#5a379e,inset_0_2px_4px_rgba(90,55,158,0.2)]',
+              ],
+        )}
+      >
+        {/* NEW Green Ribbon (For Luyện tập) */}
+        {hasNewRibbon && (
+          <div className="pointer-events-none absolute -top-1 -left-1 z-20 h-7 w-7 overflow-hidden sm:h-8 sm:w-8 md:h-9 md:w-9">
+            <div className="font-heading absolute top-1 -left-3.5 w-13 -rotate-45 border-t border-emerald-200 bg-gradient-to-b from-[#34d399] to-[#059669] py-0.5 text-center text-[5.5px] font-black tracking-tighter text-white uppercase shadow-[0_1.5px_3px_rgba(0,0,0,0.25)] sm:text-[6.5px]">
+              NEW
+            </div>
+          </div>
+        )}
+
+        {/* 3D Prominent Icon protruding above top edge matching Image 2 (~70% width, ~12% top pop-out) */}
+        <div className="pointer-events-none absolute inset-x-0 -top-1.5 flex items-center justify-center transition-transform duration-200 group-hover:scale-105 sm:-top-2 md:-top-2 lg:-top-2.5 xl:-top-2.5 2xl:-top-3">
+          <img
+            src={iconSrc}
+            alt={iconAlt}
+            className={cn(
+              'max-w-none object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.22)]',
+              // Sized precisely at ~68-70% of squircle card dimensions
+              isOrange
+                ? 'h-[40px] w-[40px] xl:h-[42px] xl:w-[42px] 2xl:h-[48px] 2xl:w-[48px]'
+                : 'h-[38px] w-[38px] xl:h-[40px] xl:w-[40px] 2xl:h-[46px] 2xl:w-[46px]',
+            )}
+            loading="eager"
+          />
+        </div>
+
+        {/* Bottom Text Label */}
+        <div className="flex w-full items-center justify-center gap-0.5 px-0.5">
+          <span
+            className={cn(
+              'font-heading leading-none font-black tracking-tight whitespace-nowrap uppercase',
+              'text-[7.5px] xl:text-[8px] 2xl:text-[9.5px]',
+              'text-[#381a6c] drop-shadow-[0_0.5px_0_rgba(255,255,255,0.8)]',
+            )}
+          >
+            {label}
+          </span>
+          {hasDropdown && (
+            <span className="ml-0.5 text-[5px] font-black text-[#5a379e] opacity-80 sm:text-[6px]">
+              ▼
+            </span>
+          )}
+        </div>
+
+        {/* Notification Badge */}
+        {badge && <div className="absolute -top-1.5 -right-1.5 z-20">{badge}</div>}
+      </button>
+
+      {/* Dropdown Menu Popover */}
+      {hasDropdown && isDropdownOpen && dropdownContent && (
+        <div className="animate-in fade-in zoom-in-95 absolute top-[calc(100%+8px)] left-1/2 z-50 min-w-[140px] -translate-x-1/2 overflow-hidden rounded-2xl border-2 border-[#8e6fd8] bg-white/95 p-1.5 shadow-[0_10px_25px_rgba(90,55,158,0.25)] backdrop-blur-md duration-150">
+          {dropdownContent}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Currency Counter Card (COIN & KIM CƯƠNG)
+ */
+function CurrencyCard({
+  iconSrc,
+  iconAlt,
+  label,
+  value,
+  onClick,
+}: {
+  iconSrc: string
+  iconAlt: string
+  label: string
+  value: number | string
+  onClick?: () => void
+}) {
+  return (
+    <div
       onClick={onClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`${label}: ${value}`}
       className={cn(
-        'group relative flex h-[48px] min-w-[50px] shrink-0 cursor-pointer flex-col items-center justify-between rounded-xl border-b-[2.5px] px-1 py-1 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-[2px] active:border-b-2 sm:h-[58px] sm:min-w-[62px] sm:rounded-2xl sm:px-1.5 sm:py-1.5 md:h-[68px] md:min-w-[76px] md:border-b-[3px] md:px-2 md:py-2',
-        styles,
-        className,
+        'group relative flex shrink-0 cursor-pointer items-center justify-between transition-all duration-200 select-none',
+        'h-[38px] min-w-[76px] sm:h-[40px] sm:min-w-[84px] xl:h-[44px] xl:min-w-[96px] 2xl:h-[48px] 2xl:min-w-[110px]',
+        'gap-1.5 sm:gap-2',
+        'rounded-[12px] sm:rounded-[14px] md:rounded-[16px] lg:rounded-[18px]',
+        'border-[2px] border-[#8e6fd8]',
+        'bg-gradient-to-b from-[#ffffff] via-[#f7f4ff] to-[#ebe5fb]',
+        'shadow-[0_3.5px_0_#5a379e,0_5px_8px_rgba(90,55,158,0.22),inset_0_1.5px_2px_rgba(255,255,255,0.95),inset_0_-1.5px_2px_rgba(142,111,216,0.18)]',
+        'px-2 sm:px-2.5 md:px-3',
+        'hover:-translate-y-0.5 hover:shadow-[0_4.5px_0_#5a379e,0_7px_10px_rgba(90,55,158,0.28)] hover:brightness-105',
+        'active:translate-y-[1px] active:shadow-[0_2px_0_#5a379e]',
       )}
     >
-      {/* Delicate floating badge */}
-      {badgeText && (
-        <span
-          className={cn(
-            'absolute -top-1.5 -left-1.5 z-20 -rotate-6 transform rounded-full px-1.5 py-0.5 text-[7px] font-black tracking-wider text-white uppercase shadow-sm sm:text-[8px] md:text-[9px]',
-            badgeColor,
-          )}
+      {/* 3D Icon */}
+      <img
+        src={iconSrc}
+        alt={iconAlt}
+        className="h-[30px] w-[30px] object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] transition-transform group-hover:scale-105 sm:h-[34px] sm:w-[34px] md:h-[38px] md:w-[38px] lg:h-[42px] lg:w-[42px] xl:h-[45px] xl:w-[45px] 2xl:h-[48px] 2xl:w-[48px]"
+      />
+
+      {/* Label & Numeric Value */}
+      <div className="flex flex-col items-end justify-center pr-0.5 leading-none">
+        <span className="font-heading text-[6px] font-black tracking-wider whitespace-nowrap text-[#63459c] uppercase sm:text-[6.5px] md:text-[7px] lg:text-[7.5px] 2xl:text-[8px]">
+          {label}
+        </span>
+        <span className="font-heading mt-0.5 text-[11px] font-black text-[#381a6c] sm:text-[12px] md:text-[13px] lg:text-[13.5px] 2xl:text-[14px]">
+          {value}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Center Authentication 3D Panel
+ * Stacked ĐĂNG NHẬP & ĐĂNG KÝ buttons inside a taller lavender 3D container,
+ * or authenticated user info when signed in.
+ */
+function CenterAuthPanel({
+  status,
+  user,
+  onLogin,
+  onRegister,
+  onLogout,
+}: {
+  status: string
+  user: any
+  onLogin: () => void
+  onRegister: () => void
+  onLogout: () => void
+}) {
+  const router = useRouter()
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // If user is authenticated, render the user profile state inside the matching container
+  if (status === 'authenticated' && user) {
+    return (
+      <div
+        ref={menuRef}
+        className={cn(
+          'relative flex shrink-0 items-center justify-center select-none',
+          'h-[56px] w-[114px] xl:h-[60px] xl:w-[126px] 2xl:h-[70px] 2xl:w-[150px]',
+          'rounded-[13px] sm:rounded-[15px] md:rounded-[17px] lg:rounded-[19px] 2xl:rounded-[20px]',
+          'border-[2px] border-[#8e6fd8] sm:border-[2.5px]',
+          'bg-gradient-to-b from-[#baa2f5] via-[#9e80ee] to-[#805dd6]',
+          'shadow-[0_4px_0_#543394,0_7px_14px_rgba(84,51,148,0.35),inset_0_2px_3px_rgba(255,255,255,0.7)]',
+          'p-1 sm:p-1.5',
+        )}
+      >
+        <button
+          type="button"
+          onClick={() => setUserMenuOpen((prev) => !prev)}
+          className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-xl bg-white/90 px-2 py-1 shadow-xs transition-transform hover:scale-[1.02] active:scale-95"
         >
-          {badgeText}
+          <div className="flex items-center gap-1">
+            <span className="font-heading truncate text-[9px] font-black text-[#381a6c] uppercase sm:text-[10px]">
+              {user.fullName || user.username || user.role}
+            </span>
+            <ChevronDown className="h-3 w-3 text-[#5a379e]" />
+          </div>
+          <span className="text-[7px] font-bold text-indigo-500 uppercase sm:text-[8px]">
+            {user.role}
+          </span>
+        </button>
+
+        {userMenuOpen && (
+          <div className="animate-in fade-in zoom-in-95 absolute top-[calc(100%+8px)] left-1/2 z-50 min-w-[150px] -translate-x-1/2 overflow-hidden rounded-2xl border-2 border-[#8e6fd8] bg-white/95 p-1 shadow-xl backdrop-blur-xl duration-150">
+            <button
+              onClick={() => {
+                setUserMenuOpen(false)
+                router.push('/account/change-password')
+              }}
+              className="flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-1.5 text-left text-xs font-bold text-slate-800 transition-colors hover:bg-indigo-50"
+            >
+              <KeyRound className="h-3.5 w-3.5 text-indigo-600" />
+              <span>Đổi mật khẩu</span>
+            </button>
+            <button
+              onClick={() => {
+                setUserMenuOpen(false)
+                onLogout()
+              }}
+              className="flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-1.5 text-left text-xs font-bold text-rose-600 transition-colors hover:bg-rose-50"
+            >
+              <LogOut className="h-3.5 w-3.5 text-rose-600" />
+              <span>Đăng xuất</span>
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Unauthenticated: Exact stacked ĐĂNG NHẬP + ĐĂNG KÝ game container
+  return (
+    <div
+      className={cn(
+        'relative flex shrink-0 flex-col items-center justify-center select-none',
+        'h-[56px] w-[114px] xl:h-[60px] xl:w-[126px] 2xl:h-[70px] 2xl:w-[150px]',
+        'rounded-[13px] sm:rounded-[15px] md:rounded-[17px] lg:rounded-[19px] 2xl:rounded-[20px]',
+        'border-[2px] border-[#8e6fd8] sm:border-[2.5px]',
+        'bg-gradient-to-b from-[#baa2f5] via-[#9e80ee] to-[#805dd6]',
+        'shadow-[0_4px_0_#543394,0_7px_14px_rgba(84,51,148,0.35),inset_0_2px_3px_rgba(255,255,255,0.7)]',
+        'gap-0.5 p-1 sm:gap-1 sm:p-1.5',
+      )}
+    >
+      {/* Top Button: ĐĂNG NHẬP */}
+      <button
+        type="button"
+        onClick={onLogin}
+        aria-label="Đăng nhập"
+        className={cn(
+          'relative flex w-full cursor-pointer items-center justify-center transition-all duration-150 select-none',
+          'h-[21px] sm:h-[23px] md:h-[25px]',
+          'rounded-full',
+          'border border-b-[2px] border-[#d0bcf6] border-b-[#8f70d8]',
+          'bg-gradient-to-b from-[#ffffff] via-[#fbf9ff] to-[#ece5fa]',
+          'shadow-[0_1.5px_3px_rgba(0,0,0,0.12)]',
+          'hover:brightness-105 active:translate-y-[1px] active:border-b',
+        )}
+      >
+        <span className="font-heading text-[8px] font-black tracking-wide text-[#432177] uppercase sm:text-[9px] md:text-[9.5px]">
+          Đăng nhập
+        </span>
+      </button>
+
+      {/* Bottom Button: ĐĂNG KÝ */}
+      <button
+        type="button"
+        onClick={onRegister}
+        aria-label="Đăng ký"
+        className={cn(
+          'relative flex w-full cursor-pointer items-center justify-center transition-all duration-150 select-none',
+          'h-[21px] sm:h-[23px] md:h-[25px]',
+          'rounded-full',
+          'border border-b-[2px] border-[#fed7aa] border-b-[#9a3412]',
+          'bg-gradient-to-b from-[#ffbe3b] via-[#ff8800] to-[#e65c00]',
+          'shadow-[0_2px_4px_rgba(154,52,18,0.3)]',
+          'hover:brightness-105 active:translate-y-[1px] active:border-b',
+        )}
+      >
+        <span className="font-heading text-[8px] font-black tracking-wide text-white uppercase drop-shadow-[0_1px_1px_rgba(154,52,18,0.8)] sm:text-[9px] md:text-[9.5px]">
+          Đăng ký
+        </span>
+      </button>
+    </div>
+  )
+}
+
+/**
+ * 3D Game Hamburger Button for Mobile / Tablet Viewports
+ */
+function HamburgerButton({ onClick, hasBadge }: { onClick: () => void; hasBadge?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Mở menu"
+      className={cn(
+        'group relative flex shrink-0 cursor-pointer flex-col items-center justify-center transition-all duration-200 select-none',
+        'h-[38px] w-[44px] sm:h-[40px] sm:w-[48px] md:h-[44px] md:w-[52px]',
+        'rounded-[12px] sm:rounded-[14px] md:rounded-[16px]',
+        'bg-gradient-to-b from-[#ffffff] via-[#f7f4ff] to-[#ebe5fb]',
+        'border-[2px] border-[#8e6fd8]',
+        'shadow-[0_3.5px_0_#5a379e,0_5px_8px_rgba(90,55,158,0.22),inset_0_1.5px_2px_rgba(255,255,255,0.95),inset_0_-1.5px_2px_rgba(142,111,216,0.18)]',
+        'hover:-translate-y-0.5 hover:shadow-[0_4.5px_0_#5a379e,0_7px_10px_rgba(90,55,158,0.28)] hover:brightness-105',
+        'active:translate-y-[1px] active:shadow-[0_2px_0_#5a379e]',
+      )}
+    >
+      <Menu className="h-4.5 w-4.5 text-[#381a6c] transition-transform duration-200 group-hover:scale-110 sm:h-5 sm:w-5" />
+      <span className="font-heading text-[6.5px] font-black tracking-wider text-[#63459c] uppercase sm:text-[7px]">
+        MENU
+      </span>
+      {hasBadge && (
+        <span className="absolute -top-1 -right-1 z-20 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-white bg-rose-500 shadow-xs">
+          <span className="text-[7px] leading-none font-black text-white">!</span>
         </span>
       )}
-      <div className="flex h-full w-full flex-col items-center justify-between">{children}</div>
     </button>
   )
 }
@@ -68,383 +390,272 @@ export function Topbar() {
   const status = useAuthStore((state) => state.status)
   const user = useAuthStore((state) => state.user)
   const logout = useLogout()
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  const handleLogin = () => {
-    router.push('/login')
+  // Dropdown states for Writing, Speaking, Vocabulary
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+
+  useEffect(() => {
+    function handleGlobalClick() {
+      setActiveDropdown(null)
+    }
+    window.addEventListener('click', handleGlobalClick)
+    return () => window.removeEventListener('click', handleGlobalClick)
+  }, [])
+
+  const toggleDropdown = (name: string) => {
+    setActiveDropdown((current) => (current === name ? null : name))
   }
 
-  const handleSignup = () => {
-    router.push('/signup')
-  }
-
-  const handleRanking = () => {
-    router.push('/ranking')
-  }
+  // Navigation handlers
+  const handleThachDau = () => router.push('/')
+  const handlePractice = () => router.push('/')
+  const handleWriting = () => router.push(DEMO_WRITE_TEST_PATH)
+  const handleSpeaking = () => router.push(DEMO_SPEAKING_TEST_PATH)
+  const handleVocabulary = () => router.push('/notebook')
+  const handleLogin = () => router.push('/login')
+  const handleRegister = () => router.push('/register')
+  const handleRanking = () => router.push('/ranking')
+  const handleHistory = () => router.push('/history')
+  const handleSchool = () => router.push('/school-ranking')
+  const handleTasks = () => router.push('/tasks')
+  const handleNotifications = () => router.push('/notifications')
 
   return (
-    <header className="absolute top-0 left-0 z-50 w-full p-1.5 select-none sm:p-2 md:p-3">
-      {/* 3 Distinct Floating Frosted Glass Capsules - Single row with horizontal fluid overflow */}
-      <div className="flex w-full items-center justify-between gap-1 sm:gap-2">
-        {/* ================= LEFT SECTION: ACTIVITIES CAPSULE ================= */}
-        <div className="no-scrollbar flex max-w-[42vw] shrink-0 items-center gap-1 overflow-x-auto rounded-xl border border-white/70 bg-white/60 p-1 shadow-[0_8px_24px_rgba(30,58,138,0.06)] backdrop-blur-xl sm:max-w-none sm:gap-1.5 sm:rounded-2xl sm:p-1.5 md:gap-2">
-          {/* Thách Đấu Button */}
-          <CapsuleNavButton variant="purple">
-            <img
-              src="/clone-assets/media/ic-challenge.9b2229cb.png"
-              alt="Thách đấu"
-              className="h-5 w-5 object-contain sm:h-6 sm:w-6 md:h-7 md:w-7"
-              onError={(e) => {
-                ;(e.target as HTMLImageElement).src =
-                  'https://api.dicebear.com/7.x/bottts/svg?seed=challenge'
-              }}
+    <>
+      <header className="top-navbar pointer-events-auto absolute top-0 left-0 z-50 box-border w-full overflow-visible px-2 pt-[max(0.375rem,env(safe-area-inset-top))] select-none sm:px-3 sm:pt-2 md:px-4 md:pt-2.5 lg:px-6 xl:px-8 2xl:pt-3">
+        {/* ================= MOBILE / TABLET COMPACT TOPBAR (< 1280px) ================= */}
+        <div className="flex w-full items-center justify-between pt-1 pb-1 xl:hidden">
+          {/* Left: COIN & KIM CƯƠNG */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <CurrencyCard
+              iconSrc="/assets/topbar/ic_coin_3d.webp"
+              iconAlt="Coin"
+              label="COIN"
+              value={0}
+              onClick={() => router.push('/')}
             />
-            <span className="text-[8px] font-black tracking-wider uppercase sm:text-[9px] md:text-[10px]">
-              Thách đấu
-            </span>
-          </CapsuleNavButton>
-
-          {/* Writing Button */}
-          <CapsuleNavButton
-            variant="blue"
-            badgeText="MỚI"
-            badgeColor="bg-[#10b981]"
-            onClick={() => router.push(DEMO_WRITE_TEST_PATH)}
-          >
-            <div className="flex h-6 w-6 items-center justify-center md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic-writing.9b3fd4e6.png"
-                alt="Writing"
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=writing'
-                }}
-              />
-            </div>
-            <div className="flex items-center gap-0.5">
-              <span className="text-[9px] font-black tracking-wider uppercase md:text-[10px]">
-                Writing
-              </span>
-              <ChevronDown className="h-2.5 w-2.5 text-blue-500" />
-            </div>
-          </CapsuleNavButton>
-
-          {/* Speaking Button */}
-          <CapsuleNavButton variant="blue" onClick={() => router.push(DEMO_SPEAKING_TEST_PATH)}>
-            <div className="flex h-6 w-6 items-center justify-center md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic-speaking.3f0031fd.png"
-                alt="Speaking"
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=speaking'
-                }}
-              />
-            </div>
-            <div className="flex items-center gap-0.5">
-              <span className="text-[9px] font-black tracking-wider uppercase md:text-[10px]">
-                Speaking
-              </span>
-              <ChevronDown className="h-2.5 w-2.5 text-blue-500" />
-            </div>
-          </CapsuleNavButton>
-
-          {/* Vocabulary Button */}
-          <CapsuleNavButton variant="blue">
-            <div className="flex h-6 w-6 items-center justify-center md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic-vocab.1dd303ec.png"
-                alt="Vocabulary"
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=vocab'
-                }}
-              />
-            </div>
-            <div className="flex items-center gap-0.5">
-              <span className="text-[9px] font-black tracking-wider uppercase md:text-[10px]">
-                Vocabulary
-              </span>
-              <ChevronDown className="h-2.5 w-2.5 text-blue-500" />
-            </div>
-          </CapsuleNavButton>
-
-          {/* Luyện Tập Button */}
-          <CapsuleNavButton variant="orange" badgeText="MỚI" badgeColor="bg-[#10b981]">
-            <div className="flex h-6 w-6 items-center justify-center md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic-practice.png"
-                alt="Luyện tập"
-                className="h-full w-full object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] transition-transform duration-200 group-hover:scale-110"
-              />
-            </div>
-            <span className="text-[9px] font-black tracking-wider uppercase md:text-[10px]">
-              Luyện tập
-            </span>
-          </CapsuleNavButton>
-
-          {/* Coin Counter Pill */}
-          <div className="flex h-[46px] min-w-[80px] items-center gap-2 rounded-xl border-b-[2.5px] border-[#fde047] bg-gradient-to-b from-[#fffbeb] to-[#fef08a] px-2.5 py-1 shadow-sm md:h-[50px] md:min-w-[90px]">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-yellow-400 bg-amber-400 text-amber-950 shadow-xs md:h-7 md:w-7">
-              <span className="text-xs font-black">C</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[7.5px] font-extrabold tracking-wider text-amber-800 uppercase md:text-[8.5px]">
-                COIN
-              </span>
-              <span className="-mt-1 text-xs font-black text-amber-950 md:text-sm">0</span>
-            </div>
+            <CurrencyCard
+              iconSrc="/assets/topbar/ic_diamond_3d.webp"
+              iconAlt="Kim Cương"
+              label="KIM CƯƠNG"
+              value={0}
+              onClick={() => router.push('/')}
+            />
           </div>
+
+          {/* Right: 3D Hamburger Menu Button */}
+          <HamburgerButton onClick={() => setIsDrawerOpen(true)} />
         </div>
 
-        {/* ================= CENTER SECTION: DREAM CLOUD AUTH HUB ================= */}
-        <div className="relative mx-auto flex shrink-0 items-center justify-center">
-          {/* Authentic Pure Vector Cloud Background */}
-          <div className="pointer-events-none absolute top-1/2 left-1/2 -z-10 hidden h-[110px] w-[180px] -translate-x-1/2 -translate-y-1/2 sm:block md:h-[135px] md:w-[220px]">
-            <svg
-              viewBox="0 0 200 120"
-              className="h-full w-full overflow-visible drop-shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
-              preserveAspectRatio="none"
-              fill="none"
-            >
-              <g fill="#ffffff">
-                <rect x="25" y="20" width="150" height="80" rx="35" />
-                <circle cx="35" cy="55" r="30" />
-                <circle cx="65" cy="28" r="28" />
-                <circle cx="105" cy="20" r="32" />
-                <circle cx="145" cy="28" r="28" />
-                <circle cx="170" cy="55" r="30" />
-                <circle cx="65" cy="92" r="26" />
-                <circle cx="105" cy="98" r="28" />
-                <circle cx="145" cy="92" r="26" />
-              </g>
-            </svg>
+        {/* ================= DESKTOP FULL-WIDTH TOPBAR (>= 1280px) ================= */}
+        <div className="top-navbar-content no-scrollbar hidden w-full items-center justify-between gap-2 overflow-x-auto pt-2 pb-1.5 xl:flex xl:gap-3 2xl:gap-6 2xl:pt-3.5">
+          {/* ================= LEFT GROUP (5 BUTTONS) ================= */}
+          <div className="flex shrink-0 items-center gap-1.5 xl:gap-2 2xl:gap-3">
+            {/* 1. THÁCH ĐẤU */}
+            <GameNavButton
+              label="Thách đấu"
+              iconSrc="/assets/topbar/ic_challenge_3d.webp"
+              iconAlt="Thách đấu"
+              onClick={handleThachDau}
+              active={pathname === '/challenge'}
+            />
+
+            {/* 2. WRITING ▼ */}
+            <GameNavButton
+              label="Writing"
+              iconSrc="/assets/topbar/ic_writing_3d.webp"
+              iconAlt="Writing"
+              hasDropdown
+              isDropdownOpen={activeDropdown === 'writing'}
+              onToggleDropdown={() => toggleDropdown('writing')}
+              active={pathname.includes('/writing')}
+              dropdownContent={
+                <div className="flex flex-col gap-1 p-1">
+                  <button
+                    type="button"
+                    onClick={handleWriting}
+                    className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
+                  >
+                    Luyện Viết Thử
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push('/exam')}
+                    className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
+                  >
+                    Đề Thi Writing
+                  </button>
+                </div>
+              }
+            />
+
+            {/* 3. SPEAKING ▼ */}
+            <GameNavButton
+              label="Speaking"
+              iconSrc="/assets/topbar/ic_speaking_3d.webp"
+              iconAlt="Speaking"
+              hasDropdown
+              isDropdownOpen={activeDropdown === 'speaking'}
+              onToggleDropdown={() => toggleDropdown('speaking')}
+              active={pathname.includes('/speaking')}
+              dropdownContent={
+                <div className="flex flex-col gap-1 p-1">
+                  <button
+                    type="button"
+                    onClick={handleSpeaking}
+                    className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
+                  >
+                    Luyện Nói Thử
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push('/exam')}
+                    className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
+                  >
+                    Đề Thi Speaking
+                  </button>
+                </div>
+              }
+            />
+
+            {/* 4. VOCABULARY ▼ */}
+            <GameNavButton
+              label="Vocabulary"
+              iconSrc="/assets/topbar/ic_vocab_3d.webp"
+              iconAlt="Vocabulary"
+              hasDropdown
+              isDropdownOpen={activeDropdown === 'vocab'}
+              onToggleDropdown={() => toggleDropdown('vocab')}
+              active={pathname === '/notebook'}
+              dropdownContent={
+                <div className="flex flex-col gap-1 p-1">
+                  <button
+                    type="button"
+                    onClick={handleVocabulary}
+                    className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
+                  >
+                    Sổ Tay Từ Vựng
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push('/exam')}
+                    className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
+                  >
+                    Kho Từ Vựng
+                  </button>
+                </div>
+              }
+            />
+
+            {/* 5. LUYỆN TẬP (Orange with NEW Ribbon) */}
+            <GameNavButton
+              label="Luyện tập"
+              iconSrc="/assets/topbar/ic_potion_3d.webp"
+              iconAlt="Luyện tập"
+              isOrange
+              hasNewRibbon
+              onClick={handlePractice}
+              active={pathname === '/'}
+            />
           </div>
 
-          {status === 'authenticated' && user ? (
-            <div className="relative z-10 px-2 py-1 sm:px-4 sm:py-2">
-              <button
-                onClick={() => setMenuOpen((open) => !open)}
-                className="flex cursor-pointer items-center gap-1.5 rounded-full border-2 border-sky-200 bg-white/95 px-3 py-1 shadow-sm backdrop-blur-md transition-all hover:bg-white sm:px-4 sm:py-1.5"
-              >
-                <span className="text-[10px] font-black tracking-wide text-sky-950 uppercase sm:text-xs md:text-sm">
-                  {user.role}
+          {/* ================= CENTER GROUP (COIN - AUTH - KIM CƯƠNG) ================= */}
+          <div className="flex shrink-0 -translate-y-1 items-center gap-1.5 sm:-translate-y-1.5 xl:gap-2.5 2xl:gap-4">
+            {/* 6. COIN Counter */}
+            <CurrencyCard
+              iconSrc="/assets/topbar/ic_coin_3d.webp"
+              iconAlt="Coin"
+              label="COIN"
+              value={0}
+              onClick={() => router.push('/')}
+            />
+
+            {/* 7. Stacked Authentication Panel */}
+            <CenterAuthPanel
+              status={status}
+              user={user}
+              onLogin={handleLogin}
+              onRegister={handleRegister}
+              onLogout={() => logout.mutate(undefined, { onSettled: () => router.push('/') })}
+            />
+
+            {/* 8. KIM CƯƠNG Counter */}
+            <CurrencyCard
+              iconSrc="/assets/topbar/ic_diamond_3d.webp"
+              iconAlt="Kim Cương"
+              label="KIM CƯƠNG"
+              value={0}
+              onClick={() => router.push('/')}
+            />
+          </div>
+
+          {/* ================= RIGHT GROUP (5 BUTTONS) ================= */}
+          <div className="flex shrink-0 items-center gap-1.5 xl:gap-2 2xl:gap-3">
+            {/* 9. XẾP HẠNG */}
+            <GameNavButton
+              label="Xếp hạng"
+              iconSrc="/assets/topbar/ic_trophy_3d.webp"
+              iconAlt="Xếp hạng"
+              onClick={handleRanking}
+              active={pathname === '/ranking'}
+            />
+
+            {/* 10. LỊCH SỬ */}
+            <GameNavButton
+              label="Lịch sử"
+              iconSrc="/assets/topbar/ic_book_3d.webp"
+              iconAlt="Lịch sử"
+              onClick={handleHistory}
+              active={pathname === '/history'}
+            />
+
+            {/* 11. TRƯỜNG CỦA TÔI */}
+            <GameNavButton
+              label="Trường của tôi"
+              iconSrc="/assets/topbar/ic_school_3d.webp"
+              iconAlt="Trường của tôi"
+              onClick={handleSchool}
+              active={pathname === '/school-ranking'}
+            />
+
+            {/* 12. NHIỆM VỤ */}
+            <GameNavButton
+              label="Nhiệm vụ"
+              iconSrc="/assets/topbar/ic_task_3d.webp"
+              iconAlt="Nhiệm vụ"
+              onClick={handleTasks}
+              active={pathname === '/tasks'}
+              badge={
+                <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-white bg-rose-500 shadow-xs">
+                  <span className="text-[7px] leading-none font-black text-white">!</span>
                 </span>
-                <ChevronDown className="h-3 w-3 text-sky-600 sm:h-3.5 sm:w-3.5" />
-              </button>
+              }
+            />
 
-              {menuOpen && (
-                <div className="absolute top-full right-0 z-50 mt-2 min-w-[160px] overflow-hidden rounded-2xl border border-sky-100 bg-white/95 p-1.5 shadow-xl backdrop-blur-xl">
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false)
-                      router.push('/account/change-password')
-                    }}
-                    className="w-full cursor-pointer rounded-xl px-4 py-2 text-left text-xs font-bold text-slate-800 transition-colors hover:bg-sky-50"
-                  >
-                    Đổi mật khẩu
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false)
-                      logout.mutate(undefined, { onSettled: () => router.push('/') })
-                    }}
-                    className="w-full cursor-pointer rounded-xl px-4 py-2 text-left text-xs font-bold text-rose-600 transition-colors hover:bg-rose-50"
-                  >
-                    Đăng xuất
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="relative z-10 flex flex-col gap-1 p-0.5 sm:w-[145px] sm:gap-1.5 sm:p-1 md:w-[155px]">
-              {/* Đăng Nhập Button */}
-              <button
-                onClick={handleLogin}
-                className="group relative w-full cursor-pointer text-center transition-all hover:-translate-y-0.5 active:translate-y-[2px]"
-              >
-                <div className="rounded-full border-b-[2px] border-[#bfdbfe] bg-[#e2ebf8] px-2.5 py-1 text-[8.5px] font-black tracking-wider text-[#1e3a8a] uppercase shadow-xs transition-all hover:bg-[#d5e4f5] sm:px-4 sm:py-1.5 sm:text-[11px] md:border-b-[2.5px] md:text-xs">
-                  ĐĂNG NHẬP
-                </div>
-              </button>
-
-              {/* Đăng Ký Button */}
-              <button
-                onClick={handleSignup}
-                className="group relative w-full cursor-pointer text-center transition-all hover:-translate-y-0.5 active:translate-y-[2px]"
-              >
-                <div className="rounded-full border-b-[2px] border-[#b91c1c] bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-2.5 py-1 text-[8.5px] font-black tracking-wider text-white uppercase shadow-xs transition-all hover:brightness-105 sm:px-4 sm:py-1.5 sm:text-[11px] md:border-b-[2.5px] md:text-xs">
-                  ĐĂNG KÝ
-                </div>
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* ================= RIGHT SECTION: UTILITY CONTROLS CAPSULE ================= */}
-        <div className="no-scrollbar flex max-w-[42vw] shrink-0 items-center justify-end gap-1 overflow-x-auto rounded-xl border border-white/70 bg-white/60 p-1 shadow-[0_8px_24px_rgba(30,58,138,0.06)] backdrop-blur-xl sm:max-w-none sm:gap-1.5 sm:rounded-2xl sm:p-1.5 md:gap-2">
-          {/* Diamond Counter Pill */}
-          <div className="flex h-[38px] min-w-[70px] items-center gap-1 rounded-lg border-b-[2px] border-[#bae6fd] bg-gradient-to-b from-white to-[#f0f9ff] px-1.5 py-0.5 shadow-sm sm:h-[46px] sm:min-w-[90px] sm:rounded-xl sm:px-2.5 sm:py-1 md:h-[50px] md:min-w-[105px] md:border-b-[2.5px]">
-            <div className="h-4 w-4 shrink-0 sm:h-5 sm:w-5 md:h-6 md:w-6">
-              <img
-                src="/clone-assets/media/icon-diamonds.580d8a36.png"
-                alt="Kim Cương"
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=diamond'
-                }}
-              />
-            </div>
-            <div className="flex flex-1 flex-col">
-              <span className="text-[6.5px] font-extrabold tracking-wider text-sky-800 uppercase sm:text-[7.5px] md:text-[8.5px]">
-                KIM CƯƠNG
-              </span>
-              <span className="-mt-1 text-[11px] font-black text-sky-950 sm:text-xs md:text-sm">
-                0
-              </span>
-            </div>
-            <button
-              aria-label="Thêm kim cương"
-              className="flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded border-b-2 border-emerald-600 bg-emerald-500 text-[8px] font-black text-white shadow-xs transition-transform hover:bg-emerald-400 active:scale-95 sm:h-4.5 sm:w-4.5 sm:rounded-md sm:text-[10px]"
-            >
-              <Plus className="h-2 w-2 sm:h-2.5 sm:w-2.5" />
-            </button>
+            {/* 13. THÔNG BÁO */}
+            <GameNavButton
+              label="Thông báo"
+              iconSrc="/assets/topbar/ic_bell_3d.webp"
+              iconAlt="Thông báo"
+              onClick={handleNotifications}
+              active={pathname === '/notifications'}
+              badge={<UnreadBadge />}
+            />
           </div>
-
-          {/* Xếp Hạng Button */}
-          <CapsuleNavButton
-            variant="blue"
-            onClick={handleRanking}
-            className={cn(pathname === '/ranking' && 'ring-2 ring-amber-400')}
-          >
-            <div className="flex h-5 w-5 shrink-0 items-center justify-center sm:h-6 sm:w-6 md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/icon_trophy.32089636.png"
-                alt="Xếp hạng"
-                className="h-4 w-4 object-contain sm:h-5 sm:w-5 md:h-6 md:w-6"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=trophy'
-                }}
-              />
-            </div>
-            <span className="text-[8px] font-black tracking-wider uppercase sm:text-[9px] md:text-[10px]">
-              Xếp hạng
-            </span>
-          </CapsuleNavButton>
-
-          {/* Lịch Sử Button (Hidden on small mobile) */}
-          <CapsuleNavButton
-            variant="blue"
-            onClick={() => router.push('/history')}
-            className={cn('hidden sm:flex', pathname === '/history' && 'ring-2 ring-amber-400')}
-          >
-            <div className="flex h-5 w-5 shrink-0 items-center justify-center sm:h-6 sm:w-6 md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic-history.png"
-                alt="Lịch sử"
-                className="h-full w-full object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.12)]"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=history'
-                }}
-              />
-            </div>
-            <span className="text-[8px] font-black tracking-wider uppercase sm:text-[9px] md:text-[10px]">
-              Lịch sử
-            </span>
-          </CapsuleNavButton>
-
-          {/* Trường Của Tôi Button (Hidden on mobile and tablet portrait) */}
-          <CapsuleNavButton
-            variant="blue"
-            onClick={() => router.push('/school-ranking')}
-            className={cn(
-              'hidden lg:flex',
-              pathname === '/school-ranking' && 'ring-2 ring-amber-400',
-            )}
-          >
-            <div className="flex h-5 w-5 shrink-0 items-center justify-center sm:h-6 sm:w-6 md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic-school.png"
-                alt="Trường của tôi"
-                className="h-full w-full object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.12)]"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=school'
-                }}
-              />
-            </div>
-            <span className="text-[8px] font-black tracking-wider uppercase sm:text-[9px] md:text-[10px]">
-              Trường của tôi
-            </span>
-          </CapsuleNavButton>
-
-          {/* Nhiệm Vụ Button (Hidden on small mobile) */}
-          <CapsuleNavButton
-            variant="blue"
-            onClick={() => router.push('/tasks')}
-            className={cn('hidden md:flex', pathname === '/tasks' && 'ring-2 ring-amber-400')}
-          >
-            <div className="flex h-5 w-5 shrink-0 items-center justify-center sm:h-6 sm:w-6 md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic-task.png"
-                alt="Nhiệm vụ"
-                className="h-full w-full object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.12)]"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=task'
-                }}
-              />
-            </div>
-            <span className="text-[8px] font-black tracking-wider uppercase sm:text-[9px] md:text-[10px]">
-              Nhiệm vụ
-            </span>
-          </CapsuleNavButton>
-
-          {/* Thông Báo Button */}
-          <CapsuleNavButton
-            variant="blue"
-            onClick={() => router.push('/notifications')}
-            className={cn(pathname === '/notifications' && 'ring-2 ring-amber-400')}
-          >
-            <div className="relative flex h-5 w-5 shrink-0 items-center justify-center sm:h-6 sm:w-6 md:h-7 md:w-7">
-              <img
-                src="/clone-assets/media/ic_bell.19fd4917.png"
-                alt="Thông báo"
-                className="h-4 w-4 object-contain sm:h-5 sm:w-5 md:h-6 md:w-6"
-                onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
-                    'https://api.dicebear.com/7.x/bottts/svg?seed=bell'
-                }}
-              />
-              <UnreadBadge />
-            </div>
-            <span className="text-[8px] font-black tracking-wider uppercase sm:text-[9px] md:text-[10px]">
-              Thông báo
-            </span>
-          </CapsuleNavButton>
-
-          {/* Vietnam Flag / Language Selector */}
-          <button
-            aria-label="Ngôn ngữ Tiếng Việt"
-            className="group relative flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-amber-300 bg-red-600 shadow-[0_2px_8px_rgba(220,38,38,0.25)] transition-all hover:scale-105 active:translate-y-[2px] sm:h-9 sm:w-9 md:h-10 md:w-10"
-          >
-            <div className="flex items-center justify-center">
-              <svg viewBox="0 0 30 20" className="h-5 w-5 sm:h-6 sm:w-6">
-                <polygon
-                  fill="#FFFF00"
-                  points="15,4 16.2,8.8 21.2,8.8 21.2,8.8 17.2,11.8 18.7,16.6 15,13.6 11.3,16.6 12.8,11.8 8.8,8.8 13.8,8.8"
-                />
-              </svg>
-            </div>
-          </button>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Mobile Navigation Drawer */}
+      <MobileNavDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        status={status}
+        user={user}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        onLogout={() => logout.mutate(undefined, { onSettled: () => router.push('/') })}
+      />
+    </>
   )
 }
