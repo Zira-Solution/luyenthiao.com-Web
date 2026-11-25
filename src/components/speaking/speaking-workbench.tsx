@@ -68,7 +68,7 @@ export function SpeakingWorkbench({
     <div className="relative min-h-[100dvh] w-full overflow-hidden">
       {/* Nền trang */}
       <Image
-        src="/clone-assets/speaking/bg.894c95ef.png"
+        src="/clone-assets/speaking/bg.894c95ef.webp"
         alt=""
         fill
         priority
@@ -85,7 +85,7 @@ export function SpeakingWorkbench({
             aria-label="Thoát"
           >
             <Image
-              src="/clone-assets/speaking/btn-out.94d0dd6c.png"
+              src="/clone-assets/speaking/btn-out.94d0dd6c.webp"
               alt=""
               width={118}
               height={48}
@@ -116,7 +116,7 @@ export function SpeakingWorkbench({
         {current.partTitle ? (
           <div className="relative mx-auto -mt-1 mb-1 w-full max-w-3xl px-4">
             <Image
-              src="/clone-assets/speaking/fr-exam-header.ec6a528f.png"
+              src="/clone-assets/speaking/fr-exam-header.ec6a528f.webp"
               alt=""
               width={0}
               height={0}
@@ -162,7 +162,7 @@ export function SpeakingWorkbench({
               className="relative flex cursor-pointer items-center gap-1 p-1"
             >
               <Image
-                src="/clone-assets/speaking/btn-next.776b1baf.png"
+                src="/clone-assets/speaking/btn-next.776b1baf.webp"
                 alt={isLast ? 'Nộp bài' : 'Câu tiếp theo'}
                 width={0}
                 height={0}

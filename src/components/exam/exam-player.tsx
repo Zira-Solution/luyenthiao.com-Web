@@ -278,7 +278,7 @@ export function ExamPlayer({ exam, attempt, mode, onExit }: ExamPlayerProps): Re
   return (
     <main className="relative w-full h-[100dvh] overflow-hidden bg-[#16143c] flex flex-col justify-between select-none font-sans">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src="/clone-assets/bg.1e17df80.webp"
         alt=""
         fill
         priority
@@ -317,7 +317,7 @@ export function ExamPlayer({ exam, attempt, mode, onExit }: ExamPlayerProps): Re
             className="absolute top-1/2 -translate-y-1/2 w-24 h-24 flex items-center justify-center transition-all duration-500 pointer-events-none"
             style={{ left: `calc(${progressPercent}% - 48px)` }}
           >
-            <Image src="/clone-assets/rocket_flyer.png" alt="Rocket progress" fill className="object-contain" />
+            <Image src="/clone-assets/rocket_flyer.webp" alt="Rocket progress" fill className="object-contain" />
           </div>
         </div>
 
@@ -332,7 +332,7 @@ export function ExamPlayer({ exam, attempt, mode, onExit }: ExamPlayerProps): Re
             </div>
           )}
           <div className="relative w-16 h-10 max-md:hidden">
-            <Image src="/clone-assets/exam/MOVERS.824079bd.png" alt="MOVERS" fill className="object-contain" />
+            <Image src="/clone-assets/exam/MOVERS.824079bd.webp" alt="MOVERS" fill className="object-contain" />
           </div>
         </div>
       </header>

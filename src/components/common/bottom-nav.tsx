@@ -30,7 +30,7 @@ const NAV_ITEMS_LEFT: NavItemData[] = [
     href: '/',
     labelLine1: 'TẤT CẢ',
     labelLine2: 'CẤP ĐỘ',
-    icon: 'level-filter.337790ac.png',
+    icon: 'level-filter.337790ac.webp',
     dropdown: true,
     palette: {
       bg: 'bg-gradient-to-b from-[#fffef7] via-[#fffbeb] to-[#fef3c7]',
@@ -44,7 +44,7 @@ const NAV_ITEMS_LEFT: NavItemData[] = [
     href: '/placement-test',
     labelLine1: 'KIỂM TRA',
     labelLine2: 'TRÌNH ĐỘ',
-    icon: 'map.30295c2a.png',
+    icon: 'map.30295c2a.webp',
     hideOnTablet: true,
     palette: {
       bg: 'bg-gradient-to-b from-[#fff1f2] via-[#ffe4e6] to-[#fecdd3]',
@@ -57,7 +57,7 @@ const NAV_ITEMS_LEFT: NavItemData[] = [
   {
     href: '/notebook',
     labelLine1: 'SỔ TAY',
-    icon: 'icon_target.87047c90.png',
+    icon: 'icon_target.87047c90.webp',
     badge: 'MỚI',
     hideOnMobile: true,
     palette: {
@@ -75,13 +75,13 @@ const NAV_ITEMS_RIGHT: NavItemData[] = [
     href: '#',
     labelLine1: 'KÍCH HOẠT',
     labelLine2: 'TÀI KHOẢN',
-    icon: 'icon_trophy.32089636.png',
+    icon: 'icon_trophy.32089636.webp',
     notification: true,
     palette: {
       bg: 'bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#bae6fd]',
       border: 'border-t-white border-x-[#bae6fd]/80 border-b-[#0284c7]',
       text: 'text-[#0369a1]',
-      shadow: 'shadow-[0_2px_6px_rgba(2,132,199,0.16)]',
+      shadow: 'shadow-[0_2px_6px_rgba(225,29,72,0.16)]',
       activeBorder: 'ring-2 ring-sky-400',
     },
   },
@@ -89,7 +89,7 @@ const NAV_ITEMS_RIGHT: NavItemData[] = [
     href: '#',
     labelLine1: 'THẦY CÔ',
     labelLine2: 'PHỤ HUYNH',
-    icon: 'ic_free.7a24c735.png',
+    icon: 'ic_free.7a24c735.webp',
     hideOnTablet: true,
     palette: {
       bg: 'bg-gradient-to-b from-[#f5f3ff] via-[#ede9fe] to-[#ddd6fe]',
@@ -103,7 +103,7 @@ const NAV_ITEMS_RIGHT: NavItemData[] = [
     href: '#',
     labelLine1: 'MỜI',
     labelLine2: 'BẠN BÈ',
-    icon: 'icon_bag.b6e8d7e3.png',
+    icon: 'icon_bag.b6e8d7e3.webp',
     hideOnMobile: true,
     palette: {
       bg: 'bg-gradient-to-b from-[#fffbf5] via-[#fef7ee] to-[#ffedd5]',
@@ -243,7 +243,7 @@ export function BottomNav() {
             >
               <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
               <img
-                src="/clone-assets/media/icon-chat.fa14d2f7.png"
+                src="/clone-assets/media/icon-chat.fa14d2f7.webp"
                 alt="Chat"
                 className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/chat:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
               />
@@ -266,12 +266,12 @@ export function BottomNav() {
 
                 {/* Baby Lion Mascot */}
                 <img
-                  src="/clone-assets/mascot/mascot_standing_front.png"
+                  src="/clone-assets/mascot/mascot_standing_front.webp"
                   alt="Luyện Thi Ảo Mascot"
                   className="relative z-10 h-full w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)]"
                   onError={(e) => {
                     ;(e.target as HTMLImageElement).src =
-                      '/clone-assets/media/ic-challenge.9b2229cb.png'
+                      '/clone-assets/media/ic-challenge.9b2229cb.webp'
                   }}
                 />
 
@@ -308,7 +308,7 @@ export function BottomNav() {
             >
               <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
               <img
-                src="/clone-assets/media/icon-call.c4ff351b.png"
+                src="/clone-assets/media/icon-call.c4ff351b.webp"
                 alt="Call Hotline"
                 className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/call:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
               />

@@ -18,7 +18,7 @@ export function SpeakingResult({
   return (
     <div className="relative min-h-[100dvh] w-full overflow-y-auto bg-page-bg px-4 py-10">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src="/clone-assets/bg.1e17df80.webp"
         alt=""
         fill
         priority
@@ -37,7 +37,7 @@ export function SpeakingResult({
 
         <div className="relative mt-4">
           <Image
-            src="/clone-assets/writing/default-frame.png"
+            src="/clone-assets/writing/default-frame.webp"
             alt=""
             width={120}
             height={120}
@@ -54,7 +54,7 @@ export function SpeakingResult({
 
         <div className="mt-6 flex items-center gap-2 text-5xl">
           <Image
-            src="/clone-assets/media/icon_trophy.32089636.png"
+            src="/clone-assets/media/icon_trophy.32089636.webp"
             alt=""
             width={52}
             height={52}

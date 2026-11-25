@@ -16,7 +16,7 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
         <Link href="/" className="hidden sm:block w-full max-w-[330px] hover:scale-105 active:scale-95 transition-transform block">
           <div className="relative aspect-[357/113] w-full">
             <Image
-              src="/clone-assets/exam/bg-back.13414e49.png"
+              src="/clone-assets/exam/bg-back.13414e49.webp"
               alt="Trở về"
               fill
               priority
@@ -33,7 +33,7 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
         <Link href="/" className="sm:hidden w-[55%] max-w-[169px] hover:scale-105 active:scale-95 transition-transform block">
           <div className="relative aspect-[189/113] w-full">
             <Image
-              src="/clone-assets/exam/bg-back-m.1d28391b.png"
+              src="/clone-assets/exam/bg-back-m.1d28391b.webp"
               alt="Trở về"
               fill
               priority
@@ -48,7 +48,7 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
         {/* Ribbon Title */}
         <div className="relative aspect-[632/140] w-full">
           <Image
-            src="/clone-assets/exam/bg-title.de447cb5.png"
+            src="/clone-assets/exam/bg-title.de447cb5.webp"
             alt="Tiêu đề"
             fill
             priority
@@ -68,7 +68,7 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
             className="relative aspect-[456/126] w-full block hover:scale-105 active:scale-95 transition-transform"
           >
             <Image
-              src="/clone-assets/exam/bg-speaking-video-btn.80759ee2.png"
+              src="/clone-assets/exam/bg-speaking-video-btn.80759ee2.webp"
               alt="Video bài thi nói"
               fill
               className="object-contain"
@@ -87,7 +87,7 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
         {/* Desktop Random Button */}
         <button className="hidden sm:block w-full max-w-[330px] hover:scale-105 active:scale-95 transition-transform relative aspect-[415/112] cursor-pointer">
           <Image
-            src="/clone-assets/exam/bg-random.66cd8920.png"
+            src="/clone-assets/exam/bg-random.66cd8920.webp"
             alt="Ngẫu nhiên"
             fill
             priority
@@ -102,7 +102,7 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
         {/* Mobile Random Button */}
         <button className="sm:hidden w-[55%] max-w-[169px] hover:scale-105 active:scale-95 transition-transform relative aspect-[186/112] cursor-pointer">
           <Image
-            src="/clone-assets/exam/bg-random-m.dc004e87.png"
+            src="/clone-assets/exam/bg-random-m.dc004e87.webp"
             alt="Ngẫu nhiên"
             fill
             priority

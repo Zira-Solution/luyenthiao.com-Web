@@ -26,7 +26,7 @@ function QuestionHeader({
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-[#f7e9d4] px-4 py-3 shadow-md">
       <Image
-        src="/clone-assets/speaking/teacher-avatar.68a16d1c.png"
+        src="/clone-assets/speaking/teacher-avatar.68a16d1c.webp"
         alt="Giáo viên"
         width={56}
         height={56}
@@ -40,7 +40,7 @@ function QuestionHeader({
         {question.vi ? <p className="text-xs text-slate-500">{question.vi}</p> : null}
       </div>
       <Image
-        src="/clone-assets/speaking/ic-speaker.1fe89d31.png"
+        src="/clone-assets/speaking/ic-speaker.1fe89d31.webp"
         alt="Phát âm thanh"
         width={34}
         height={34}

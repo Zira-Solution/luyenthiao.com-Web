@@ -48,21 +48,21 @@ export const GameInput = forwardRef<HTMLInputElement, GameInputProps>(
             <div className="absolute top-0 left-0 w-full h-full -z-[1]">
               <div className="relative h-full w-full flex">
                 <Image 
-                  src="/clone-assets/bg-input-header.png" 
+                  src="/clone-assets/bg-input-header.webp" 
                   alt="" 
                   width={30} 
                   height={60} 
                   className="h-full w-auto" 
                 />
                 <Image 
-                  src="/clone-assets/bg-input-body.png" 
+                  src="/clone-assets/bg-input-body.webp" 
                   alt="" 
                   width={300} 
                   height={60} 
                   className="h-full w-full min-w-0" 
                 />
                 <Image 
-                  src="/clone-assets/bg-input-footer.png" 
+                  src="/clone-assets/bg-input-footer.webp" 
                   alt="" 
                   width={30} 
                   height={60} 

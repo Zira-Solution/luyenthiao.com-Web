@@ -20,7 +20,7 @@ export default function ForgotPasswordPage(): React.ReactElement {
     <main className="min-h-screen relative flex items-center justify-center overflow-hidden bg-page-bg px-4 py-12">
       <div className="absolute inset-0 z-0">
         <Image
-          src="/clone-assets/bg.1e17df80.png"
+          src="/clone-assets/bg.1e17df80.webp"
           alt="Space Background"
           fill
           className="object-cover"

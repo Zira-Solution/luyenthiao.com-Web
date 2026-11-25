@@ -85,7 +85,7 @@ export function LevelMap({ level }: LevelMapProps): ReactElement {
                       >
                         {/* Checkpoint circular badge */}
                         <Image
-                          src="/clone-assets/exam/bg-checkpoint.95231678.png"
+                          src="/clone-assets/exam/bg-checkpoint.95231678.webp"
                           alt={`Thử thách ${levelNum}`}
                           fill
                           className="object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)]"
@@ -99,7 +99,7 @@ export function LevelMap({ level }: LevelMapProps): ReactElement {
                         {/* Checkpoint Title ribbon */}
                         <div className="absolute w-[132.743362%] -left-[16.371681%] top-[64.159292%] aspect-[319/113]">
                           <Image
-                            src="/clone-assets/exam/bg-checkpoint-title.f554fd72.png"
+                            src="/clone-assets/exam/bg-checkpoint-title.f554fd72.webp"
                             alt=""
                             fill
                             className="object-contain"
@@ -115,7 +115,7 @@ export function LevelMap({ level }: LevelMapProps): ReactElement {
                       <div className="relative w-full h-full opacity-90">
                         {/* Checkpoint circular badge disabled */}
                         <Image
-                          src="/clone-assets/exam/bg-checkpoint-disabled.49d83d62.png"
+                          src="/clone-assets/exam/bg-checkpoint-disabled.49d83d62.webp"
                           alt={`Thử thách ${levelNum} (khoá)`}
                           fill
                           className="object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]"
@@ -129,7 +129,7 @@ export function LevelMap({ level }: LevelMapProps): ReactElement {
                         {/* Locked Padlock Badge */}
                         <div className="absolute z-10 w-[28.105263%] aspect-[183/231] right-[1%] top-0">
                           <Image
-                            src="/clone-assets/exam/bg-locked.451398ce.png"
+                            src="/clone-assets/exam/bg-locked.451398ce.webp"
                             alt="Bị khoá"
                             fill
                             className="object-contain"
@@ -138,7 +138,7 @@ export function LevelMap({ level }: LevelMapProps): ReactElement {
                         {/* Checkpoint Title ribbon disabled */}
                         <div className="absolute w-[132.743362%] -left-[16.371681%] top-[64.159292%] aspect-[319/113]">
                           <Image
-                            src="/clone-assets/exam/bg-checkpoint-title-disabled.c4613481.png"
+                            src="/clone-assets/exam/bg-checkpoint-title-disabled.c4613481.webp"
                             alt=""
                             fill
                             className="object-contain"

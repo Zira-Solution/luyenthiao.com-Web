@@ -31,7 +31,7 @@ export function ExamModeSelectModal({ data, onStart }: { data: CheckpointData; o
     >
       {/* Border frame */}
       <Image
-        src="/clone-assets/exam/border.c71a6ea1.png"
+        src="/clone-assets/exam/border.c71a6ea1.webp"
         alt=""
         fill
         className="object-fill pointer-events-none"
@@ -45,7 +45,7 @@ export function ExamModeSelectModal({ data, onStart }: { data: CheckpointData; o
         aria-label="Đóng"
       >
         <Image
-          src="/clone-assets/exam/close.6f7d2509.png"
+          src="/clone-assets/exam/close.6f7d2509.webp"
           alt="Close"
           fill
           className="object-contain"
@@ -54,14 +54,14 @@ export function ExamModeSelectModal({ data, onStart }: { data: CheckpointData; o
 
       {/* Bottom decorations */}
       <Image
-        src="/clone-assets/exam/icon-bottom-left.86e6ba91.png"
+        src="/clone-assets/exam/icon-bottom-left.86e6ba91.webp"
         alt=""
         width={180}
         height={90}
         className="absolute -bottom-4 -left-4 z-[3] pointer-events-none max-md:hidden"
       />
       <Image
-        src="/clone-assets/exam/icon-bottom-right.4c460589.png"
+        src="/clone-assets/exam/icon-bottom-right.4c460589.webp"
         alt=""
         width={240}
         height={210}
@@ -161,7 +161,7 @@ export function ExamModeSelectModal({ data, onStart }: { data: CheckpointData; o
         >
           <div className="relative px-8 py-3 rounded-2xl bg-gradient-to-b from-cp-start-from to-cp-start-to border-b-4 border-cp-start-border shadow-lg flex items-center gap-2">
             <Image
-              src="/clone-assets/exam/rocket.67fd0fe5.png"
+              src="/clone-assets/exam/rocket.67fd0fe5.webp"
               alt=""
               width={36}
               height={36}

@@ -47,7 +47,7 @@ export function ExamResultView(): React.ReactElement {
           
           {/* Border Frame Decoration */}
           <Image
-            src="/clone-assets/exam/border.c71a6ea1.png"
+            src="/clone-assets/exam/border.c71a6ea1.webp"
             alt=""
             fill
             className="object-fill pointer-events-none rounded-[40px]"
@@ -59,7 +59,7 @@ export function ExamResultView(): React.ReactElement {
             className="absolute top-4 right-4 w-10 h-10 cursor-pointer hover:scale-105 active:scale-95 transition-transform z-20"
           >
             <Image
-              src="/clone-assets/exam/close.6f7d2509.png"
+              src="/clone-assets/exam/close.6f7d2509.webp"
               alt="Close"
               fill
               className="object-contain"
@@ -190,7 +190,7 @@ export function ExamResultView(): React.ReactElement {
         {/* Bottom Logo Decoration */}
         <div className="flex justify-center mt-6">
           <Image
-            src="/clone-assets/exam/MOVERS.824079bd.png"
+            src="/clone-assets/exam/MOVERS.824079bd.webp"
             alt="Movers"
             width={120}
             height={60}

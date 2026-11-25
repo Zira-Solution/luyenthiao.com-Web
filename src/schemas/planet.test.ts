@@ -22,7 +22,7 @@ describe('planets', () => {
       slug: 'starters',
       name: 'STARTERS',
       description: 'Hòn Đảo Kẹo Ngọt',
-      image: '/assets/planets/planet_candy_wonderland.png',
+      image: '/assets/planets/planet_candy_wonderland.webp',
       glowColor: '#ec4899',
       ribbonFrom: '#f472b6',
       ribbonTo: '#fb7185',

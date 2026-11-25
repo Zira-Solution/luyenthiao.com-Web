@@ -100,7 +100,7 @@ describe('decideRoute — pages', () => {
   )
 
   it.each([
-    '/clone-assets/media/bg-home.72e8fdd5.jpg',
+    '/clone-assets/media/bg-home.72e8fdd5.webp',
     '/image/logo.png',
     '/audio/a.mp3',
     '/clone-assets/a/B.PNG',

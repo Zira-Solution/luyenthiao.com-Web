@@ -169,9 +169,12 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
           <img
             src={planet.image}
             alt={planet.name}
+            loading={isActive ? 'eager' : 'lazy'}
+            fetchPriority={isActive ? 'high' : 'auto'}
+            decoding="async"
             className="h-full w-full object-contain drop-shadow-[0_18px_36px_rgba(30,58,138,0.25)] transition-transform duration-500"
             onError={(e) => {
-              ;(e.target as HTMLImageElement).src = '/clone-assets/media/planet_candy.png'
+              ;(e.target as HTMLImageElement).src = '/clone-assets/media/planet_candy.webp'
             }}
           />
           {/* Subtle 3D Island Contact Shadow */}
@@ -182,8 +185,10 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
             <>
               {/* Floating Pocket Watch - Left */}
               <img
-                src="/assets/planets/time_oasis_watch_left.png"
+                src="/assets/planets/time_oasis_watch_left.webp"
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="pointer-events-none absolute z-10 animate-[float-watch-left_4.2s_ease-in-out_infinite] drop-shadow-[0_6px_12px_rgba(30,58,138,0.2)] select-none motion-reduce:animate-none"
                 style={{
                   top: '4.47%',
@@ -194,8 +199,10 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
               />
               {/* Floating Pocket Watch - Right */}
               <img
-                src="/assets/planets/time_oasis_watch_right.png"
+                src="/assets/planets/time_oasis_watch_right.webp"
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="pointer-events-none absolute z-10 animate-[float-watch-right_5s_ease-in-out_1.8s_infinite] drop-shadow-[0_6px_12px_rgba(30,58,138,0.2)] select-none motion-reduce:animate-none"
                 style={{
                   top: '19.54%',

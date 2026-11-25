@@ -22,7 +22,7 @@ export function WritingResultOverview({
   return (
     <div className="relative flex min-h-[100dvh] w-full flex-col items-center overflow-y-auto bg-page-bg px-4 py-8">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src="/clone-assets/bg.1e17df80.webp"
         alt=""
         fill
         priority
@@ -41,7 +41,7 @@ export function WritingResultOverview({
         {/* Ngữ cảnh chúc mừng */}
         <div className="mt-6 flex flex-col items-center">
           <Image
-            src="/clone-assets/writing/congratulation-vi.png"
+            src="/clone-assets/writing/congratulation-vi.webp"
             alt="Chúc mừng"
             width={420}
             height={110}

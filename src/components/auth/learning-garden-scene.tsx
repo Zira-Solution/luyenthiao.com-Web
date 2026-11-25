@@ -80,7 +80,7 @@ export function LearningGardenScene(): React.ReactElement {
 
           {/* Layer C: Learning Garden Island Core (Asset with Grounded Lion & Books) */}
           <Image
-            src="/assets/learning-garden/island/garden_island_diorama.png"
+            src="/assets/learning-garden/island/garden_island_diorama.webp"
             alt="Đảo Vườn Học Tập Diệu Kỳ Luyện Thi Ảo"
             fill
             priority

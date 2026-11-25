@@ -68,7 +68,7 @@ export function WritingWorkbench({
   return (
     <div className="relative flex min-h-[100dvh] w-full flex-col bg-page-bg text-white">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src="/clone-assets/bg.1e17df80.webp"
         alt=""
         fill
         priority

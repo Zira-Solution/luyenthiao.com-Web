@@ -83,7 +83,7 @@ export function SpeakingPreview({
           </div>
           <div className="relative h-16 w-16">
             <Image
-              src="/clone-assets/writing/default-frame.png"
+              src="/clone-assets/writing/default-frame.webp"
               alt=""
               fill
               className="object-contain"

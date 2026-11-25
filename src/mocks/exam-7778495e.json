@@ -25,7 +25,7 @@
             "description": "Thực hành bài thi Movers chuẩn Cambridge trong phòng thi ảo Luyện Thi Ảo, luyện kỹ năng và cải thiện phản xạ tiếng Anh hiệu quả.",
             "featureImage": {
               "id": "/clone-assets/exam-media/30d2c141f28648bc8fdaad25d71a50c8.webp",
-              "url": "/clone-assets/exam-media/30d2c141f28648bc8fdaad25d71a50c8.png",
+              "url": "/clone-assets/exam-media/30d2c141f28648bc8fdaad25d71a50c8.webp",
               "__typename": "Image"
             },
             "__typename": "TestLevelMetaSeo"
@@ -312,7 +312,7 @@
                     "id": "ExamPartContent/efbf45c6-5a90-4135-b011-818fd0d4a8bc",
                     "body": {
                       "formattedText": {
-                        "text": "/clone-assets/exam-media/48423343371346aba1f9be7f5772ed60.png",
+                        "text": "/clone-assets/exam-media/48423343371346aba1f9be7f5772ed60.webp",
                         "format": "IMAGE_ID",
                         "label": null,
                         "metadataText": null,
@@ -624,13 +624,13 @@
                           "__typename": "ExamPartContentImage"
                         },
                         {
-                          "imageId": "/clone-assets/exam-media/listen_p3_C_stone.png",
+                          "imageId": "/clone-assets/exam-media/listen_p3_C_stone.webp",
                           "label": "C",
                           "position": 0,
                           "__typename": "ExamPartContentImage"
                         },
                         {
-                          "imageId": "/clone-assets/exam-media/listen_p3_D_may_giat.png",
+                          "imageId": "/clone-assets/exam-media/listen_p3_D_may_giat.webp",
                           "label": "D",
                           "position": 0,
                           "__typename": "ExamPartContentImage"
@@ -642,7 +642,7 @@
                           "__typename": "ExamPartContentImage"
                         },
                         {
-                          "imageId": "/clone-assets/exam-media/listen_p3_F_mu_cuop_bien.png",
+                          "imageId": "/clone-assets/exam-media/listen_p3_F_mu_cuop_bien.webp",
                           "label": "F",
                           "position": 0,
                           "__typename": "ExamPartContentImage"
@@ -654,7 +654,7 @@
                           "__typename": "ExamPartContentImage"
                         },
                         {
-                          "imageId": "/clone-assets/exam-media/listen_p3_H_stair.png",
+                          "imageId": "/clone-assets/exam-media/listen_p3_H_stair.webp",
                           "label": "H",
                           "position": 0,
                           "__typename": "ExamPartContentImage"
@@ -686,7 +686,7 @@
                             "format": "IMAGE_ID",
                             "label": "A CD",
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/db1f3fca4ea2454784312d49501533ad.png",
+                            "text": "/clone-assets/exam-media/db1f3fca4ea2454784312d49501533ad.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -792,7 +792,7 @@
                             "format": "IMAGE_ID",
                             "label": "A cup of coffee",
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/44210d69b99c49da9d6a55ceba36f95c.png",
+                            "text": "/clone-assets/exam-media/44210d69b99c49da9d6a55ceba36f95c.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -898,7 +898,7 @@
                             "format": "IMAGE_ID",
                             "label": "A bowl",
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/7a8ae8de7be34244bed9a0b9920a4e82.png",
+                            "text": "/clone-assets/exam-media/7a8ae8de7be34244bed9a0b9920a4e82.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1043,7 +1043,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/92e16534c1464f178b7579aaf9c0e1ec.png",
+                            "text": "/clone-assets/exam-media/92e16534c1464f178b7579aaf9c0e1ec.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1069,7 +1069,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/14d2e97e97504bc091b2e1c3957fbee7.png",
+                            "text": "/clone-assets/exam-media/14d2e97e97504bc091b2e1c3957fbee7.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1095,7 +1095,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/257c1c4b254a4d339f1d56c7ec932f3e.png",
+                            "text": "/clone-assets/exam-media/257c1c4b254a4d339f1d56c7ec932f3e.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1138,7 +1138,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/b270bea78e3a4b099f8298d5724cfdfc.png",
+                            "text": "/clone-assets/exam-media/b270bea78e3a4b099f8298d5724cfdfc.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1164,7 +1164,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/68cb9afd75fc43f89c15d4a710726a36.png",
+                            "text": "/clone-assets/exam-media/68cb9afd75fc43f89c15d4a710726a36.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1190,7 +1190,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/e972554d4a634a22af9770e06cc52f1c.png",
+                            "text": "/clone-assets/exam-media/e972554d4a634a22af9770e06cc52f1c.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1239,7 +1239,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/608c494b485b4ccc80231c3a47139515.png",
+                            "text": "/clone-assets/exam-media/608c494b485b4ccc80231c3a47139515.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1265,7 +1265,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/3e3de61df1e54962be94f938bb757a8a.png",
+                            "text": "/clone-assets/exam-media/3e3de61df1e54962be94f938bb757a8a.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1291,7 +1291,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/3c385a51e0a747ce8ea82f20389d65d1.png",
+                            "text": "/clone-assets/exam-media/3c385a51e0a747ce8ea82f20389d65d1.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1340,7 +1340,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/e289a488a29a48c3af298693007bd431.png",
+                            "text": "/clone-assets/exam-media/e289a488a29a48c3af298693007bd431.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1366,7 +1366,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/9778715b12324a7ead5876119561f993.png",
+                            "text": "/clone-assets/exam-media/9778715b12324a7ead5876119561f993.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1392,7 +1392,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/327a739d9c374906a0c1ba91b0f0010e.png",
+                            "text": "/clone-assets/exam-media/327a739d9c374906a0c1ba91b0f0010e.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1441,7 +1441,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/956d1366ff3e4e5981aec80cd11efda5.png",
+                            "text": "/clone-assets/exam-media/956d1366ff3e4e5981aec80cd11efda5.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1542,7 +1542,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/d51056a4b32e430daf44580a0cafffa0.png",
+                            "text": "/clone-assets/exam-media/d51056a4b32e430daf44580a0cafffa0.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1568,7 +1568,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/92215d5961df48d1805bf6f3690954e6.png",
+                            "text": "/clone-assets/exam-media/92215d5961df48d1805bf6f3690954e6.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1594,7 +1594,7 @@
                             "format": "IMAGE_ID",
                             "label": null,
                             "metadataText": null,
-                            "text": "/clone-assets/exam-media/0dc84217bcab4acc8cc9b87cc13e02e2.png",
+                            "text": "/clone-assets/exam-media/0dc84217bcab4acc8cc9b87cc13e02e2.webp",
                             "__typename": "ExamQuestionFormattedText"
                           },
                           "textIndexes": null,
@@ -1829,7 +1829,7 @@
                       "format": "IMAGE_ID",
                       "label": null,
                       "metadataText": null,
-                      "text": "/clone-assets/exam-media/d1e2c3c11d434906aa32b8d7a8a66408.png",
+                      "text": "/clone-assets/exam-media/d1e2c3c11d434906aa32b8d7a8a66408.webp",
                       "__typename": "ExamQuestionFormattedText"
                     },
                     "choices": [

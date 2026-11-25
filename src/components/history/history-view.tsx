@@ -173,11 +173,11 @@ export function HistoryView(): React.ReactElement {
           <div className="w-full py-10 flex flex-col items-center justify-center text-center text-shadow-game-title">
             <div className="relative w-36 h-36 md:w-44 md:h-44 mb-6 animate-[floating_4s_ease-in-out_infinite] text-shadow-game-title">
               <img 
-                src="/clone-assets/logo.46df16c4.png" 
+                src="/clone-assets/logo.46df16c4.webp" 
                 alt="Mascot sleeping" 
                 className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.4)] opacity-80 text-shadow-game-title"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/clone-assets/media/ic-challenge.9b2229cb.png'; // fallback
+                  (e.target as HTMLImageElement).src = '/clone-assets/media/ic-challenge.9b2229cb.webp'; // fallback
                 }}
               />
               <span className="absolute -top-1 right-2 text-3xl md:text-4xl animate-bounce text-shadow-game-title">💤</span>

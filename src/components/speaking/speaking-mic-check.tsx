@@ -17,7 +17,7 @@ export function SpeakingMicCheck({
   return (
     <div className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-y-auto bg-page-bg px-4 py-10">
       <Image
-        src="/clone-assets/speaking/bg.894c95ef.png"
+        src="/clone-assets/speaking/bg.894c95ef.webp"
         alt=""
         fill
         priority
@@ -26,7 +26,7 @@ export function SpeakingMicCheck({
 
       <div className="relative z-10 flex w-full max-w-[620px] flex-col items-center rounded-[36px] bg-white p-8 text-center shadow-2xl ring-4 ring-amber-200/70">
         <Image
-          src="/clone-assets/speaking/ic-micro.298eb73f.png"
+          src="/clone-assets/speaking/ic-micro.298eb73f.webp"
           alt="Micro"
           width={64}
           height={64}

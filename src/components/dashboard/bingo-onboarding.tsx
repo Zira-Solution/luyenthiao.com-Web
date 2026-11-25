@@ -16,7 +16,7 @@ export function BingoOnboarding() {
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/clone-assets/bg.1e17df80.png"
+          src="/clone-assets/bg.1e17df80.webp"
           alt="Space Background"
           fill
           className="object-cover"
@@ -36,7 +36,7 @@ export function BingoOnboarding() {
           className="flex items-center gap-2 border-none bg-white/10 px-4 py-2 font-bold text-white hover:bg-white/20"
           onClick={() => {}}
         >
-          <Image src="/clone-assets/ic-logout.7baec1b3.png" alt="Logout" width={24} height={24} />
+          <Image src="/clone-assets/ic-logout.7baec1b3.webp" alt="Logout" width={24} height={24} />
           Đăng xuất
         </Button>
       </div>
@@ -46,7 +46,7 @@ export function BingoOnboarding() {
         {/* Bingo Mascot */}
         <div className="relative h-[300px] w-[300px] shrink-0 md:h-[500px] md:w-[500px]">
           <Image
-            src="/clone-assets/logo.46df16c4.png"
+            src="/clone-assets/logo.46df16c4.webp"
             alt="Bingo Mascot"
             fill
             className="object-contain drop-shadow-2xl"

@@ -59,8 +59,8 @@ function GradingOption({
       <Image
         src={
           option.default
-            ? '/clone-assets/writing/radio-checked.png'
-            : '/clone-assets/writing/radio.png'
+            ? '/clone-assets/writing/radio-checked.webp'
+            : '/clone-assets/writing/radio.webp'
         }
         alt=""
         width={24}
@@ -80,7 +80,7 @@ export function WritingIntro({ test, onStart }: WritingIntroProps): React.ReactE
   return (
     <div className="bg-page-bg relative flex min-h-[100dvh] w-full items-center justify-center overflow-y-auto px-4 py-10">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src="/clone-assets/bg.1e17df80.webp"
         alt=""
         fill
         priority
@@ -94,7 +94,7 @@ export function WritingIntro({ test, onStart }: WritingIntroProps): React.ReactE
           className="absolute top-5 left-5 flex h-11 w-11 cursor-pointer items-center justify-center rounded-2xl bg-white shadow-md transition-transform hover:scale-105 active:scale-95"
         >
           <Image
-            src="/clone-assets/writing/arrow-left.png"
+            src="/clone-assets/writing/arrow-left.webp"
             alt=""
             width={22}
             height={14}

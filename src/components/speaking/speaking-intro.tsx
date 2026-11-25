@@ -34,7 +34,7 @@ export function SpeakingIntro({ name, onStart }: SpeakingIntroProps): React.Reac
   return (
     <div className="bg-page-bg relative flex min-h-[100dvh] w-full flex-col items-center overflow-y-auto px-4 py-6">
       <Image
-        src="/clone-assets/speaking/bg.894c95ef.png"
+        src="/clone-assets/speaking/bg.894c95ef.webp"
         alt=""
         fill
         priority
@@ -45,7 +45,7 @@ export function SpeakingIntro({ name, onStart }: SpeakingIntroProps): React.Reac
       <header className="relative z-10 flex w-full max-w-4xl items-center justify-between">
         <button type="button" className="flex cursor-pointer items-center gap-1">
           <Image
-            src="/clone-assets/speaking/btn-out.94d0dd6c.png"
+            src="/clone-assets/speaking/btn-out.94d0dd6c.webp"
             alt=""
             width={112}
             height={46}
@@ -54,7 +54,7 @@ export function SpeakingIntro({ name, onStart }: SpeakingIntroProps): React.Reac
         </button>
         <div className="flex items-center gap-1">
           <Image
-            src="/clone-assets/speaking/box-time.2ac9e25e.png"
+            src="/clone-assets/speaking/box-time.2ac9e25e.webp"
             alt=""
             width={112}
             height={44}
@@ -78,19 +78,19 @@ export function SpeakingIntro({ name, onStart }: SpeakingIntroProps): React.Reac
 
         <ul className="mt-7 flex flex-col gap-3">
           <GuidelineRow
-            src="/clone-assets/speaking/sound.e34e2ea7.png"
+            src="/clone-assets/speaking/sound.e34e2ea7.webp"
             alt="Bật âm thanh"
             strong="BẬT ÂM THANH"
             text="khi làm bài"
           />
           <GuidelineRow
-            src="/clone-assets/speaking/mix.a2c7f937.png"
+            src="/clone-assets/speaking/mix.a2c7f937.webp"
             alt="Tai nghe"
             strong="Kiểm tra TAI NGHE"
             text="THU ÂM"
           />
           <GuidelineRow
-            src="/clone-assets/speaking/book.4e98e9a5.png"
+            src="/clone-assets/speaking/book.4e98e9a5.webp"
             alt="Hoàn thành tất cả"
             strong="HOÀN THÀNH TẤT CẢ"
             text="câu hỏi để nộp bài"
@@ -100,7 +100,7 @@ export function SpeakingIntro({ name, onStart }: SpeakingIntroProps): React.Reac
         {/* Yêu cầu chấm bài */}
         <div className="mt-5 flex items-center justify-center gap-3 rounded-2xl border-2 border-amber-300 bg-white px-5 py-3 shadow-sm">
           <Image
-            src="/clone-assets/speaking/un-check.1f84877f.png"
+            src="/clone-assets/speaking/un-check.1f84877f.webp"
             alt=""
             width={24}
             height={24}
@@ -128,7 +128,7 @@ export function SpeakingIntro({ name, onStart }: SpeakingIntroProps): React.Reac
           </button>
           <div className="mt-4 flex items-center gap-2">
             <Image
-              src="/clone-assets/speaking/icon-diamonds.580d8a36.png"
+              src="/clone-assets/speaking/icon-diamonds.580d8a36.webp"
               alt=""
               width={24}
               height={22}

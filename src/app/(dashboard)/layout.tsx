@@ -29,8 +29,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           className="group cursor-pointer transition-transform duration-200 hover:-translate-x-1 hover:brightness-105 active:translate-x-0"
         >
           <img
-            src="/clone-assets/exam/button_feedback_vi.5162d6f8.png"
+            src="/clone-assets/exam/button_feedback_vi.5162d6f8.webp"
             alt="Báo cáo lỗi"
+            loading="lazy"
+            decoding="async"
             className="h-[110px] w-auto object-contain drop-shadow-[-3px_4px_10px_rgba(0,0,0,0.2)] lg:h-[120px]"
           />
         </button>
