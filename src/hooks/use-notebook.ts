@@ -2,10 +2,16 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { deleteNotebookEntry, fetchMyNotebook, updateNotebookEntry } from '@/lib/api/notebook'
+import {
+  deleteNotebookEntry,
+  fetchMyNotebook,
+  saveNotebookEntry,
+  updateNotebookEntry,
+} from '@/lib/api/notebook'
 import { retryTransient, useIsAuthenticated } from '@/lib/private-query'
 import { queryKeys } from '@/lib/query-keys'
 import type { NotebookPatch } from '@/schemas/notebook'
+import type { SaveNotebookWordInput } from '@/schemas/vocab'
 
 export function useMyNotebook() {
   const enabled = useIsAuthenticated()
@@ -14,6 +20,16 @@ export function useMyNotebook() {
     queryFn: fetchMyNotebook,
     enabled,
     retry: retryTransient,
+  })
+}
+
+export function useSaveNotebookEntry() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (input: SaveNotebookWordInput) => saveNotebookEntry(input),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.notebook() })
+    },
   })
 }
 
