@@ -3,6 +3,9 @@
 import Image from 'next/image'
 import { useEffect, useRef } from 'react'
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
+import { useSiteConfig } from '@/providers/site-config-provider'
+
 /**
  * DreamySkyBackground (Illustrated High-Resolution Fantasy Daytime Sky)
  * - Coherent, high-resolution original illustrated daytime sky artwork (2560x1429 WebP)
@@ -14,6 +17,12 @@ import { useEffect, useRef } from 'react'
  */
 export function DreamySkyBackground(): React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const { config, resolveAsset } = useSiteConfig()
+  const bgSrc = resolveAsset(
+    config.homeAssets.background,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.background,
+    '/assets/homepage/background/universe-background.webp',
+  )
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -82,7 +91,7 @@ export function DreamySkyBackground(): React.ReactElement {
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden select-none">
       {/* Semi-Realistic High-Resolution Fantasy Daytime Sky Artwork */}
       <Image
-        src="/assets/homepage/background/universe-background.webp"
+        src={bgSrc}
         alt="Bầu trời diệu kỳ Luyện Thi Ảo"
         fill
         unoptimized

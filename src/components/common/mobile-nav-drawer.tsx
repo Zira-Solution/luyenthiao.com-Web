@@ -1,18 +1,19 @@
 'use client'
 
-import { ChevronDown, ChevronRight, KeyRound, LogOut, X } from 'lucide-react'
+import { ChevronDown, ChevronRight, KeyRound, LogOut, Shield, X } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { UnreadBadge } from '@/components/common/unread-badge'
-import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH } from '@/constants'
+import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH, ROUTES } from '@/constants'
 import { cn } from '@/lib/utils'
+import type { User } from '@/types/auth'
 
 interface MobileNavDrawerProps {
   isOpen: boolean
   onClose: () => void
   status: string
-  user: any
+  user: (User & { username?: string; fullName?: string }) | null
   onLogin: () => void
   onRegister: () => void
   onLogout: () => void
@@ -113,6 +114,16 @@ export function MobileNavDrawer({
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
+                  {user.role === 'ADMIN' && (
+                    <button
+                      type="button"
+                      onClick={() => navigateTo(ROUTES.ADMIN_HOME)}
+                      className="col-span-2 flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-white py-1.5 text-xs font-bold text-blue-700 transition-colors hover:bg-blue-50"
+                    >
+                      <Shield className="h-3.5 w-3.5 text-blue-700" />
+                      <span>Quản trị CMS</span>
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => navigateTo('/account/change-password')}
@@ -173,7 +184,7 @@ export function MobileNavDrawer({
             {/* Thách đấu */}
             <button
               type="button"
-              onClick={() => navigateTo('/')}
+              onClick={() => navigateTo(ROUTES.CHALLENGES)}
               className="flex w-full cursor-pointer items-center justify-between rounded-xl border border-[#d9ccf5] bg-white px-3 py-2 text-left shadow-xs transition-colors hover:bg-[#f6f2ff]"
             >
               <div className="flex items-center gap-2.5">
@@ -248,7 +259,7 @@ export function MobileNavDrawer({
                   </button>
                   <button
                     type="button"
-                    onClick={() => navigateTo('/exam')}
+                    onClick={() => navigateTo('/placement-test')}
                     className="flex w-full cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-100/60"
                   >
                     Đề Thi Writing
@@ -292,7 +303,7 @@ export function MobileNavDrawer({
                   </button>
                   <button
                     type="button"
-                    onClick={() => navigateTo('/exam')}
+                    onClick={() => navigateTo('/placement-test')}
                     className="flex w-full cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-100/60"
                   >
                     Đề Thi Speaking
@@ -336,7 +347,7 @@ export function MobileNavDrawer({
                   </button>
                   <button
                     type="button"
-                    onClick={() => navigateTo('/exam')}
+                    onClick={() => navigateTo(ROUTES.VOCAB)}
                     className="flex w-full cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-100/60"
                   >
                     Kho Từ Vựng

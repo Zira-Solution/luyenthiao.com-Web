@@ -4,7 +4,18 @@ import { ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
 import { cn } from '@/lib/utils'
+import { useSiteConfig } from '@/providers/site-config-provider'
+
+const BOTTOM_NAV_KEY_BY_ICON: Record<string, string> = {
+  'level-filter.337790ac.png': 'allLevels',
+  'map.30295c2a.png': 'placementTest',
+  'icon_target.87047c90.png': 'notebook',
+  'icon_trophy.32089636.png': 'activate',
+  'ic_free.7a24c735.png': 'teacherParent',
+  'icon_bag.b6e8d7e3.png': 'inviteFriends',
+}
 
 interface NavItemData {
   href: string
@@ -116,8 +127,18 @@ const NAV_ITEMS_RIGHT: NavItemData[] = [
 ]
 
 const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) => {
+  const { config, resolveAsset } = useSiteConfig()
   const isActive = pathname === item.href
   const isLinkable = item.href !== '#'
+  const iconKey = BOTTOM_NAV_KEY_BY_ICON[item.icon]
+  const fallbackIcon = `/clone-assets/media/${item.icon}`
+  const iconSrc = iconKey
+    ? resolveAsset(
+        config.homeAssets.bottomNavIcons[iconKey],
+        DEFAULT_SITE_CONFIG_CLIENT.homeAssets.bottomNavIcons[iconKey] ?? fallbackIcon,
+        fallbackIcon,
+      )
+    : fallbackIcon
 
   return (
     <Link
@@ -152,7 +173,7 @@ const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) 
       {/* Standardized Icon Container */}
       <div className="relative flex h-4.5 w-4.5 shrink-0 items-center justify-center sm:h-5.5 sm:w-5.5 md:h-6 md:w-6 lg:h-7 lg:w-7">
         <img
-          src={`/clone-assets/media/${item.icon}`}
+          src={iconSrc}
           alt={item.labelLine1}
           className="relative z-10 h-full w-full object-contain drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.12)] transition-transform duration-200 group-hover:scale-105"
           onError={(e) => {
@@ -201,6 +222,17 @@ const NavButton = ({ item, pathname }: { item: NavItemData; pathname: string }) 
 export function BottomNav() {
   const pathname = usePathname()
   const router = useRouter()
+  const { config, resolveAsset } = useSiteConfig()
+  const chatIconSrc = resolveAsset(
+    config.homeAssets.bottomNavIcons.chat,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.bottomNavIcons.chat ?? '',
+    '/clone-assets/media/icon-chat.fa14d2f7.png',
+  )
+  const callIconSrc = resolveAsset(
+    config.homeAssets.bottomNavIcons.call,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.bottomNavIcons.call ?? '',
+    '/clone-assets/media/icon-call.c4ff351b.png',
+  )
 
   return (
     <div className="relative z-50 flex w-full justify-center px-2 pb-[max(0.75rem,calc(env(safe-area-inset-bottom)+8px))] select-none sm:px-4 sm:pb-3 md:pb-4">
@@ -243,7 +275,7 @@ export function BottomNav() {
             >
               <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
               <img
-                src="/clone-assets/media/icon-chat.fa14d2f7.png"
+                src={chatIconSrc}
                 alt="Chat"
                 className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/chat:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
               />
@@ -308,7 +340,7 @@ export function BottomNav() {
             >
               <div className="pointer-events-none absolute inset-x-1 top-0.5 h-[35%] rounded-full bg-gradient-to-b from-white/70 to-transparent" />
               <img
-                src="/clone-assets/media/icon-call.c4ff351b.png"
+                src={callIconSrc}
                 alt="Call Hotline"
                 className="h-4 w-4 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] transition-transform group-hover/call:scale-110 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5"
               />

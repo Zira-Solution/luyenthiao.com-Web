@@ -1,14 +1,16 @@
 'use client'
 
-import { ChevronDown, LogOut, KeyRound, Menu } from 'lucide-react'
+import { ChevronDown, KeyRound, LogOut, Menu, Shield } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
 import { MobileNavDrawer } from '@/components/common/mobile-nav-drawer'
 import { UnreadBadge } from '@/components/common/unread-badge'
-import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH } from '@/constants'
+import { DEMO_SPEAKING_TEST_PATH, DEMO_WRITE_TEST_PATH, ROUTES } from '@/constants'
 import { useLogout } from '@/hooks'
 import { cn } from '@/lib/utils'
+import { useSiteConfig } from '@/providers/site-config-provider'
 import { useAuthStore } from '@/store/auth-store'
 
 interface GameNavButtonProps {
@@ -209,6 +211,12 @@ function CurrencyCard({
  * Stacked ĐĂNG NHẬP & ĐĂNG KÝ buttons inside a taller lavender 3D container,
  * or authenticated user info when signed in.
  */
+interface NavUser {
+  role?: string
+  fullName?: string
+  username?: string
+}
+
 function CenterAuthPanel({
   status,
   user,
@@ -217,7 +225,7 @@ function CenterAuthPanel({
   onLogout,
 }: {
   status: string
-  user: any
+  user: NavUser | null
   onLogin: () => void
   onRegister: () => void
   onLogout: () => void
@@ -269,6 +277,19 @@ function CenterAuthPanel({
 
         {userMenuOpen && (
           <div className="animate-in fade-in zoom-in-95 absolute top-[calc(100%+8px)] left-1/2 z-50 min-w-[150px] -translate-x-1/2 overflow-hidden rounded-2xl border-2 border-[#8e6fd8] bg-white/95 p-1 shadow-xl backdrop-blur-xl duration-150">
+            {user.role === 'ADMIN' && (
+              <button
+                type="button"
+                onClick={() => {
+                  setUserMenuOpen(false)
+                  router.push(ROUTES.ADMIN_HOME)
+                }}
+                className="flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-1.5 text-left text-xs font-bold text-blue-700 transition-colors hover:bg-blue-50"
+              >
+                <Shield className="h-3.5 w-3.5 text-blue-700" />
+                <span>Quản trị CMS</span>
+              </button>
+            )}
             <button
               onClick={() => {
                 setUserMenuOpen(false)
@@ -390,7 +411,34 @@ export function Topbar() {
   const status = useAuthStore((state) => state.status)
   const user = useAuthStore((state) => state.user)
   const logout = useLogout()
+  const { config, language, setLanguage, resolveAsset } = useSiteConfig()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  const iconChallenge = resolveAsset(
+    config.homeAssets.topbarIcons.challenge,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.topbarIcons.challenge ?? '',
+    '/assets/topbar/ic_challenge_3d.webp',
+  )
+  const iconWriting = resolveAsset(
+    config.homeAssets.topbarIcons.writing,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.topbarIcons.writing ?? '',
+    '/assets/topbar/ic_writing_3d.webp',
+  )
+  const iconSpeaking = resolveAsset(
+    config.homeAssets.topbarIcons.speaking,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.topbarIcons.speaking ?? '',
+    '/assets/topbar/ic_speaking_3d.webp',
+  )
+  const iconVocab = resolveAsset(
+    config.homeAssets.topbarIcons.vocab,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.topbarIcons.vocab ?? '',
+    '/assets/topbar/ic_vocab_3d.webp',
+  )
+  const iconBell = resolveAsset(
+    config.homeAssets.topbarIcons.bell,
+    DEFAULT_SITE_CONFIG_CLIENT.homeAssets.topbarIcons.bell ?? '',
+    '/assets/topbar/ic_bell_3d.webp',
+  )
 
   // Dropdown states for Writing, Speaking, Vocabulary
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
@@ -408,7 +456,7 @@ export function Topbar() {
   }
 
   // Navigation handlers
-  const handleThachDau = () => router.push('/')
+  const handleThachDau = () => router.push(ROUTES.CHALLENGES)
   const handlePractice = () => router.push('/')
   const handleWriting = () => router.push(DEMO_WRITE_TEST_PATH)
   const handleSpeaking = () => router.push(DEMO_SPEAKING_TEST_PATH)
@@ -455,16 +503,16 @@ export function Topbar() {
             {/* 1. THÁCH ĐẤU */}
             <GameNavButton
               label="Thách đấu"
-              iconSrc="/assets/topbar/ic_challenge_3d.webp"
+              iconSrc={iconChallenge}
               iconAlt="Thách đấu"
               onClick={handleThachDau}
-              active={pathname === '/challenge'}
+              active={pathname.startsWith(ROUTES.CHALLENGES)}
             />
 
             {/* 2. WRITING ▼ */}
             <GameNavButton
               label="Writing"
-              iconSrc="/assets/topbar/ic_writing_3d.webp"
+              iconSrc={iconWriting}
               iconAlt="Writing"
               hasDropdown
               isDropdownOpen={activeDropdown === 'writing'}
@@ -481,7 +529,7 @@ export function Topbar() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => router.push('/exam')}
+                    onClick={() => router.push('/placement-test')}
                     className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
                   >
                     Đề Thi Writing
@@ -493,7 +541,7 @@ export function Topbar() {
             {/* 3. SPEAKING ▼ */}
             <GameNavButton
               label="Speaking"
-              iconSrc="/assets/topbar/ic_speaking_3d.webp"
+              iconSrc={iconSpeaking}
               iconAlt="Speaking"
               hasDropdown
               isDropdownOpen={activeDropdown === 'speaking'}
@@ -510,7 +558,7 @@ export function Topbar() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => router.push('/exam')}
+                    onClick={() => router.push('/placement-test')}
                     className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
                   >
                     Đề Thi Speaking
@@ -522,12 +570,12 @@ export function Topbar() {
             {/* 4. VOCABULARY ▼ */}
             <GameNavButton
               label="Vocabulary"
-              iconSrc="/assets/topbar/ic_vocab_3d.webp"
+              iconSrc={iconVocab}
               iconAlt="Vocabulary"
               hasDropdown
               isDropdownOpen={activeDropdown === 'vocab'}
               onToggleDropdown={() => toggleDropdown('vocab')}
-              active={pathname === '/notebook'}
+              active={pathname === '/notebook' || pathname === '/vocab'}
               dropdownContent={
                 <div className="flex flex-col gap-1 p-1">
                   <button
@@ -539,7 +587,7 @@ export function Topbar() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => router.push('/exam')}
+                    onClick={() => router.push(ROUTES.VOCAB)}
                     className="rounded-xl px-3 py-1.5 text-left text-xs font-bold text-[#381a6c] transition-colors hover:bg-purple-50"
                   >
                     Kho Từ Vựng
@@ -636,12 +684,37 @@ export function Topbar() {
             {/* 13. THÔNG BÁO */}
             <GameNavButton
               label="Thông báo"
-              iconSrc="/assets/topbar/ic_bell_3d.webp"
+              iconSrc={iconBell}
               iconAlt="Thông báo"
               onClick={handleNotifications}
               active={pathname === '/notifications'}
               badge={<UnreadBadge />}
             />
+
+            {config.languages.length > 1 && (
+              <div
+                className="flex shrink-0 items-center rounded-full border border-[#c7b5ec] bg-white/85 p-0.5 shadow-xs"
+                role="group"
+                aria-label="Chọn ngôn ngữ"
+              >
+                {config.languages.map((item) => (
+                  <button
+                    key={item.code}
+                    type="button"
+                    onClick={() => setLanguage(item.code)}
+                    aria-pressed={language === item.code}
+                    className={cn(
+                      'cursor-pointer rounded-full px-2 py-1 text-[10px] font-black uppercase transition-colors',
+                      language === item.code
+                        ? 'bg-[#6d28d9] text-white'
+                        : 'text-[#432177] hover:bg-purple-100',
+                    )}
+                  >
+                    {item.code}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </header>
