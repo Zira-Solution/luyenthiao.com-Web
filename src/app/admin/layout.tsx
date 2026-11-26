@@ -1,3 +1,4 @@
+import { AdminShell } from '@/components/admin'
 import { RequireAdmin, RequireAuth } from '@/components/auth'
 
 export default function AdminLayout({
@@ -7,7 +8,9 @@ export default function AdminLayout({
 }): React.ReactElement {
   return (
     <RequireAuth>
-      <RequireAdmin>{children}</RequireAdmin>
+      <RequireAdmin>
+        <AdminShell>{children}</AdminShell>
+      </RequireAdmin>
     </RequireAuth>
   )
 }
