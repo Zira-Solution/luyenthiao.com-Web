@@ -209,4 +209,20 @@ describe('apiFetch', () => {
     )
     expect(refreshCalls).toHaveLength(0)
   })
+
+  it('does not attach Content-Type: application/json when body is FormData', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ url: 'https://cdn.example.com/a.png' }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const body = new FormData()
+    body.append('file', new Blob(['x'], { type: 'image/png' }), 'a.png')
+
+    await apiFetch('/uploads', { method: 'POST', body })
+
+    const init = fetchMock.mock.calls[0]![1] as RequestInit
+    const headers = new Headers(init.headers)
+    expect(headers.has('Content-Type')).toBe(false)
+  })
 })
