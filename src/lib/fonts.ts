@@ -1,4 +1,4 @@
-import { Baloo_2, Nunito } from 'next/font/google'
+import { Baloo_2, Inter, Nunito } from 'next/font/google'
 
 export const baloo2 = Baloo_2({
   subsets: ['vietnamese', 'latin'],
@@ -11,5 +11,12 @@ export const nunito = Nunito({
   subsets: ['vietnamese', 'latin'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   variable: '--font-nunito',
+  display: 'swap',
+})
+
+export const inter = Inter({
+  subsets: ['vietnamese', 'latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-admin-sans',
   display: 'swap',
 })

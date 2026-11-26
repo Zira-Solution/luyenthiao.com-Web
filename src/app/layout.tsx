@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from '@/components/common'
 import { APP_DESCRIPTION, APP_NAME } from '@/constants'
 import { env } from '@/lib/env'
-import { baloo2, nunito } from '@/lib/fonts'
+import { baloo2, inter, nunito } from '@/lib/fonts'
 import { AuthProvider } from '@/providers/auth-provider'
 import { QueryProvider } from '@/providers/query-provider'
 
@@ -35,7 +35,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>): React.ReactElement {
   return (
-    <html lang="vi" suppressHydrationWarning className={`${baloo2.variable} ${nunito.variable}`}>
+    <html
+      lang="vi"
+      suppressHydrationWarning
+      className={`${baloo2.variable} ${nunito.variable} ${inter.variable}`}
+    >
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"

@@ -23,12 +23,18 @@ const PUBLIC = [
   '/school-ranking',
   '/placement-test',
   '/testlevels/a1',
+  '/vocab',
+  '/check-point/demo',
+  '/challenges',
+  '/challenges/ioe',
+  '/challenges/result/res-123',
 ]
 const PROTECTED = [
   '/admin/exam',
   '/admin/exam/123',
   '/account/change-password',
   '/check-point/7',
+  '/challenges/room/AB12CD',
   '/testresult',
   '/history',
   '/notebook',
@@ -62,6 +68,12 @@ describe('decideRoute — pages', () => {
     expect(decideRoute(req({ pathname: '/history', search: '?page=2' }))).toEqual({
       kind: 'redirect',
       location: '/login?redirect=%2Fhistory%3Fpage%3D2',
+    })
+  })
+
+  it('allows guests on /testresult only when demo=1', () => {
+    expect(decideRoute(req({ pathname: '/testresult', search: '?demo=1&score=5' }))).toEqual({
+      kind: 'next',
     })
   })
 

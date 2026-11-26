@@ -14,7 +14,13 @@ export const PUBLIC_PATHS = [
   '/school-ranking',
   '/placement-test',
   '/testlevels',
+  '/vocab',
+  '/check-point/demo',
+  '/challenges',
 ] as const
+
+/** Sub-paths inside otherwise public roots that require an authenticated student session. */
+export const PROTECTED_SUBPATHS = ['/challenges/room'] as const
 
 /** Pages a visitor with the hint is sent away from. */
 export const GUEST_ONLY_PATHS = ['/login', '/signup'] as const
@@ -69,7 +75,14 @@ export function decideRoute(request: RouteRequest): RouteDecision {
     }
   }
 
-  if (!hasAuthHint && !isIn(pathname, PUBLIC_PATHS)) {
+  const isGuestDemoResult =
+    matchesPath(pathname, '/testresult') && new URLSearchParams(search).get('demo') === '1'
+
+  if (
+    !hasAuthHint &&
+    !isGuestDemoResult &&
+    (isIn(pathname, PROTECTED_SUBPATHS) || !isIn(pathname, PUBLIC_PATHS))
+  ) {
     const params = new URLSearchParams({ redirect: `${pathname}${search}` })
     return { kind: 'redirect', location: `/login?${params.toString()}` }
   }

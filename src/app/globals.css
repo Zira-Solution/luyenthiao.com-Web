@@ -5,6 +5,7 @@
 @theme inline {
   --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-baloo), ui-sans-serif, system-ui, sans-serif;
+  --font-admin: var(--font-admin-sans), ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -51,6 +52,21 @@
   --color-semantic-warning: #faad14;
   --color-semantic-danger: #f5222d;
   --color-semantic-info: #1677ff;
+
+  /* Admin CMS shell — Direction B (Refined Navy Branded) */
+  --color-admin-sidebar: #0b2550;
+  --color-admin-sidebar-deep: #071936;
+  --color-admin-sidebar-hover: #13356b;
+  --color-admin-sidebar-border: #1b427d;
+  --color-admin-sidebar-active: #1a478a;
+  --color-admin-sidebar-fg: #dbe6f6;
+  --color-admin-sidebar-muted: #9eb4d6;
+  --color-admin-sidebar-card: #103063;
+  --color-admin-accent: #60a5fa;
+  --color-admin-canvas: #f8fafc;
+  /* Primary buttons on the light admin content area: white text is 5.73:1 (hover 7.1:1), AA for small text. */
+  --color-admin-primary: #0062d1;
+  --color-admin-primary-hover: #0055b3;
 
   /* Dashboard Theme Tokens */
   --color-ribbon-bg: #065f21;
@@ -263,6 +279,15 @@
   html {
     @apply font-sans;
     scroll-behavior: smooth;
+  }
+  .admin-theme {
+    font-family: var(--font-admin);
+    letter-spacing: normal;
+    color: #0f172a;
+  }
+  .admin-theme :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-admin);
+    letter-spacing: -0.02em;
   }
 }
 
