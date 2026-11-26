@@ -1,25 +1,33 @@
-"use client"
+'use client'
 
-import { ImageIcon, Link2, Music, Plus, Trash2 } from "lucide-react"
-import Image from "next/image"
-import { useState, type ReactElement } from "react"
+import { ImageIcon, Link2, Music, Plus, Trash2 } from 'lucide-react'
+import Image from 'next/image'
+import { useState, type ReactElement } from 'react'
 
+import { MediaBrowserDialog } from './media-browser-dialog'
 
-import { MediaBrowserDialog } from "./media-browser-dialog"
+import type { MediaKind } from '@/lib/admin-media'
 
-import type { MediaKind } from "@/lib/admin-media"
-import { cn } from "@/lib/utils"
-
-interface MediaPickerFieldProps {
+export interface MediaPickerFieldProps {
   kind: MediaKind
   value: string | null | undefined
   onChange: (v: string | null) => void
 }
 
+function isValidMediaUrl(value: string): boolean {
+  if (value.startsWith('/')) return true
+  try {
+    const parsed = new URL(value)
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:'
+  } catch {
+    return false
+  }
+}
+
 export function MediaPickerField({ kind, value, onChange }: MediaPickerFieldProps): ReactElement {
   const [open, setOpen] = useState(false)
   const [urlMode, setUrlMode] = useState(false)
-  const [urlInput, setUrlInput] = useState("")
+  const [urlInput, setUrlInput] = useState('')
   const [urlWarn, setUrlWarn] = useState(false)
 
   const choosePath = (path: string) => {
@@ -29,44 +37,51 @@ export function MediaPickerField({ kind, value, onChange }: MediaPickerFieldProp
   const applyUrl = () => {
     const v = urlInput.trim()
     if (!v) return
-    if (v.startsWith("/")) {
+    if (isValidMediaUrl(v)) {
       onChange(v)
       setUrlMode(false)
-      setUrlInput("")
+      setUrlInput('')
       setUrlWarn(false)
     } else {
       setUrlWarn(true)
     }
   }
 
+  const isExternal = Boolean(value && (value.startsWith('https://') || value.startsWith('http://')))
+
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2.5">
       {value ? (
-        <div className="w-16 h-16 shrink-0 rounded-lg border border-white/15 overflow-hidden bg-black/20 grid place-items-center">
-          {kind === "image" ? (
+        <div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+          {kind === 'image' ? (
             <Image
               src={value}
               alt="Thumb"
-              width={64}
-              height={64}
-              className="w-full h-full object-contain"
+              width={56}
+              height={56}
+              unoptimized={isExternal}
+              className="size-full object-contain"
             />
           ) : (
-            <div className="flex flex-col items-center gap-0.5 text-white/60 px-1">
-              <Music className="w-5 h-5" />
-              <span className="text-[9px] font-semibold text-center truncate w-full">
-                {value.split("/").pop()}
+            <div className="flex w-full flex-col items-center gap-0.5 px-1 text-slate-600">
+              <Music className="size-4" aria-hidden="true" />
+              <span className="w-full truncate text-center text-[10px] font-medium">
+                {value.split('/').pop()}
               </span>
             </div>
           )}
         </div>
       ) : (
-        <div className="w-16 h-16 shrink-0 rounded-lg border border-dashed border-white/20 grid place-items-center text-white/30">
-          {kind === "image" ? <ImageIcon className="w-5 h-5" /> : <Music className="w-5 h-5" />}
+        <div className="grid size-14 shrink-0 place-items-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+          {kind === 'image' ? (
+            <ImageIcon className="size-4" aria-hidden="true" />
+          ) : (
+            <Music className="size-4" aria-hidden="true" />
+          )}
         </div>
       )}
 
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         {urlMode ? (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-2">
@@ -78,57 +93,60 @@ export function MediaPickerField({ kind, value, onChange }: MediaPickerFieldProp
                   setUrlWarn(false)
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") applyUrl()
+                  if (e.key === 'Enter') applyUrl()
                 }}
-                placeholder="Đường dẫn bắt đầu bằng /…"
-                className="flex-1 min-w-0 bg-white/10 text-white text-sm rounded-lg px-2.5 py-1.5 focus:outline-none border border-white/15 focus:border-brand-primary placeholder:text-white/30"
+                placeholder="Đường dẫn /… hoặc https://…"
+                className="focus:border-brand-primary focus:ring-brand-primary/20 min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:outline-none"
               />
               <button
+                type="button"
                 onClick={applyUrl}
-                className="shrink-0 px-3 py-1.5 rounded-lg bg-brand-primary text-white font-bold text-xs cursor-pointer"
+                className="bg-admin-primary hover:bg-admin-primary-hover shrink-0 cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold text-white transition-colors"
               >
                 OK
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setUrlMode(false)
                   setUrlWarn(false)
                 }}
-                className="shrink-0 px-2 py-1.5 rounded-lg bg-white/10 text-white/70 font-bold text-xs cursor-pointer"
+                className="shrink-0 cursor-pointer rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
               >
                 Hủy
               </button>
             </div>
             {urlWarn && (
-              <span className="text-semantic-warning text-[11px] font-semibold">
-                URL ngoài sẽ không hiển thị được — hãy tải file vào public/clone-assets.
+              <span className="text-xs font-medium text-amber-700">
+                URL cần bắt đầu bằng / hoặc http(s):// hợp lệ.
               </span>
             )}
           </div>
         ) : (
           <div className="flex flex-wrap items-center gap-1.5">
             <button
+              type="button"
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="size-3.5" aria-hidden="true" />
               Thư viện
             </button>
             <button
+              type="button"
               onClick={() => setUrlMode(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
             >
-              <Link2 className="w-3.5 h-3.5" />
+              <Link2 className="size-3.5" aria-hidden="true" />
               Dán URL
             </button>
             {value && (
               <button
+                type="button"
                 onClick={() => onChange(null)}
-                className={cn(
-                  "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-game-danger-to/30 text-white/70 hover:text-white text-xs font-bold transition-colors cursor-pointer",
-                )}
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-700 transition-colors hover:bg-rose-100"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className="size-3.5" aria-hidden="true" />
                 Xóa
               </button>
             )}
