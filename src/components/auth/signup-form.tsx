@@ -261,9 +261,11 @@ export function SignupForm(): React.ReactElement {
         {/* Google */}
         <button
           type="button"
-          className="flex h-[40px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-slate-200/80 bg-white font-bold text-slate-700 shadow-xs transition-all hover:border-slate-300 hover:bg-slate-50 active:translate-y-[1px] sm:h-[44px]"
+          disabled
+          aria-disabled="true"
+          className="flex h-[40px] flex-1 cursor-not-allowed items-center justify-center gap-2 rounded-2xl border-2 border-slate-200/80 bg-slate-50 font-bold text-slate-700 shadow-xs sm:h-[44px]"
         >
-          <svg className="h-4 w-4 sm:h-4.5 sm:w-4.5" viewBox="0 0 24 24">
+          <svg className="h-4 w-4 opacity-60 sm:h-4.5 sm:w-4.5" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -281,18 +283,32 @@ export function SignupForm(): React.ReactElement {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          <span className="font-heading text-xs font-black tracking-wide sm:text-sm">Google</span>
+          <span className="flex flex-col items-start gap-0.5 leading-none">
+            <span className="font-heading text-xs font-black tracking-wide sm:text-sm">Google</span>
+            <span className="rounded-full bg-slate-200 px-1.5 py-px text-[9px] leading-tight font-bold text-slate-700">
+              Sắp có
+            </span>
+          </span>
         </button>
 
         {/* Facebook */}
         <button
           type="button"
-          className="flex h-[40px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-[#1877F2]/30 bg-[#1877F2] font-bold text-white shadow-xs transition-all hover:bg-[#166fe5] active:translate-y-[1px] sm:h-[44px]"
+          disabled
+          aria-disabled="true"
+          className="flex h-[40px] flex-1 cursor-not-allowed items-center justify-center gap-2 rounded-2xl border-2 border-[#166fe5]/30 bg-[#166fe5] font-bold text-white shadow-xs sm:h-[44px]"
         >
-          <svg className="h-4 w-4 fill-white sm:h-4.5 sm:w-4.5" viewBox="0 0 24 24">
+          <svg className="h-4 w-4 fill-white opacity-70 sm:h-4.5 sm:w-4.5" viewBox="0 0 24 24">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
           </svg>
-          <span className="font-heading text-xs font-black tracking-wide sm:text-sm">Facebook</span>
+          <span className="flex flex-col items-start gap-0.5 leading-none">
+            <span className="font-heading text-xs font-black tracking-wide sm:text-sm">
+              Facebook
+            </span>
+            <span className="rounded-full bg-white px-1.5 py-px text-[9px] leading-tight font-bold text-[#166fe5]">
+              Sắp có
+            </span>
+          </span>
         </button>
       </div>
 

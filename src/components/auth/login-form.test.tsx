@@ -1,4 +1,4 @@
-import { act, cleanup, render } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LoginForm } from '@/components/auth/login-form'
@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/auth-store'
 
 const replace = vi.fn()
 const push = vi.fn()
+const mutate = vi.fn()
 let search = 'redirect=/history'
 
 vi.mock('next/navigation', () => ({
@@ -15,7 +16,7 @@ vi.mock('next/navigation', () => ({
 }))
 vi.mock('@/lib/navigation', () => ({ hardNavigate: vi.fn() }))
 vi.mock('@/hooks', () => ({
-  useLogin: () => ({ mutate: vi.fn(), error: null, isPending: false }),
+  useLogin: () => ({ mutate, error: null, isPending: false }),
 }))
 
 describe('LoginForm redirect after authentication', () => {
@@ -54,5 +55,37 @@ describe('LoginForm redirect after authentication', () => {
     act(() => useAuthStore.setState({ status: 'authenticated' }))
     expect(hardNavigate).toHaveBeenCalledTimes(1)
     expect(hardNavigate).toHaveBeenCalledWith('/history')
+  })
+})
+
+describe('LoginForm social button', () => {
+  beforeEach(() => {
+    vi.mocked(hardNavigate).mockReset()
+    push.mockReset()
+    replace.mockReset()
+    mutate.mockReset()
+    search = ''
+    useAuthStore.setState({ status: 'idle' })
+  })
+  afterEach(() => {
+    cleanup()
+    useAuthStore.setState({ accessToken: null, user: null, status: 'idle', signedOut: false })
+  })
+
+  it('renders the Google button disabled with a visible coming-soon label', () => {
+    render(<LoginForm />)
+    const button = screen.getByRole('button', { name: /Google/ }) as HTMLButtonElement
+    expect(button.disabled).toBe(true)
+    expect(button.getAttribute('aria-disabled')).toBe('true')
+    expect(button.textContent).toContain('Sắp có')
+  })
+
+  it('does not log in or navigate when the disabled Google button is clicked', () => {
+    render(<LoginForm />)
+    fireEvent.click(screen.getByRole('button', { name: /Google/ }))
+    expect(mutate).not.toHaveBeenCalled()
+    expect(hardNavigate).not.toHaveBeenCalled()
+    expect(push).not.toHaveBeenCalled()
+    expect(replace).not.toHaveBeenCalled()
   })
 })

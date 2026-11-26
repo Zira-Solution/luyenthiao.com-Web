@@ -78,4 +78,16 @@ describe('PrivateDataCleanup', () => {
     act(() => useAuthStore.getState().setSession('token-a2', userA))
     expect(client.getQueryData(queryKeys.tasks())).toEqual(['private'])
   })
+
+  it('drops and resets admin queries when signing out or switching users', () => {
+    const client = setup()
+    client.setQueryData(queryKeys.adminExams(), [{ id: 'e1' }])
+
+    act(() => useAuthStore.getState().setSession('token-b', userB))
+    expect(client.getQueryData(queryKeys.adminExams())).toBeUndefined()
+
+    client.setQueryData(queryKeys.adminExams(), [{ id: 'e2' }])
+    act(() => useAuthStore.getState().clearSession('logout'))
+    expect(client.getQueryData(queryKeys.adminExams())).toBeUndefined()
+  })
 })

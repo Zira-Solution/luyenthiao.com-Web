@@ -24,8 +24,13 @@ export function PrivateDataCleanup(): null {
         // Ended: nobody is signed in, so drop the data. Switched: removeQueries does not notify
         // mounted observers (screens would keep the previous user's data), so reset instead: it
         // cancels in-flight fetches, notifies observers and refetches active queries as the new user.
-        if (ended) queryClient.removeQueries({ queryKey: queryKeys.me() })
-        else if (switched) void queryClient.resetQueries({ queryKey: queryKeys.me() })
+        if (ended) {
+          queryClient.removeQueries({ queryKey: queryKeys.me() })
+          queryClient.removeQueries({ queryKey: queryKeys.admin() })
+        } else if (switched) {
+          void queryClient.resetQueries({ queryKey: queryKeys.me() })
+          void queryClient.resetQueries({ queryKey: queryKeys.admin() })
+        }
       }),
     [queryClient],
   )

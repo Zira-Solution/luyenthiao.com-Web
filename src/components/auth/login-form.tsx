@@ -192,9 +192,16 @@ export function LoginForm(): React.ReactElement {
       {/* 6. Clean Google Sign-in Button */}
       <button
         type="button"
-        className="group flex h-[46px] w-full cursor-pointer items-center justify-center gap-2.5 rounded-2xl border-2 border-slate-200/90 bg-white px-4 shadow-[0_4px_12px_rgba(100,110,180,0.06)] transition-all duration-150 hover:-translate-y-0.5 hover:bg-slate-50 active:translate-y-[1px] sm:h-[48px]"
+        disabled
+        aria-disabled="true"
+        className="flex h-[46px] w-full cursor-not-allowed items-center justify-center gap-2.5 rounded-2xl border-2 border-slate-200/90 bg-slate-50 px-4 shadow-[0_4px_12px_rgba(100,110,180,0.06)] sm:h-[48px]"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0 sm:h-5 sm:w-5">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          className="shrink-0 opacity-60 sm:h-5 sm:w-5"
+        >
           <path
             fill="#4285F4"
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -214,6 +221,9 @@ export function LoginForm(): React.ReactElement {
         </svg>
         <span className="text-xs font-bold tracking-wide text-slate-700 sm:text-sm">
           Đăng nhập với Google
+        </span>
+        <span className="shrink-0 rounded-full bg-slate-200 px-1.5 py-0.5 text-[10px] leading-none font-bold text-slate-700">
+          Sắp có
         </span>
       </button>
 
