@@ -4,6 +4,7 @@ import { ChevronLeft, Search, BookOpen, Star, RefreshCw, Volume2, HelpCircle } f
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
+import { VocabLibraryView } from "@/components/vocab/vocab-library-view";
 import { useDeleteNotebookEntry, useMyNotebook, useUpdateNotebookEntry } from "@/hooks/use-notebook";
 import { GENERIC_ERROR_MESSAGE } from "@/lib/api-client";
 import { LEVEL_OPTIONS, levelLabel } from "@/lib/level-label";
@@ -13,7 +14,7 @@ import type { NotebookWord } from "@/schemas/notebook";
 export function NotebookView(): React.ReactElement {
   const router = useRouter();
   
-  const [activeCategory, setActiveCategory] = useState<"vocab" | "grammar" | "starred">("vocab");
+  const [activeCategory, setActiveCategory] = useState<"vocab" | "library" | "grammar" | "starred">("vocab");
   const [searchQuery, setSearchQuery] = useState("");
   const [levelFilter, setLevelFilter] = useState("all");
   
@@ -115,22 +116,32 @@ export function NotebookView(): React.ReactElement {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex gap-2 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-sm rounded-full border-2 border-ranking-table-border shadow-lg mb-6 max-w-md w-full justify-between text-shadow-game-title">
+      <div className="flex flex-wrap gap-2 p-1.5 bg-game-input-focus-shadow/80 backdrop-blur-sm rounded-full border-2 border-ranking-table-border shadow-lg mb-6 max-w-xl w-full justify-between text-shadow-game-title">
         <button 
           onClick={() => setActiveCategory("vocab")}
           aria-pressed={activeCategory === "vocab"}
           className={cn(
-            "flex-1 py-2 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center",
+            "flex-1 py-2 px-3 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center whitespace-nowrap",
             activeCategory === "vocab" ? "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border border-blue-400 text-white shadow-md" : "text-blue-200 hover:text-white"
           )}
         >
           Từ vựng
         </button>
         <button 
+          onClick={() => setActiveCategory("library")}
+          aria-pressed={activeCategory === "library"}
+          className={cn(
+            "flex-1 py-2 px-3 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center whitespace-nowrap",
+            activeCategory === "library" ? "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border border-blue-400 text-white shadow-md" : "text-blue-200 hover:text-white"
+          )}
+        >
+          Kho từ vựng
+        </button>
+        <button 
           onClick={() => setActiveCategory("grammar")}
           aria-pressed={activeCategory === "grammar"}
           className={cn(
-            "flex-1 py-2 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center",
+            "flex-1 py-2 px-3 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center whitespace-nowrap",
             activeCategory === "grammar" ? "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border border-blue-400 text-white shadow-md" : "text-blue-200 hover:text-white"
           )}
         >
@@ -140,7 +151,7 @@ export function NotebookView(): React.ReactElement {
           onClick={() => setActiveCategory("starred")}
           aria-pressed={activeCategory === "starred"}
           className={cn(
-            "flex-1 py-2 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center",
+            "flex-1 py-2 px-3 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center whitespace-nowrap",
             activeCategory === "starred" ? "bg-gradient-to-b from-topbar-login-bg to-topbar-login-border border border-blue-400 text-white shadow-md" : "text-blue-200 hover:text-white"
           )}
         >
@@ -148,7 +159,9 @@ export function NotebookView(): React.ReactElement {
         </button>
       </div>
 
-      {activeCategory === "grammar" ? (
+      {activeCategory === "library" ? (
+        <VocabLibraryView embedded />
+      ) : activeCategory === "grammar" ? (
         /* GRAMMAR VIEW */
         <div className="w-full bg-ranking-table-bg backdrop-blur-sm rounded-[2.2rem] p-8 border-3 border-ranking-table-border shadow-[0_15px_30px_rgba(0,0,0,0.5)] max-w-4xl text-shadow-game-title">
           <p className="text-white font-black text-sm md:text-base text-center text-shadow-game-title">
