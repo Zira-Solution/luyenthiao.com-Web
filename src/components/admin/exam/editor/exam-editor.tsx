@@ -1,32 +1,39 @@
-"use client"
+'use client'
 
-import { ArrowLeft, Plus, Save, Trash2 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useEffect, useState, type ReactElement } from "react"
+import { ArrowLeft, Plus, Save, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState, type ReactElement } from 'react'
 
-import { Field, NumberInput, TextInput } from "./editor-field"
-import { PartCard } from "./part-card"
-import { ValidationPanel } from "./validation-panel"
+import { Field, NumberInput, TextInput } from './editor-field'
+import { PartCard } from './part-card'
+import { ValidationPanel } from './validation-panel'
 
-import { ROUTES } from "@/constants"
-import { clearDraft, loadDraft, saveDraft } from "@/lib/admin-draft"
-import { examSchema, type Exam, type ExamPart, type ExamStructure } from "@/lib/exam"
-import { blankExam, blankPart, blankStructure, structurePartCount } from "@/lib/exam-blank"
-import { selectDirty, useExamEditorStore } from "@/store/exam-editor-store"
-import { useExamStore } from "@/store/exam-store"
+import { AdminPageHeader } from '@/components/admin/shell'
+import { ROUTES } from '@/constants'
+import {
+  useAdminExam,
+  useAdminPlanets,
+  useCreateAdminExam,
+  useUpdateAdminExam,
+} from '@/hooks/admin'
+import { clearDraft, loadDraft, saveDraft } from '@/lib/admin-draft'
+import { examSchema, type Exam, type ExamPart, type ExamStructure } from '@/lib/exam'
+import { blankExam, blankPart, blankStructure, structurePartCount } from '@/lib/exam-blank'
+import { selectDirty, useExamEditorStore } from '@/store/exam-editor-store'
 
-
-interface ExamEditorProps {
+export interface ExamEditorProps {
   examId: string
 }
 
 export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
   const router = useRouter()
-  const isNew = examId === "new"
+  const isNew = examId === 'new'
+  const draftKey = isNew ? 'new' : examId
 
-  const hydrate = useExamStore((s) => s.hydrate)
-  const addExam = useExamStore((s) => s.add)
-  const updateExam = useExamStore((s) => s.update)
+  const { data: serverExam, isLoading, error } = useAdminExam(examId)
+  const { data: planets = [] } = useAdminPlanets()
+  const createExam = useCreateAdminExam()
+  const updateExam = useUpdateAdminExam()
 
   const draft = useExamEditorStore((s) => s.draft)
   const init = useExamEditorStore((s) => s.init)
@@ -36,38 +43,34 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
   const dirty = useExamEditorStore(selectDirty)
 
   const [saveError, setSaveError] = useState<string | null>(null)
-  const [draftMeta, setDraftMeta] = useState<{ savedAt: number } | null>(null)
+  const [draftMeta, setDraftMeta] = useState<{ savedAt: number } | null>(() => {
+    const existing = loadDraft(draftKey)
+    return existing ? { savedAt: existing.savedAt } : null
+  })
 
-  const draftKey = isNew ? "new" : examId
-  const draftSnapshot = useExamEditorStore((s) => s.draft)
-
-  // Autosave — ghi bản nháp sau 400ms im lặng
+  // Autosave — ghi bản nháp cục bộ phòng mất mạng sau 400ms im lặng
   useEffect(() => {
-    if (!draftSnapshot) return
+    if (!draft) return
     const t = setTimeout(() => {
-      saveDraft(draftKey, draftSnapshot)
+      saveDraft(draftKey, draft)
     }, 400)
     return () => clearTimeout(t)
-  }, [draftSnapshot, draftKey])
+  }, [draft, draftKey])
 
   useEffect(() => {
-    hydrate()
-    const existing = loadDraft(draftKey)
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- restore banner cần biết trạng thái nháp ở lúc mount
-    if (existing) setDraftMeta({ savedAt: existing.savedAt })
-    let initial: Exam | null = null
+    const currentId = useExamEditorStore.getState().draft?.id
     if (isNew) {
-      initial = blankExam()
-    } else {
-      const found = useExamStore.getState().exams.find((e) => e.id === examId)
-      if (found) initial = JSON.parse(JSON.stringify(found)) as Exam
+      if (!currentId) init(blankExam())
+    } else if (serverExam && currentId !== serverExam.id) {
+      init(JSON.parse(JSON.stringify(serverExam)) as Exam)
     }
-    if (initial) init(initial)
+  }, [isNew, serverExam, init])
+
+  useEffect(() => {
     return () => {
       reset()
-      setDraftMeta(null)
     }
-  }, [examId, isNew, hydrate, init, reset, draftKey])
+  }, [examId, reset])
 
   const restoreDraft = () => {
     const existing = loadDraft(draftKey)
@@ -82,10 +85,28 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
     setDraftMeta(null)
   }
 
-  if (!draft) {
+  if (!isNew && error) {
     return (
-      <div className="min-h-screen bg-dashboard-bg font-sans flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-white" />
+      <div className="rounded-xl border border-rose-200 bg-white p-8 text-center shadow-xs">
+        <p className="text-base font-semibold text-rose-700">
+          {error instanceof Error ? error.message : 'Không tải được đề thi từ máy chủ.'}
+        </p>
+        <button
+          type="button"
+          onClick={() => router.push(ROUTES.ADMIN_EXAM)}
+          className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Quay lại danh sách
+        </button>
+      </div>
+    )
+  }
+
+  if (!draft || (!isNew && isLoading)) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <div className="border-brand-primary size-10 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     )
   }
@@ -100,11 +121,23 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
     patchExam((d) => ({ ...d, structures: d.structures.filter((_, i) => i !== idx) }))
 
   const addPart = (structIdx: number) =>
-    patchStruct(structIdx, (s) => ({ ...s, parts: [...s.parts, blankPart("gapfill")] }))
+    patchStruct(structIdx, (s) => ({ ...s, parts: [...s.parts, blankPart('gapfill')] }))
 
-  const save = () => {
+  const handleSelectPlanet = (slug: string) => {
+    const matched = planets.find((p) => p.slug === slug)
+    patchExam((d) => ({
+      ...d,
+      levelSlug: slug,
+      levelName: matched ? matched.name : slug.toUpperCase(),
+    }))
+  }
+
+  const examTitle = draft.name || 'Đề thi mới'
+  const isSaving = createExam.isPending || updateExam.isPending
+
+  const save = async () => {
     setSaveError(null)
-    if (!draft) return
+    if (!draft || isSaving) return
 
     const st = useExamEditorStore.getState()
     const jsonTexts = st.jsonTexts
@@ -113,7 +146,6 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
     let parseError: string | null = null
     const finalPartsPerStruct: ExamStructure[] = draft.structures.map((s) => {
       const parts: ExamPart[] = s.parts.map((p) => {
-        // Chỉ áp dụng buffer JSON cho phần đang bật "chế độ nâng cao"
         if (!jsonMode[p.id]) return p
         const raw = jsonTexts[p.id]?.trim()
         if (!raw) {
@@ -121,7 +153,7 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
           return p
         }
         try {
-          return { ...p, questions: JSON.parse(raw) as ExamPart["questions"] }
+          return { ...p, questions: JSON.parse(raw) as ExamPart['questions'] }
         } catch {
           parseError = `JSON câu hỏi của phần "${p.title || p.id}" không hợp lệ.`
           return p
@@ -139,71 +171,91 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
     const result = examSchema.safeParse(final)
     if (!result.success) {
       const first = result.error.issues[0]
-      setSaveError(
-        `Dữ liệu không hợp lệ: ${first?.path.join(".")} ${first?.message}`,
-      )
+      setSaveError(`Dữ liệu không hợp lệ: ${first?.path.join('.')} ${first?.message}`)
       return
     }
-    if (isNew) addExam(final)
-    else updateExam(final)
-    clearDraft(draftKey)
-    setDraftMeta(null)
-    router.push(ROUTES.ADMIN_EXAM)
+
+    try {
+      if (isNew) {
+        await createExam.mutateAsync(result.data)
+      } else {
+        await updateExam.mutateAsync({ id: examId, exam: result.data })
+      }
+      clearDraft(draftKey)
+      setDraftMeta(null)
+      router.push(ROUTES.ADMIN_EXAM)
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Lưu đề thi thất bại.')
+    }
   }
 
+  const hasCurrentPlanetInList = planets.some((p) => p.slug === draft.levelSlug)
+
   return (
-    <div className="min-h-screen bg-dashboard-bg font-sans">
-      <header className="border-b border-white/10 bg-topbar-login-bg/80 backdrop-blur sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <button
-            onClick={() => router.push(ROUTES.ADMIN_EXAM)}
-            className="inline-flex items-center gap-2 text-white/70 hover:text-white font-black text-sm uppercase transition-colors cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {isNew ? "Tạo đề mới" : "Sửa đề thi"}
-          </button>
-          <div className="flex items-center gap-3">
+    <>
+      <AdminPageHeader
+        title={examTitle}
+        breadcrumbs={[
+          { label: 'Trang chủ', href: '/' },
+          { label: 'Đề thi', href: ROUTES.ADMIN_EXAM },
+          { label: examTitle },
+        ]}
+        actions={
+          <>
+            <button
+              type="button"
+              onClick={() => router.push(ROUTES.ADMIN_EXAM)}
+              className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              <ArrowLeft className="size-4" aria-hidden="true" />
+              Quay lại
+            </button>
             {dirty && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-primary/20 border border-brand-primary/40 px-3 py-1 text-brand-primary text-xs font-black uppercase">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+              <span className="text-admin-primary inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium">
+                <span className="bg-admin-primary size-1.5 animate-pulse rounded-full" />
                 Chưa lưu
               </span>
             )}
-            <span className="text-white/40 text-xs font-mono hidden sm:inline">
-              {isNew ? "(mới)" : draft.id}
+            <span className="hidden font-mono text-xs text-slate-500 sm:inline">
+              {isNew ? '(mới)' : draft.id}
             </span>
             <button
+              type="button"
               onClick={save}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-game-cta-to hover:bg-game-cta-from text-white font-black text-sm uppercase transition-colors cursor-pointer shadow-lg"
+              disabled={isSaving}
+              className="bg-admin-primary hover:bg-admin-primary-hover inline-flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-xs transition-colors disabled:opacity-50"
             >
-              <Save className="w-4 h-4" />
-              Lưu đề
+              <Save className="size-4" aria-hidden="true" />
+              {isSaving ? 'Đang lưu…' : 'Lưu đề'}
             </button>
-          </div>
-        </div>
-      </header>
+          </>
+        }
+      />
 
-      <main className="max-w-5xl mx-auto px-6 py-8 flex flex-col gap-6">
+      <div className="flex flex-col gap-5">
         {saveError && (
-          <div className="bg-game-danger-to/20 border border-game-danger-from rounded-2xl px-4 py-3 text-white font-bold text-sm">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
             {saveError}
           </div>
         )}
 
         {draftMeta && (
-          <div className="flex flex-wrap items-center gap-3 bg-brand-primary/15 border border-brand-primary/40 rounded-2xl px-4 py-3">
-            <p className="text-brand-primary text-sm font-bold flex-1 min-w-[200px]">
-              Bạn có một bản nháp chưa lưu ({new Date(draftMeta.savedAt).toLocaleTimeString("vi-VN")}).
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
+            <p className="text-admin-primary min-w-[200px] flex-1 text-sm font-medium">
+              Bạn có một bản nháp chưa lưu (
+              {new Date(draftMeta.savedAt).toLocaleTimeString('vi-VN')}).
             </p>
             <button
+              type="button"
               onClick={restoreDraft}
-              className="px-4 py-2 rounded-xl bg-brand-primary text-white font-black text-xs uppercase transition-colors cursor-pointer hover:opacity-90"
+              className="bg-admin-primary hover:bg-admin-primary-hover cursor-pointer rounded-lg px-3.5 py-1.5 text-xs font-semibold text-white transition-colors"
             >
               Khôi phục
             </button>
             <button
+              type="button"
               onClick={discardDraft}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase transition-colors cursor-pointer"
+              className="cursor-pointer rounded-lg border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
             >
               Bỏ nháp
             </button>
@@ -211,15 +263,47 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
         )}
 
         {/* Metadata */}
-        <section className="bg-white/5 border border-white/10 rounded-3xl p-6 flex flex-col gap-4">
-          <h2 className="text-white font-black uppercase tracking-wide text-sm">Thông tin chung</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Field label="Tên đề thi">
-              <TextInput
-                value={draft.name}
-                onChange={(v) => patchExam((d) => ({ ...d, name: v }))}
-                placeholder="VD: Movers Practice Test 1"
+        <section className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold text-slate-900">Thông tin chung</h2>
+            <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-700">
+              <input
+                type="checkbox"
+                checked={Boolean(draft.isDemo)}
+                onChange={(e) => patchExam((d) => ({ ...d, isDemo: e.target.checked }))}
+                className="accent-brand-primary"
               />
+              Đề dùng thử (Demo cho khách)
+            </label>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <div className="xl:col-span-2">
+              <Field label="Tên đề thi">
+                <TextInput
+                  value={draft.name}
+                  onChange={(v) => patchExam((d) => ({ ...d, name: v }))}
+                  placeholder="VD: Movers Practice Test 1"
+                />
+              </Field>
+            </div>
+            <Field label="Hành tinh">
+              <select
+                aria-label="Hành tinh"
+                value={draft.levelSlug}
+                onChange={(e) => handleSelectPlanet(e.target.value)}
+                className="focus:border-brand-primary focus:ring-brand-primary/20 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:outline-none"
+              >
+                {!hasCurrentPlanetInList && draft.levelSlug && (
+                  <option value={draft.levelSlug}>
+                    {draft.levelName || draft.levelSlug} ({draft.levelSlug})
+                  </option>
+                )}
+                {planets.map((p) => (
+                  <option key={p.id} value={p.slug}>
+                    {p.name} ({p.slug})
+                  </option>
+                ))}
+              </select>
             </Field>
             <Field label="Tên cấp độ">
               <TextInput
@@ -228,39 +312,53 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
                 placeholder="VD: MOVERS"
               />
             </Field>
-            <Field label="Slug cấp độ">
-              <TextInput
-                value={draft.levelSlug}
-                onChange={(v) => patchExam((d) => ({ ...d, levelSlug: v }))}
-                placeholder="VD: movers"
-              />
-            </Field>
+            <div className="grid grid-cols-2 gap-2">
+              <Field label="Slug cấp độ">
+                <TextInput
+                  value={draft.levelSlug}
+                  onChange={(v) => patchExam((d) => ({ ...d, levelSlug: v }))}
+                  placeholder="VD: movers"
+                />
+              </Field>
+              <Field label="Thứ tự">
+                <NumberInput
+                  value={draft.order ?? 0}
+                  min={0}
+                  onChange={(n) => patchExam((d) => ({ ...d, order: n }))}
+                />
+              </Field>
+            </div>
           </div>
         </section>
 
-        {/* Structures */}
-        <section className="bg-white/5 border border-white/10 rounded-3xl p-6">
+        {/* Validation */}
+        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
           <ValidationPanel exam={draft} />
         </section>
 
-        <section className="flex flex-col gap-6">
+        {/* Structures */}
+        <section className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-white font-black uppercase tracking-wide text-sm">
+            <h2 className="text-sm font-semibold text-slate-900">
               Cấu trúc đề thi ({structurePartCount(draft)} phần)
             </h2>
             <button
+              type="button"
               onClick={addStructure}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-xs uppercase transition-colors cursor-pointer"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="size-3.5" aria-hidden="true" />
               Thêm cấu trúc
             </button>
           </div>
 
           {draft.structures.map((structure, si) => (
-            <div key={structure.id} className="bg-white/5 border border-white/10 rounded-3xl p-6">
-              <div className="flex items-center justify-between gap-4 mb-4">
-                <div className="grid grid-cols-2 gap-3 flex-1 max-w-md">
+            <div
+              key={structure.id}
+              className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs"
+            >
+              <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+                <div className="grid max-w-md flex-1 grid-cols-2 gap-3">
                   <Field label="Tên cấu trúc">
                     <TextInput
                       value={structure.name}
@@ -276,11 +374,12 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
                   </Field>
                 </div>
                 <button
+                  type="button"
                   onClick={() => removeStructure(si)}
                   disabled={draft.structures.length === 1}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 hover:bg-game-danger-to text-white/70 hover:text-white font-bold text-xs uppercase transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700 transition-colors hover:bg-rose-100 disabled:pointer-events-none disabled:opacity-40"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 className="size-3.5" aria-hidden="true" />
                   Xóa
                 </button>
               </div>
@@ -290,15 +389,16 @@ export function ExamEditor({ examId }: ExamEditorProps): ReactElement {
               ))}
 
               <button
+                type="button"
                 onClick={() => addPart(si)}
-                className="mt-3 w-full py-2.5 rounded-xl border border-dashed border-white/20 hover:border-white/40 text-white/60 hover:text-white font-bold text-xs uppercase transition-colors cursor-pointer"
+                className="mt-3 w-full cursor-pointer rounded-lg border border-dashed border-slate-300 py-2 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900"
               >
                 + Thêm phần
               </button>
             </div>
           ))}
         </section>
-      </main>
-    </div>
+      </div>
+    </>
   )
 }

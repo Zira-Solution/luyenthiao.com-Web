@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import type { ChangeEvent, ReactElement, ReactNode } from "react"
+import type { ChangeEvent, ReactElement, ReactNode } from 'react'
 
-interface FieldProps {
+export interface FieldProps {
   label: string
   children: ReactNode
 }
@@ -10,13 +10,13 @@ interface FieldProps {
 export function Field({ label, children }: FieldProps): ReactElement {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-white/60 text-[11px] font-black uppercase tracking-wide">{label}</span>
+      <span className="text-xs font-medium text-slate-600">{label}</span>
       {children}
     </label>
   )
 }
 
-interface TextInputProps {
+export interface TextInputProps {
   value: string
   onChange: (v: string) => void
   placeholder?: string
@@ -28,36 +28,35 @@ export function TextInput({ value, onChange, placeholder }: TextInputProps): Rea
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="bg-white/10 text-white font-semibold text-sm rounded-xl px-3 py-2.5 focus:outline-none border border-transparent focus:border-brand-primary placeholder:text-white/30"
+      className="focus:border-brand-primary focus:ring-brand-primary/20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:outline-none"
     />
   )
 }
 
-interface NumberInputProps {
+export interface NumberInputProps {
   value: number
   onChange: (n: number) => void
   min?: number
+  max?: number
 }
 
-export function NumberInput({
-  value,
-  onChange,
-  min = 1,
-}: NumberInputProps): ReactElement {
+export function NumberInput({ value, onChange, min = 1, max }: NumberInputProps): ReactElement {
   return (
     <input
       type="number"
       min={min}
+      max={max}
       value={value}
-      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        onChange(parseInt(e.target.value, 10) || 1)
-      }
-      className="bg-white/10 text-white font-semibold text-sm rounded-xl px-3 py-2.5 focus:outline-none border border-transparent focus:border-brand-primary"
+      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        const parsed = Number.parseInt(e.target.value, 10)
+        onChange(Number.isNaN(parsed) ? min : parsed)
+      }}
+      className="focus:border-brand-primary focus:ring-brand-primary/20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:outline-none"
     />
   )
 }
 
-interface TextAreaInputProps {
+export interface TextAreaInputProps {
   value: string
   onChange: (v: string) => void
   placeholder?: string
@@ -77,7 +76,7 @@ export function TextAreaInput({
       placeholder={placeholder}
       rows={rows}
       spellCheck={false}
-      className="w-full bg-white/10 text-white font-semibold text-sm rounded-xl px-3 py-2.5 focus:outline-none border border-transparent focus:border-brand-primary placeholder:text-white/30 resize-y"
+      className="focus:border-brand-primary focus:ring-brand-primary/20 w-full resize-y rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:outline-none"
     />
   )
 }

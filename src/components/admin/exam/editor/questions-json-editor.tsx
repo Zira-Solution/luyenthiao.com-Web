@@ -1,17 +1,20 @@
-"use client"
+'use client'
 
-import { Code2, RotateCcw } from "lucide-react"
-import { useRef, useState, type ReactElement } from "react"
+import { Code2, RotateCcw } from 'lucide-react'
+import { useRef, useState, type ReactElement } from 'react'
 
-import { useExamEditorStore } from "@/store/exam-editor-store"
-import type { ExamQuestion } from "@/types/exam"
+import { useExamEditorStore } from '@/store/exam-editor-store'
+import type { ExamQuestion } from '@/types/exam'
 
-interface QuestionsJsonEditorProps {
+export interface QuestionsJsonEditorProps {
   structIdx: number
   partIdx: number
 }
 
-export function QuestionsJsonEditor({ structIdx, partIdx }: QuestionsJsonEditorProps): ReactElement {
+export function QuestionsJsonEditor({
+  structIdx,
+  partIdx,
+}: QuestionsJsonEditorProps): ReactElement {
   const draft = useExamEditorStore((s) => s.draft)
   const json = useExamEditorStore((s) => s.jsonTexts)
   const jsonMode = useExamEditorStore((s) => s.jsonMode)
@@ -26,7 +29,7 @@ export function QuestionsJsonEditor({ structIdx, partIdx }: QuestionsJsonEditorP
   if (!part) return <div />
 
   const isJson = !!jsonMode[part.id]
-  const buffer = json[part.id] ?? ""
+  const buffer = json[part.id] ?? ''
 
   const enterJsonMode = () => {
     setJsonText(part.id, JSON.stringify(part.questions ?? [], null, 2))
@@ -39,23 +42,23 @@ export function QuestionsJsonEditor({ structIdx, partIdx }: QuestionsJsonEditorP
     setError(null)
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => {
-      const latest = useExamEditorStore.getState().jsonTexts[part.id] ?? ""
+      const latest = useExamEditorStore.getState().jsonTexts[part.id] ?? ''
       const trimmed = latest.trim()
       if (!trimmed) {
-        setError("questions rỗng.")
+        setError('questions rỗng.')
         return
       }
       try {
         const parsed = JSON.parse(trimmed) as unknown
         if (!Array.isArray(parsed)) {
-          setError("questions phải là một mảng JSON.")
+          setError('questions phải là một mảng JSON.')
           return
         }
         // parse-then-commit: chỉ ghi khi JSON hợp lệ
         patchPart(structIdx, partIdx, (p) => ({ ...p, questions: parsed as ExamQuestion[] }))
         setError(null)
       } catch {
-        setError("JSON chưa hợp lệ — dữ liệu form giữ nguyên.")
+        setError('JSON chưa hợp lệ — dữ liệu form giữ nguyên.')
       }
     }, 400)
   }
@@ -72,24 +75,26 @@ export function QuestionsJsonEditor({ structIdx, partIdx }: QuestionsJsonEditorP
   }
 
   return (
-    <div className="mt-3 rounded-xl border border-white/10 bg-black/10 p-3 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3">
       <div className="flex items-center justify-between gap-2">
-        <span className="inline-flex items-center gap-1.5 text-white/60 text-xs font-bold">
-          <Code2 className="w-3.5 h-3.5" />
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600">
+          <Code2 className="size-3.5" aria-hidden="true" />
           Chế độ nâng cao (JSON)
         </span>
         {!isJson && (
           <button
+            type="button"
             onClick={enterJsonMode}
-            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
+            className="cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
           >
             Bật JSON
           </button>
         )}
         {isJson && !error && (
           <button
+            type="button"
             onClick={leaveJsonMode}
-            className="px-3 py-1.5 rounded-lg bg-brand-primary hover:opacity-90 text-white text-xs font-bold transition-colors cursor-pointer"
+            className="bg-admin-primary hover:bg-admin-primary-hover cursor-pointer rounded-lg px-3 py-1 text-xs font-semibold text-white transition-colors"
           >
             Về Form
           </button>
@@ -102,16 +107,17 @@ export function QuestionsJsonEditor({ structIdx, partIdx }: QuestionsJsonEditorP
             value={buffer}
             onChange={(e) => onTextChange(e.target.value)}
             spellCheck={false}
-            className="w-full h-56 bg-slate-900/70 text-white/90 font-mono text-xs rounded-xl border border-white/10 p-3 focus:border-brand-primary focus:outline-none resize-y"
+            className="focus:border-brand-primary focus:ring-brand-primary/20 h-56 w-full resize-y rounded-lg border border-slate-300 bg-slate-50 p-3 font-mono text-xs text-slate-900 focus:ring-2 focus:outline-none"
           />
           {error && (
-            <div className="flex items-center justify-between gap-2 rounded-xl border border-game-danger-from/50 bg-game-danger-to/15 px-3 py-2">
-              <span className="text-game-danger-from text-xs font-semibold">{error}</span>
+            <div className="flex items-center justify-between gap-2 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2">
+              <span className="text-xs font-medium text-rose-700">{error}</span>
               <button
+                type="button"
                 onClick={rejectChanges}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold transition-colors cursor-pointer"
+                className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
               >
-                <RotateCcw className="w-3 h-3" />
+                <RotateCcw className="size-3" aria-hidden="true" />
                 Bỏ thay đổi
               </button>
             </div>

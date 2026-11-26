@@ -1,18 +1,17 @@
-"use client"
+'use client'
 
-import { AlignLeft, Plus, Trash2 } from "lucide-react"
-import { useRef, type ReactElement } from "react"
+import { AlignLeft, Plus, Trash2 } from 'lucide-react'
+import { useRef, type ReactElement } from 'react'
 
-import { Field } from "../editor-field"
-import { TagsInput } from "../tags-input"
+import { Field } from '../editor-field'
+import { TagsInput } from '../tags-input'
 
-import { blankDetail, defaultQuestion } from "@/lib/exam-factories"
-import { cn } from "@/lib/utils"
-import { useExamEditorStore } from "@/store/exam-editor-store"
-import type { ExamDetail, ExamQuestion } from "@/types/exam"
+import { blankDetail, defaultQuestion } from '@/lib/exam-factories'
+import { cn } from '@/lib/utils'
+import { useExamEditorStore } from '@/store/exam-editor-store'
+import type { ExamDetail, ExamQuestion } from '@/types/exam'
 
-
-interface PartFormGapfillProps {
+export interface PartFormGapfillProps {
   structIdx: number
   partIdx: number
 }
@@ -25,17 +24,17 @@ export function PartFormGapfill({ structIdx, partIdx }: PartFormGapfillProps): R
   if (!part) return <div />
 
   const realCount = part.questions.filter((q) => !q.isExample).length
-  const variant = realCount <= 1 ? "Đoạn văn chỗ trống" : "Dạng hàng (mỗi ô 1 dòng)"
+  const variant = realCount <= 1 ? 'Đoạn văn chỗ trống' : 'Dạng hàng (mỗi ô 1 dòng)'
 
   const addQuestion = () =>
     patchPart(structIdx, partIdx, (p) => ({
       ...p,
-      questions: [...p.questions, defaultQuestion("gapfill")],
+      questions: [...p.questions, defaultQuestion('gapfill')],
     }))
 
   return (
-    <div className="flex flex-col gap-3 px-4 pb-4">
-      <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white/80">
+    <div className="flex flex-col gap-3">
+      <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700">
         Khuôn dạng: {variant}
       </div>
 
@@ -53,11 +52,11 @@ export function PartFormGapfill({ structIdx, partIdx }: PartFormGapfillProps): R
       ))}
 
       <button
+        type="button"
         onClick={addQuestion}
-        className="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg border border-dashed border-white/25 hover:border-white/40 text-white/60 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+        className="inline-flex cursor-pointer items-center gap-1.5 self-start rounded-lg border border-dashed border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
       >
-        <Plus className="w-3.5 h-3.5" />
-        + Thêm câu hỏi
+        <Plus className="size-3.5" aria-hidden="true" />+ Thêm câu hỏi
       </button>
     </div>
   )
@@ -70,10 +69,8 @@ function GapfillQuestionCard({
   q: ExamQuestion
   onPatch: (patch: Partial<ExamQuestion>) => void
 }): ReactElement {
-  const prompt = q.promptHtml ?? ""
-  const referenced = new Set(
-    Array.from(prompt.matchAll(/\{\{(\d+)\}\}/g), (m) => m[1] as string),
-  )
+  const prompt = q.promptHtml ?? ''
+  const referenced = new Set(Array.from(prompt.matchAll(/\{\{(\d+)\}\}/g), (m) => m[1] as string))
   const labelSet = new Set(q.details.map((d) => d.label))
   const missingRefs = Array.from(referenced).filter((n) => !labelSet.has(n))
 
@@ -85,7 +82,7 @@ function GapfillQuestionCard({
   const removeDetail = (di: number) => onPatch({ details: q.details.filter((_, i) => i !== di) })
 
   const addBlank = () =>
-    onPatch({ details: [...q.details, blankDetail("gapfill", String(q.details.length + 1))] })
+    onPatch({ details: [...q.details, blankDetail('gapfill', String(q.details.length + 1))] })
 
   const insertBlankMarker = () => {
     const n = q.details.length + 1
@@ -97,7 +94,7 @@ function GapfillQuestionCard({
     const next = val.slice(0, start) + marker + val.slice(end)
     onPatch({ promptHtml: next })
     if (!labelSet.has(String(n))) {
-      onPatch({ details: [...q.details, blankDetail("gapfill", String(n))] })
+      onPatch({ details: [...q.details, blankDetail('gapfill', String(n))] })
     }
     requestAnimationFrame(() => {
       const t = taRef.current
@@ -110,9 +107,9 @@ function GapfillQuestionCard({
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/10 overflow-hidden">
-      <div className="flex items-center justify-between gap-2 px-3 py-2 bg-white/5">
-        <label className="flex items-center gap-2 text-white/70 text-xs font-bold cursor-pointer">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="flex items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-3.5 py-2">
+        <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-700">
           <input
             type="checkbox"
             checked={q.isExample}
@@ -122,15 +119,16 @@ function GapfillQuestionCard({
           Là ví dụ — không chấm điểm
         </label>
         <button
+          type="button"
           onClick={() => onPatch({ details: [] })}
-          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-game-danger-to/30 text-white/50 hover:text-white text-[11px] transition-colors cursor-pointer"
+          className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700 transition-colors hover:bg-rose-100"
         >
-          <Trash2 className="w-3 h-3" />
+          <Trash2 className="size-3" aria-hidden="true" />
           Bỏ ô trống
         </button>
       </div>
 
-      <div className="px-3 py-3 flex flex-col gap-3">
+      <div className="flex flex-col gap-3 p-3.5">
         <Field label="Đoạn văn / Câu hỏi">
           <div className="flex flex-col gap-1.5">
             <div className="relative">
@@ -140,28 +138,31 @@ function GapfillQuestionCard({
                 onChange={(e) => onPatch({ promptHtml: e.target.value })}
                 rows={3}
                 spellCheck={false}
-                className="w-full bg-white/10 text-white text-sm rounded-xl px-3 py-2.5 pr-24 focus:outline-none border border-transparent focus:border-brand-primary placeholder:text-white/30 resize-y"
+                className="focus:border-brand-primary focus:ring-brand-primary/20 w-full resize-y rounded-lg border border-slate-300 bg-white px-3 py-2 pr-24 text-sm text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:outline-none"
                 placeholder="Nhập đoạn văn, dùng {{1}}, {{2}}…"
               />
               <button
+                type="button"
                 onClick={insertBlankMarker}
-                className="absolute top-2 right-2 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-brand-primary text-white text-[11px] font-black uppercase cursor-pointer hover:opacity-90"
+                className="bg-admin-primary hover:bg-admin-primary-hover absolute top-2 right-2 inline-flex cursor-pointer items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-white transition-colors"
               >
-                <AlignLeft className="w-3 h-3" />
+                <AlignLeft className="size-3" aria-hidden="true" />
                 Chỗ trống
               </button>
             </div>
             {missingRefs.length > 0 && (
-              <span className="text-game-danger-from text-[11px] font-semibold">
-                {missingRefs.map((n) => `{{${n}}}`).join(", ")} chưa có ô tương ứng
+              <span className="text-xs font-medium text-rose-700">
+                {missingRefs.map((n) => `{{${n}}}`).join(', ')} chưa có ô tương ứng
               </span>
             )}
           </div>
         </Field>
 
         <div className="flex flex-col gap-2">
-          <span className="text-white/60 text-[11px] font-black uppercase tracking-wide">Ô trống</span>
-          {q.details.length === 0 && <span className="text-white/40 text-xs">Chưa có ô trống nào.</span>}
+          <span className="text-xs font-medium text-slate-600">Ô trống</span>
+          {q.details.length === 0 && (
+            <span className="text-xs text-slate-500">Chưa có ô trống nào.</span>
+          )}
           {q.details.map((d, di) => (
             <BlankRow
               key={d.id}
@@ -172,11 +173,11 @@ function GapfillQuestionCard({
             />
           ))}
           <button
+            type="button"
             onClick={addBlank}
-            className="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg border border-dashed border-white/25 hover:border-white/40 text-white/60 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+            className="inline-flex cursor-pointer items-center gap-1.5 self-start rounded-lg border border-dashed border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900"
           >
-            <Plus className="w-3.5 h-3.5" />
-            + Thêm ô trống
+            <Plus className="size-3.5" aria-hidden="true" />+ Thêm ô trống
           </button>
         </div>
       </div>
@@ -196,24 +197,24 @@ function BlankRow({
   onRemove: () => void
 }): ReactElement {
   const hasOptions = (d.options?.length ?? 0) > 0
-  let hint: { text: string; tone: "danger" | "warning" } | null = null
+  let hint: { text: string; tone: 'danger' | 'warning' } | null = null
   if (!isReferenced) {
     if (hasOptions) {
       hint = {
         text: "Ô này hiển thị thành khối 'Choose the best name' ở cột trái",
-        tone: "warning",
+        tone: 'warning',
       }
     } else {
-      hint = { text: "Ô này sẽ không bao giờ hiển thị", tone: "danger" }
+      hint = { text: 'Ô này sẽ không bao giờ hiển thị', tone: 'danger' }
     }
   }
 
   return (
-    <div className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-2.5">
-      <span className="w-8 h-8 shrink-0 rounded-lg bg-brand-primary text-white grid place-items-center font-black text-sm">
+    <div className="flex items-start gap-2.5 rounded-lg border border-slate-200 bg-slate-50/70 p-3">
+      <span className="bg-admin-primary grid size-7 shrink-0 place-items-center rounded-md text-xs font-semibold text-white">
         {d.label}
       </span>
-      <div className="flex-1 flex flex-col gap-2 min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
         <Field label="Các lựa chọn (để trống = tự gõ)">
           <TagsInput
             values={d.options}
@@ -231,18 +232,19 @@ function BlankRow({
         {hint && (
           <span
             className={cn(
-              "text-[11px] font-semibold",
-              hint.tone === "danger" ? "text-game-danger-from" : "text-semantic-warning",
+              'text-xs font-medium',
+              hint.tone === 'danger' ? 'text-rose-700' : 'text-amber-800',
             )}
           >
             {hint.text}
           </span>
         )}
         <button
+          type="button"
           onClick={onRemove}
-          className="self-start inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-game-danger-to/30 text-white/50 hover:text-white text-[11px] transition-colors cursor-pointer"
+          className="inline-flex cursor-pointer items-center gap-1 self-start rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700 transition-colors hover:bg-rose-100"
         >
-          <Trash2 className="w-3 h-3" />
+          <Trash2 className="size-3" aria-hidden="true" />
           Xóa ô
         </button>
       </div>

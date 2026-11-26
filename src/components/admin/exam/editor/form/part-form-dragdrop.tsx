@@ -1,20 +1,19 @@
-"use client"
+'use client'
 
-import { Plus, Trash2 } from "lucide-react"
-import { useState, type ReactElement } from "react"
+import { Plus, Trash2 } from 'lucide-react'
+import { useState, type ReactElement } from 'react'
 
-import { BoxPicker } from "../box-picker"
-import { Field } from "../editor-field"
+import { BoxPicker } from '../box-picker'
+import { Field } from '../editor-field'
 
-import { MediaPickerField } from "@/components/admin/media"
-import { getColorName, isColorCode } from "@/lib/exam"
-import { blankDetail, defaultQuestion } from "@/lib/exam-factories"
-import { useExamEditorStore } from "@/store/exam-editor-store"
-import type { ExamQuestion, WordBoxItem } from "@/types/exam"
+import { MediaPickerField } from '@/components/admin/media'
+import { getColorName, isColorCode } from '@/lib/exam'
+import { blankDetail, defaultQuestion } from '@/lib/exam-factories'
+import { cn } from '@/lib/utils'
+import { useExamEditorStore } from '@/store/exam-editor-store'
+import type { ExamQuestion, WordBoxItem } from '@/types/exam'
 
-
-
-interface PartFormDragdropProps {
+export interface PartFormDragdropProps {
   structIdx: number
   partIdx: number
 }
@@ -39,12 +38,12 @@ export function PartFormDragdrop({ structIdx, partIdx }: PartFormDragdropProps):
   }
 
   const ensureQuestion = () => {
-    const q = { ...defaultQuestion("dragdrop"), details: [blankDetail("dragdrop", "1")] }
+    const q = { ...defaultQuestion('dragdrop'), details: [blankDetail('dragdrop', '1')] }
     patchPart(structIdx, partIdx, (p) => ({ ...p, questions: [...p.questions, q] }))
     setSelectedId(q.details[0]?.id ?? null)
   }
 
-  const patchDetail = (di: number, patch: Partial<ExamQuestion["details"][number]>) => {
+  const patchDetail = (di: number, patch: Partial<ExamQuestion['details'][number]>) => {
     if (!main) return
     patchMain({
       details: main.details.map((d, i) => (i === di ? { ...d, ...patch } : d)),
@@ -54,7 +53,7 @@ export function PartFormDragdrop({ structIdx, partIdx }: PartFormDragdropProps):
   const addBox = () => {
     if (!main) return
     patchMain({
-      details: [...main.details, blankDetail("dragdrop", String(main.details.length + 1))],
+      details: [...main.details, blankDetail('dragdrop', String(main.details.length + 1))],
     })
   }
 
@@ -62,56 +61,49 @@ export function PartFormDragdrop({ structIdx, partIdx }: PartFormDragdropProps):
   const choiceLabels = choices.map((c) => c.label).filter(Boolean) as string[]
 
   return (
-    <div className="flex flex-col gap-3 px-4 pb-4">
+    <div className="flex flex-col gap-3">
       {activeCount > 1 && (
-        <div className="rounded-xl border border-semantic-warning/40 bg-semantic-warning/10 px-3 py-2 text-semantic-warning text-xs font-semibold">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
           Player chỉ dùng câu đầu tiên, các câu khác bị bỏ qua.
         </div>
       )}
 
       {!main ? (
         <button
+          type="button"
           onClick={ensureQuestion}
-          className="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg border border-dashed border-white/25 hover:border-white/40 text-white/60 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+          className="inline-flex cursor-pointer items-center gap-1.5 self-start rounded-lg border border-dashed border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
         >
-          <Plus className="w-3.5 h-3.5" />
-          + Tạo câu chính
+          <Plus className="size-3.5" aria-hidden="true" />+ Tạo câu chính
         </button>
       ) : (
         <>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 flex flex-col gap-2">
-            <p className="text-white/60 text-[11px] font-black uppercase tracking-wide">Ảnh nền</p>
+          <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3.5">
+            <p className="text-xs font-medium text-slate-600">Ảnh nền</p>
             <MediaPickerField
               kind="image"
               value={main.promptHtml ?? null}
               onChange={(v) => patchMain({ promptHtml: v })}
             />
-            <p className="text-white/40 text-[11px]">
+            <p className="text-xs text-slate-500">
               Lưu ý: field này là đường dẫn ảnh nền cho cả bức tranh.
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 flex flex-col gap-2">
-            <p className="text-white/60 text-[11px] font-black uppercase tracking-wide">
-              Các thẻ kéo (tên vật phẩm)
-            </p>
-            <ChoiceEditor
-              choices={choices}
-              onChange={(c) => patchMain({ choices: c })}
-            />
+          <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3.5">
+            <p className="text-xs font-medium text-slate-600">Các thẻ kéo (tên vật phẩm)</p>
+            <ChoiceEditor choices={choices} onChange={(c) => patchMain({ choices: c })} />
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 flex flex-col gap-3">
+          <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-3.5">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-white/60 text-[11px] font-black uppercase tracking-wide">
-                Ô thả trên ảnh
-              </p>
+              <p className="text-xs font-medium text-slate-600">Ô thả trên ảnh</p>
               <button
+                type="button"
                 onClick={addBox}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold transition-colors cursor-pointer"
+                className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50"
               >
-                <Plus className="w-3 h-3" />
-                + Thêm ô
+                <Plus className="size-3" aria-hidden="true" />+ Thêm ô
               </button>
             </div>
 
@@ -139,58 +131,61 @@ export function PartFormDragdrop({ structIdx, partIdx }: PartFormDragdropProps):
                   <div
                     key={d.id}
                     onClick={() => setSelectedId(d.id)}
-                    className={`flex items-center gap-2 rounded-xl border p-2 transition-colors cursor-pointer ${
+                    className={cn(
+                      'flex cursor-pointer items-center gap-2.5 rounded-lg border p-2.5 transition-colors',
                       isActive
-                        ? "border-brand-primary bg-brand-primary/10"
-                        : "border-white/10 bg-white/5 hover:border-white/25"
-                    }`}
+                        ? 'border-brand-primary ring-brand-primary/30 bg-slate-50 ring-1'
+                        : 'border-slate-200 bg-white hover:border-slate-300',
+                    )}
                   >
                     <span
-                      className={`w-8 h-8 shrink-0 rounded-lg grid place-items-center font-black text-sm text-white ${
-                        isActive ? "bg-brand-primary" : "bg-white/10 text-white/70"
-                      }`}
+                      className={cn(
+                        'grid size-8 shrink-0 place-items-center rounded-lg text-sm font-semibold',
+                        isActive ? 'bg-admin-primary text-white' : 'bg-slate-100 text-slate-700',
+                      )}
                     >
                       {d.label}
                     </span>
                     {isActive && (
-                      <span className="hidden md:inline text-white/50 text-[10px] font-bold uppercase">
+                      <span className="hidden text-xs font-medium text-slate-700 md:inline">
                         Đang chọn để vẽ
                       </span>
                     )}
-                  <Field label="Đáp án đúng">
-                    <select
-                      value={d.correctAnswers?.[0] ?? ""}
-                      onChange={(e) =>
-                        patchDetail(di, {
-                          correctAnswers: e.target.value ? [e.target.value] : [],
-                        })
-                      }
-                      className="bg-white/10 text-white font-semibold text-sm rounded-xl px-3 py-2 focus:outline-none border border-transparent focus:border-brand-primary"
-                    >
-                      <option value="" className="text-slate-900">
-                        — Chọn thẻ —
-                      </option>
-                      {choiceLabels.map((l) => (
-                        <option key={l} value={l} className="text-slate-900">
-                          {isColorCode(l) ? getColorName(l) : l}
+                    <Field label="Đáp án đúng">
+                      <select
+                        value={d.correctAnswers?.[0] ?? ''}
+                        onChange={(e) =>
+                          patchDetail(di, {
+                            correctAnswers: e.target.value ? [e.target.value] : [],
+                          })
+                        }
+                        className="focus:border-brand-primary focus:ring-brand-primary/20 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900 focus:ring-2 focus:outline-none"
+                      >
+                        <option value="" className="text-slate-900">
+                          — Chọn thẻ —
                         </option>
-                      ))}
-                    </select>
-                  </Field>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setSelectedId(null)
-                      patchMain({
-                        details: main.details.filter((_, i) => i !== di),
-                      })
-                    }}
-                    className="p-2 rounded-lg bg-white/5 hover:bg-game-danger-to text-white/60 hover:text-white transition-colors cursor-pointer"
-                    aria-label="Xóa ô"
-                    title="Xóa ô"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                        {choiceLabels.map((l, li) => (
+                          <option key={`${l}-${li}`} value={l} className="text-slate-900">
+                            {isColorCode(l) ? getColorName(l) : l}
+                          </option>
+                        ))}
+                      </select>
+                    </Field>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setSelectedId(null)
+                        patchMain({
+                          details: main.details.filter((_, i) => i !== di),
+                        })
+                      }}
+                      className="cursor-pointer rounded-lg border border-rose-200 bg-rose-50 p-2 text-rose-700 transition-colors hover:bg-rose-100"
+                      aria-label="Xóa ô"
+                      title="Xóa ô"
+                    >
+                      <Trash2 className="size-4" aria-hidden="true" />
+                    </button>
                   </div>
                 )
               })}
@@ -209,7 +204,7 @@ function ChoiceEditor({
   choices: WordBoxItem[]
   onChange: (c: WordBoxItem[]) => void
 }): ReactElement {
-  const add = () => onChange([...choices, { label: "" }])
+  const add = () => onChange([...choices, { label: '' }])
   return (
     <div className="flex flex-col gap-2">
       {choices.map((c, i) => {
@@ -218,12 +213,12 @@ function ChoiceEditor({
           <div key={i} className="flex items-center gap-2">
             {isColor ? (
               <span
-                className="w-8 h-8 shrink-0 rounded-lg border border-white/20"
+                className="size-8 shrink-0 rounded-lg border border-slate-300"
                 style={{ backgroundColor: c.label }}
               />
             ) : (
-              <span className="w-8 h-8 shrink-0 rounded-lg bg-white/10 text-white/70 grid place-items-center text-xs font-bold uppercase">
-                {c.label.slice(0, 2) || "?"}
+              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-slate-100 text-xs font-semibold text-slate-700 uppercase">
+                {c.label.slice(0, 2) || '?'}
               </span>
             )}
             <input
@@ -231,25 +226,26 @@ function ChoiceEditor({
               onChange={(e) =>
                 onChange(choices.map((it, j) => (j === i ? { ...it, label: e.target.value } : it)))
               }
-              placeholder={isColor ? getColorName(c.label) : "Tên thẻ (hoặc #hex để tô màu)"}
-              className="flex-1 bg-white/10 text-white text-sm rounded-lg px-2.5 py-1.5 focus:outline-none border border-transparent focus:border-brand-primary placeholder:text-white/30"
+              placeholder={isColor ? getColorName(c.label) : 'Tên thẻ (hoặc #hex để tô màu)'}
+              className="focus:border-brand-primary focus:ring-brand-primary/20 flex-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:outline-none"
             />
             <button
+              type="button"
               onClick={() => onChange(choices.filter((_, j) => j !== i))}
-              className="p-2 rounded-lg bg-white/5 hover:bg-game-danger-to text-white/60 hover:text-white transition-colors cursor-pointer"
+              className="cursor-pointer rounded-lg border border-rose-200 bg-rose-50 p-2 text-rose-700 transition-colors hover:bg-rose-100"
               aria-label="Xóa thẻ"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="size-4" aria-hidden="true" />
             </button>
           </div>
         )
       })}
       <button
+        type="button"
         onClick={add}
-        className="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg border border-dashed border-white/25 hover:border-white/40 text-white/60 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+        className="inline-flex cursor-pointer items-center gap-1.5 self-start rounded-lg border border-dashed border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900"
       >
-        <Plus className="w-3.5 h-3.5" />
-        + Thêm thẻ
+        <Plus className="size-3.5" aria-hidden="true" />+ Thêm thẻ
       </button>
     </div>
   )

@@ -1,18 +1,17 @@
-"use client"
+'use client'
 
-import { Plus, Trash2 } from "lucide-react"
-import { type ReactElement } from "react"
+import { Plus, Trash2 } from 'lucide-react'
+import { type ReactElement } from 'react'
 
-import { Field, TextInput } from "../editor-field"
+import { Field, TextInput } from '../editor-field'
 
-import { MediaPickerField } from "@/components/admin/media"
-import { blankDetail, defaultQuestion } from "@/lib/exam-factories"
-import { cn } from "@/lib/utils"
-import { useExamEditorStore } from "@/store/exam-editor-store"
-import type { ExamDetail, ExamQuestion, WordBoxItem } from "@/types/exam"
+import { MediaPickerField } from '@/components/admin/media'
+import { blankDetail, defaultQuestion } from '@/lib/exam-factories'
+import { cn } from '@/lib/utils'
+import { useExamEditorStore } from '@/store/exam-editor-store'
+import type { ExamDetail, ExamQuestion, WordBoxItem } from '@/types/exam'
 
-
-interface PartFormMatchingProps {
+export interface PartFormMatchingProps {
   structIdx: number
   partIdx: number
 }
@@ -31,25 +30,25 @@ export function PartFormMatching({ structIdx, partIdx }: PartFormMatchingProps):
       ...p,
       questions: [
         ...p.questions,
-        { ...defaultQuestion("matching"), details: [blankDetail("matching", "")] },
+        { ...defaultQuestion('matching'), details: [blankDetail('matching', '')] },
       ],
     }))
 
   return (
-    <div className="flex flex-col gap-3 px-4 pb-4">
+    <div className="flex flex-col gap-3">
       {hasDuplicate(part.wordBox) && (
-        <div className="rounded-xl border border-game-danger-from/50 bg-game-danger-to/15 px-3 py-2 text-game-danger-from text-xs font-semibold">
+        <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700">
           Hai thẻ cùng chữ gây hiển thị sai — hãy đổi chữ trùng.
         </div>
       )}
 
       {part.questions.filter((q) => !q.isExample && q.details.length > 1).length > 0 && (
-        <div className="rounded-xl border border-semantic-warning/40 bg-semantic-warning/10 px-3 py-2 text-semantic-warning text-xs font-semibold">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
           Một số câu có nhiều hơn 1 ô — player chỉ dùng ô đầu tiên.
         </div>
       )}
 
-      <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white/80">
+      <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700">
         Cột phải: {letters.length} thẻ chữ. Cột trái: các vật phẩm bên dưới.
       </div>
 
@@ -74,11 +73,11 @@ export function PartFormMatching({ structIdx, partIdx }: PartFormMatchingProps):
       ))}
 
       <button
+        type="button"
         onClick={addItem}
-        className="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg border border-dashed border-white/25 hover:border-white/40 text-white/60 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+        className="inline-flex cursor-pointer items-center gap-1.5 self-start rounded-lg border border-dashed border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
       >
-        <Plus className="w-3.5 h-3.5" />
-        + Thêm vật phẩm
+        <Plus className="size-3.5" aria-hidden="true" />+ Thêm vật phẩm
       </button>
     </div>
   )
@@ -106,12 +105,12 @@ function MatchingItemRow({
       details: q.details.map((d, i) => (i === 0 ? { ...d, ...patch } : d)),
     })
 
-  const answer = detail?.correctAnswers?.[0] ?? ""
+  const answer = detail?.correctAnswers?.[0] ?? ''
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/10 p-3 flex flex-col gap-2">
+    <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-3.5">
       <div className="flex items-center justify-between gap-2">
-        <label className="flex items-center gap-2 text-white/70 text-xs font-bold cursor-pointer">
+        <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-700">
           <input
             type="checkbox"
             checked={q.isExample}
@@ -121,16 +120,17 @@ function MatchingItemRow({
           Là ví dụ
         </label>
         <button
+          type="button"
           onClick={onRemove}
-          className="p-2 rounded-lg bg-white/5 hover:bg-game-danger-to text-white/60 hover:text-white transition-colors cursor-pointer"
+          className="cursor-pointer rounded-lg border border-rose-200 bg-rose-50 p-1.5 text-rose-700 transition-colors hover:bg-rose-100"
           aria-label="Xóa vật phẩm"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="size-4" aria-hidden="true" />
         </button>
       </div>
 
       {detail && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+        <div className="grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2">
           <Field label="Tên vật phẩm">
             <TextInput
               value={detail.label}
@@ -148,14 +148,16 @@ function MatchingItemRow({
           <Field label="Đáp án đúng">
             <select
               value={answer}
-              onChange={(e) => patchDetail({ correctAnswers: e.target.value ? [e.target.value] : [] })}
-              className="bg-white/10 text-white font-semibold text-sm rounded-xl px-3 py-2.5 focus:outline-none border border-transparent focus:border-brand-primary"
+              onChange={(e) =>
+                patchDetail({ correctAnswers: e.target.value ? [e.target.value] : [] })
+              }
+              className="focus:border-brand-primary focus:ring-brand-primary/20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:outline-none"
             >
               <option value="" className="text-slate-900">
                 — Chọn thẻ —
               </option>
-              {letters.map((l) => (
-                <option key={l} value={l} className="text-slate-900">
+              {letters.map((l, idx) => (
+                <option key={`${l}-${idx}`} value={l} className="text-slate-900">
                   {l}
                 </option>
               ))}
@@ -163,7 +165,7 @@ function MatchingItemRow({
           </Field>
           <div className="flex items-end">
             {answer && !letters.includes(answer) && (
-              <span className={cn("text-game-danger-from text-xs font-semibold")}>
+              <span className={cn('text-xs font-medium text-rose-700')}>
                 Đáp án &quot;{answer}&quot; không còn tồn tại trong cột phải.
               </span>
             )}

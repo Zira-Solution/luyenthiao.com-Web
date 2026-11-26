@@ -1,5 +1,7 @@
-export { PartFormDragdrop } from "./part-form-dragdrop"
-export { PartFormGapfill } from "./part-form-gapfill"
-export { PartFormMatching } from "./part-form-matching"
-export { PartFormMultichoice } from "./part-form-multichoice"
-export { PartSettingsFields } from "./part-settings-fields"
+export { PartFormDragdrop } from './part-form-dragdrop'
+export { PartFormGapfill } from './part-form-gapfill'
+export { PartFormMatching } from './part-form-matching'
+export { PartFormMultichoice } from './part-form-multichoice'
+export { PartFormSpeak } from './part-form-speak'
+export { PartFormWrite } from './part-form-write'
+export { PartSettingsFields } from './part-settings-fields'
