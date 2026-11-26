@@ -23,6 +23,8 @@ describe('planets', () => {
       name: 'STARTERS',
       description: 'Hòn Đảo Kẹo Ngọt',
       image: '/assets/planets/planet_candy_wonderland.png',
+      mapBackground: '/clone-assets/exam/bg-map.73c46437.jpg',
+      mapTotal: 200,
       glowColor: '#ec4899',
       ribbonFrom: '#f472b6',
       ribbonTo: '#fb7185',
@@ -31,13 +33,13 @@ describe('planets', () => {
     })
   })
 
-  it('uses a safe linkUrl as href and marks /challenges as coming soon', () => {
+  it('uses a safe linkUrl as href and unlocks /challenges', () => {
     const rows = planetsSchema.parse(planets)
     const starters = rows.find((row) => row.slug === 'starters')
     if (!starters) throw new Error('fixture has no starters row')
     const [planet] = toPlanets([{ ...starters, linkUrl: '/challenges' }])
     expect(planet?.href).toBe('/challenges')
-    expect(planet?.comingSoon).toBe(true)
+    expect(planet?.comingSoon).toBe(false)
   })
 
   it('includes the ioe planet with arena diorama', () => {
@@ -76,5 +78,21 @@ describe('planets', () => {
       expect(planet.href).toBe(`/testlevels/${planet.slug}`)
       expect(planet.comingSoon).toBe(false)
     }
+  })
+
+  it('ưu tiên tên, ảnh và mô tả từ Admin API thay vì PLANET_OVERRIDES cứng', () => {
+    const rows = planetsSchema.parse(planets)
+    const starters = rows.find((row) => row.slug === 'starters')!
+    const [custom] = toPlanets([
+      {
+        ...starters,
+        name: 'STARTERS CUSTOM',
+        subtitle: 'Thế giới mới từ Admin',
+        image: 'https://cdn.example.com/custom-planet.png',
+      },
+    ])
+    expect(custom?.name).toBe('STARTERS CUSTOM')
+    expect(custom?.description).toBe('Thế giới mới từ Admin')
+    expect(custom?.image).toBe('https://cdn.example.com/custom-planet.png')
   })
 })

@@ -257,7 +257,10 @@ export function PlanetDiorama({ planet, isActive, isVisible, onSelect }: PlanetD
               // Normalized position t from -1 (leftmost) to +1 (rightmost)
               const t = (i - half) / half
               // Dramatic convex arc hugging the bottom curve of the planet (straight for short words <= 3 chars like IOE, KET, PET)
-              const dy = isShortWord ? 0 : Math.pow(Math.abs(t), 1.6) * (n > 6 ? 16 : 11)
+              // Rounded: Math.pow with a fractional exponent can differ in the last digit between Node (SSR) and the browser, which React reports as a hydration mismatch.
+              const dy = isShortWord
+                ? 0
+                : Math.round(Math.pow(Math.abs(t), 1.6) * (n > 6 ? 16 : 11) * 100) / 100
               // Outward rotation along the arc (straight for short words)
               const rot = isShortWord ? 0 : t * (n > 6 ? 13 : 8.5)
               // Bookends (ends) are slightly punchier for curved words

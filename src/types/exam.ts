@@ -1,4 +1,7 @@
-export type PartKind = "dragdrop" | "matching" | "multichoice" | "gapfill"
+import type { SpeakingQuestion, SpeakingQuestionKind } from '@/types/speaking'
+import type { WritingPrompt } from '@/types/writing'
+
+export type PartKind = 'dragdrop' | 'matching' | 'multichoice' | 'gapfill' | 'write' | 'speak'
 
 export interface Box {
   left: string
@@ -31,6 +34,7 @@ export interface ExamQuestion {
   choices?: WordBoxItem[]
   correctLabel?: string | null
   details: ExamDetail[]
+  skillTags?: string[]
 }
 
 export interface ExamPart {
@@ -42,6 +46,10 @@ export interface ExamPart {
   wordBox?: WordBoxItem[]
   extraHtml?: string | null
   questions: ExamQuestion[]
+  maxScore?: number
+  prompt?: WritingPrompt | null
+  speakKind?: SpeakingQuestionKind | null
+  speakQuestions?: SpeakingQuestion[]
 }
 
 export interface ExamStructure {
@@ -56,6 +64,8 @@ export interface Exam {
   name: string
   levelSlug: string
   levelName: string
+  isDemo?: boolean
+  order?: number
   structures: ExamStructure[]
 }
 

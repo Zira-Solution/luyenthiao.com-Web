@@ -75,4 +75,41 @@ describe("normalizeExam", () => {
     expect(titleDetail?.options).toHaveLength(3)
     expect(titleDetail?.correctAnswers).toEqual(["Jim had a weird dream"])
   })
+
+  it("parses compact DB exams where optional minutes, isExample, correctAnswers and sampleAnswer are omitted", () => {
+    const parsed = examSchema.parse({
+      id: "compact-1",
+      name: "Compact Exam",
+      levelSlug: "flyers",
+      structures: [
+        {
+          id: "s1",
+          name: "Reading & Writing",
+          parts: [
+            {
+              id: "p1",
+              kind: "multichoice",
+              questions: [
+                {
+                  id: "q1",
+                  title: "Question 1",
+                  correctLabel: "A",
+                  details: [{ id: "d1", label: "A", text: "Blue" }],
+                },
+              ],
+            },
+            {
+              id: "p2",
+              kind: "write",
+              maxScore: 5,
+              prompt: { title: "Essay", instruction: "Write about today." },
+            },
+          ],
+        },
+      ],
+    })
+    expect(parsed.structures[0]?.minutes).toBe(15)
+    expect(parsed.structures[0]?.parts[0]?.questions[0]?.isExample).toBe(false)
+    expect(parsed.structures[0]?.parts[1]?.prompt?.sampleAnswer).toBe("")
+  })
 })

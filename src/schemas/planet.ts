@@ -11,6 +11,8 @@ const planetSchema = z.object({
   ribbonFrom: z.string(),
   ribbonTo: z.string(),
   sortOrder: z.number(),
+  mapTotal: z.number().nullish().optional(),
+  mapBackground: z.string().nullish().optional(),
 })
 
 export const planetsSchema = z.array(planetSchema)
@@ -23,6 +25,8 @@ export interface Planet {
   glowColor: string
   ribbonFrom: string
   ribbonTo: string
+  mapTotal?: number
+  mapBackground?: string
   /** Where a click goes: `linkUrl`, else the level's exam list. */
   href: string
   /** True while the target route does not exist yet (`/challenges`: sub-project 5). */
@@ -204,24 +208,15 @@ export const ADVENTURE_WORLDS: readonly Planet[] = [
 ]
 
 export function formatWorldSubtitle(subtitle: string, slug?: string): string {
+  const trimmed = subtitle.trim()
+  if (trimmed) {
+    // Loại bỏ hoàn toàn các từ "hành tinh", "tinh cầu" nếu còn sót
+    return trimmed.replace(/hành tinh\s*/gi, 'Hòn đảo ').replace(/tinh cầu\s*/gi, 'Hòn đảo ')
+  }
   if (slug && PLANET_OVERRIDES[slug]?.description) {
     return PLANET_OVERRIDES[slug].description!
   }
-  const lower = subtitle.toLowerCase()
-  if (lower.includes('kẹo ngọt') || lower.includes('ngọt ngào')) return 'Hòn Đảo Kẹo Ngọt'
-  if (lower.includes('khủng long')) return 'Hòn Đảo Khủng Long'
-  if (lower.includes('giấc mơ') || lower.includes('thần tiên')) return 'Khu Vườn Thần Tiên'
-  if (lower.includes('tương lai') || lower.includes('robot')) return 'Miền Đất Tương Lai'
-  if (lower.includes('đấu trường') || lower.includes('thách đấu')) return 'Đấu Trường Cổ Tích'
-  if (lower.includes('thời gian') || lower.includes('ốc đảo')) return 'Ốc Đảo Thời Gian'
-  if (lower.includes('băng giá') || lower.includes('tuyết')) return 'Vương Quốc Băng Giá'
-  if (lower.includes('san hô')) return 'Xứ Sở San Hô'
-  if (lower.includes('nghìn lẻ một đêm') || lower.includes('arabian'))
-    return 'Ốc Đảo Nghìn Lẻ Một Đêm'
-  if (lower.includes('giai điệu') || lower.includes('melody')) return 'Hòn Đảo Giai Điệu'
-
-  // Loại bỏ hoàn toàn các từ "hành tinh", "tinh cầu"
-  return subtitle.replace(/hành tinh\s*/gi, 'Hòn đảo ').replace(/tinh cầu\s*/gi, 'Hòn đảo ')
+  return ''
 }
 
 export function toPlanets(rows: z.output<typeof planetsSchema>): Planet[] {
@@ -229,22 +224,26 @@ export function toPlanets(rows: z.output<typeof planetsSchema>): Planet[] {
     .filter((row) => !HIDDEN_PLANET_SLUGS.includes(row.slug))
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .map((row) => {
+      const override = PLANET_OVERRIDES[row.slug]
       const href =
         row.linkUrl && safeRedirectPath(row.linkUrl) === row.linkUrl
           ? row.linkUrl
           : `/testlevels/${row.slug}`
-      const baseDescription = formatWorldSubtitle(row.subtitle, row.slug)
+      const description = formatWorldSubtitle(row.subtitle, row.slug)
+      const name = row.name.trim() || override?.name || row.slug
+      const image = row.image.trim() || override?.image || '/clone-assets/media/planet_candy.png'
       return {
         slug: row.slug,
-        name: row.name,
-        description: baseDescription,
-        image: row.image,
-        ...PLANET_OVERRIDES[row.slug],
+        name,
+        description,
+        image,
         glowColor: row.glowColor,
         ribbonFrom: row.ribbonFrom,
         ribbonTo: row.ribbonTo,
+        ...(typeof row.mapTotal === 'number' ? { mapTotal: row.mapTotal } : {}),
+        ...(row.mapBackground ? { mapBackground: row.mapBackground } : {}),
         href,
-        comingSoon: href.startsWith('/challenges'),
+        comingSoon: false,
       }
     })
 
