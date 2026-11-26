@@ -1,12 +1,7 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
-import { WritingResultContent } from '@/components/writing'
-import { writingTestMock } from '@/mocks/writing'
-import type { WritingTest } from '@/types/writing'
-
-const writingData: WritingTest = writingTestMock
+import { WritingResultRoute } from '@/components/writing'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -14,16 +9,10 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
-  const show = id === writingData.attempt.id
   return {
-    title: show ? 'Kết quả bài thi Viết - Luyện thi' : 'Không tìm thấy kết quả',
-    description: 'Điểm và nhận xét từ Luyện Thi Ảo AI cho bài thi viết.',
-    keywords: ['tieng anh', 'luyen thi', 'luyenthiao', 'ket qua', 'bai viet'],
+    title: 'Kết quả bài thi Viết - Luyện thi',
+    description: 'Điểm và nhận xét chi tiết cho bài thi Viết.',
     alternates: { canonical: `/write/result/${id}` },
-    openGraph: {
-      title: show ? 'Kết quả bài thi Viết' : 'Không tìm thấy kết quả',
-      description: 'Điểm và nhận xét từ Luyện Thi Ảo AI cho bài thi viết.',
-    },
   }
 }
 
@@ -31,8 +20,6 @@ export default async function WritingResultPage({
   params,
 }: PageProps): Promise<React.ReactElement> {
   const { id } = await params
-  if (id !== writingData.attempt.id) notFound()
-
   return (
     <Suspense
       fallback={
@@ -41,7 +28,7 @@ export default async function WritingResultPage({
         </main>
       }
     >
-      <WritingResultContent attempt={writingData.attempt} writeSlug={writingData.id} />
+      <WritingResultRoute id={id} />
     </Suspense>
   )
 }

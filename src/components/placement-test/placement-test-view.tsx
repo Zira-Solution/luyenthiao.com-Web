@@ -15,10 +15,12 @@ import { useState, useEffect, useRef } from 'react'
 import { LEVEL_TESTS, MOCK_QUESTIONS, type Question } from './placement-test-data'
 import { playBeep } from './placement-test-sound'
 
+import { useDemoExam } from '@/hooks/use-student-exams'
 import { cn } from '@/lib/utils'
 
 export function PlacementTestView(): React.ReactElement {
   const router = useRouter()
+  const { data: demoExam } = useDemoExam(true)
 
   const [gameState, setGameState] = useState<'lobby' | 'quiz' | 'result'>('lobby')
   const [selectedLevel, setSelectedLevel] = useState<(typeof LEVEL_TESTS)[0] | null>(null)
@@ -157,6 +159,21 @@ export function PlacementTestView(): React.ReactElement {
               Hãy hoàn thành bài thi thử ngắn 3 câu để kiểm tra ngay trình độ ngoại ngữ của bản thân
               và nhận huân chương tri thức!
             </p>
+            {demoExam && (
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-amber-300/40 bg-amber-400/15 px-4 py-3 text-xs font-bold text-amber-100">
+                <span>Đang mở Đề Demo đầy đủ: {demoExam.name}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playBeep('click')
+                    router.push('/check-point/demo')
+                  }}
+                  className="cursor-pointer rounded-xl bg-amber-400 px-3.5 py-1.5 font-black text-slate-950 shadow transition hover:bg-amber-300"
+                >
+                  Làm Đề Demo chính thức
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="text-shadow-game-title grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">

@@ -59,7 +59,7 @@ export function WritingReview({
         </button>
         <div>
           <h1 className="text-sm font-black tracking-wide uppercase">
-            Flyers - [FLYERS] Bài thi Viết 1
+            {attempt.headerTitle || 'Flyers - Bài thi Viết'}
           </h1>
           <p className="text-xs text-slate-500">
             Điểm và nhận xét từ Luyện Thi Ảo AI cho phần viết

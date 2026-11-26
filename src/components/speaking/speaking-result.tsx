@@ -1,6 +1,10 @@
+"use client"
+
 import { ArrowLeft, ClipboardList } from "lucide-react"
 import Image from "next/image"
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from "@/components/admin/site-config/site-config-defaults"
+import { useSiteConfig } from "@/providers/site-config-provider"
 import type { SpeakingAttempt } from "@/types/speaking"
 
 interface SpeakingResultProps {
@@ -15,13 +19,21 @@ export function SpeakingResult({
   onReview,
   onBack,
 }: SpeakingResultProps): React.ReactElement {
+  const { config, resolveAsset } = useSiteConfig()
+  const ga = config.globalAssets
+  const dga = DEFAULT_SITE_CONFIG_CLIENT.globalAssets
+  const bgSrc = resolveAsset(ga.background, dga.background ?? "")
+  const frameSrc = resolveAsset(ga.resultFrame, dga.resultFrame ?? "")
+  const trophySrc = resolveAsset(ga.trophyIcon, dga.trophyIcon ?? "")
+
   return (
     <div className="relative min-h-[100dvh] w-full overflow-y-auto bg-page-bg px-4 py-10">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src={bgSrc}
         alt=""
         fill
         priority
+        unoptimized
         className="pointer-events-none object-cover opacity-80"
       />
 
@@ -37,10 +49,11 @@ export function SpeakingResult({
 
         <div className="relative mt-4">
           <Image
-            src="/clone-assets/writing/default-frame.png"
+            src={frameSrc}
             alt=""
             width={120}
             height={120}
+            unoptimized
             className="object-contain"
           />
           <span className="absolute inset-0 flex items-center justify-center text-6xl">
@@ -54,10 +67,11 @@ export function SpeakingResult({
 
         <div className="mt-6 flex items-center gap-2 text-5xl">
           <Image
-            src="/clone-assets/media/icon_trophy.32089636.png"
+            src={trophySrc}
             alt=""
             width={52}
             height={52}
+            unoptimized
             className="object-contain"
           />
         </div>

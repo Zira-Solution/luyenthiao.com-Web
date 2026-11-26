@@ -1,12 +1,25 @@
+'use client'
+
 import { ArrowLeft, FileText, Mic, Play, Volume2 } from 'lucide-react'
 import Image from 'next/image'
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
+import { useSiteConfig } from '@/providers/site-config-provider'
 import type { SpeakingAnswer, SpeakingAttempt } from '@/types/speaking'
 
 interface SpeakingPreviewProps {
   attempt: SpeakingAttempt
   answers?: Record<string, SpeakingAnswer>
   onBack?: () => void
+}
+
+function AvatarFrame(): React.ReactElement {
+  const { config, resolveAsset } = useSiteConfig()
+  const frameSrc = resolveAsset(
+    config.globalAssets.resultFrame,
+    DEFAULT_SITE_CONFIG_CLIENT.globalAssets.resultFrame ?? '',
+  )
+  return <Image src={frameSrc} alt="" fill unoptimized className="object-contain" />
 }
 
 const OOPS =
@@ -82,12 +95,7 @@ export function SpeakingPreview({
             </p>
           </div>
           <div className="relative h-16 w-16">
-            <Image
-              src="/clone-assets/writing/default-frame.png"
-              alt=""
-              fill
-              className="object-contain"
-            />
+            <AvatarFrame />
             <span className="absolute inset-0 flex items-center justify-center text-3xl">👦</span>
           </div>
         </section>

@@ -6,6 +6,8 @@ import { useEffect, useMemo, useState } from "react"
 
 import { WritingStoryImage } from "./writing-story-image"
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from "@/components/admin/site-config/site-config-defaults"
+import { useSiteConfig } from "@/providers/site-config-provider"
 import type { WritingAttempt } from "@/types/writing"
 
 interface WritingWorkbenchProps {
@@ -63,15 +65,20 @@ export function WritingWorkbench({
   }, [answer])
 
   const wordCount = useMemo(() => countWords(answer), [answer])
-
+  const { config, resolveAsset } = useSiteConfig()
+  const bgSrc = resolveAsset(
+    config.globalAssets.background,
+    DEFAULT_SITE_CONFIG_CLIENT.globalAssets.background ?? "",
+  )
 
   return (
     <div className="relative flex min-h-[100dvh] w-full flex-col bg-page-bg text-white">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src={bgSrc}
         alt=""
         fill
         priority
+        unoptimized
         className="object-cover opacity-80 pointer-events-none"
       />
 

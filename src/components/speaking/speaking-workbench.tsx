@@ -6,6 +6,8 @@ import { useMemo, useState } from 'react'
 
 import { SpeakingQuestion } from './speaking-question'
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
+import { useSiteConfig } from '@/providers/site-config-provider'
 import type { SpeakingAnswer, SpeakingAttempt } from '@/types/speaking'
 
 interface SpeakingWorkbenchProps {
@@ -50,6 +52,7 @@ export function SpeakingWorkbench({
   )
 
   const [index, setIndex] = useState(0)
+  const { config, resolveAsset } = useSiteConfig()
   const current = flat[index]
 
   if (!current) {
@@ -63,15 +66,22 @@ export function SpeakingWorkbench({
   const isLast = index === flat.length - 1
   const goNext = () => (isLast ? onOpenSubmit() : setIndex(index + 1))
   const goPrev = () => (index > 0 ? setIndex(index - 1) : onPrevious?.())
+  const sa = config.speakingAssets
+  const da = DEFAULT_SITE_CONFIG_CLIENT.speakingAssets
+  const bgSrc = resolveAsset(sa.background, da.background ?? '')
+  const exitSrc = resolveAsset(sa.exitButton, da.exitButton ?? '')
+  const headerFrameSrc = resolveAsset(sa.examHeaderFrame, da.examHeaderFrame ?? '')
+  const nextBtnSrc = resolveAsset(sa.nextButton, da.nextButton ?? '')
 
   return (
     <div className="relative min-h-[100dvh] w-full overflow-hidden">
       {/* Nền trang */}
       <Image
-        src="/clone-assets/speaking/bg.894c95ef.png"
+        src={bgSrc}
         alt=""
         fill
         priority
+        unoptimized
         className="object-cover"
       />
 
@@ -85,10 +95,11 @@ export function SpeakingWorkbench({
             aria-label="Thoát"
           >
             <Image
-              src="/clone-assets/speaking/btn-out.94d0dd6c.png"
+              src={exitSrc}
               alt=""
               width={118}
               height={48}
+              unoptimized
               className="h-12 w-28 object-contain"
             />
           </button>
@@ -116,11 +127,12 @@ export function SpeakingWorkbench({
         {current.partTitle ? (
           <div className="relative mx-auto -mt-1 mb-1 w-full max-w-3xl px-4">
             <Image
-              src="/clone-assets/speaking/fr-exam-header.ec6a528f.png"
+              src={headerFrameSrc}
               alt=""
               width={0}
               height={0}
               sizes="100vw"
+              unoptimized
               className="h-[84px] w-full object-contain"
             />
             <p className="absolute inset-0 flex items-center justify-center text-center text-base font-black tracking-wide text-white uppercase drop-shadow">
@@ -162,11 +174,12 @@ export function SpeakingWorkbench({
               className="relative flex cursor-pointer items-center gap-1 p-1"
             >
               <Image
-                src="/clone-assets/speaking/btn-next.776b1baf.png"
+                src={nextBtnSrc}
                 alt={isLast ? 'Nộp bài' : 'Câu tiếp theo'}
                 width={0}
                 height={0}
                 sizes="100vw"
+                unoptimized
                 className="h-16 w-auto object-contain drop-shadow-lg"
               />
             </button>

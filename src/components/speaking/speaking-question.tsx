@@ -6,6 +6,8 @@ import { useState } from 'react'
 import { SpeakingMicRecord } from './speaking-mic-record'
 import { SpeakingScene } from './speaking-scene'
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
+import { useSiteConfig } from '@/providers/site-config-provider'
 import type { SpeakingAnswer, SpeakingQuestion } from '@/types/speaking'
 
 interface SpeakingQuestionProps {
@@ -23,13 +25,20 @@ function QuestionHeader({
   question: SpeakingQuestion
   questionNumber?: number
 }): React.ReactElement {
+  const { config, resolveAsset } = useSiteConfig()
+  const sa = config.speakingAssets
+  const da = DEFAULT_SITE_CONFIG_CLIENT.speakingAssets
+  const teacherSrc = resolveAsset(sa.teacherAvatar, da.teacherAvatar ?? '')
+  const speakerSrc = resolveAsset(sa.speakerIcon, da.speakerIcon ?? '')
+
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-[#f7e9d4] px-4 py-3 shadow-md">
       <Image
-        src="/clone-assets/speaking/teacher-avatar.68a16d1c.png"
+        src={teacherSrc}
         alt="Giáo viên"
         width={56}
         height={56}
+        unoptimized
         className="h-12 w-12 rounded-full object-cover ring-2 ring-amber-300"
       />
       <div className="min-w-0 flex-1">
@@ -40,10 +49,11 @@ function QuestionHeader({
         {question.vi ? <p className="text-xs text-slate-500">{question.vi}</p> : null}
       </div>
       <Image
-        src="/clone-assets/speaking/ic-speaker.1fe89d31.png"
+        src={speakerSrc}
         alt="Phát âm thanh"
         width={34}
         height={34}
+        unoptimized
         className="h-8 w-8 cursor-pointer"
       />
     </div>

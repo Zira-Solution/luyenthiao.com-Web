@@ -4,6 +4,9 @@ import Image from "next/image"
 
 import { SpeakingMicRecord } from "./speaking-mic-record"
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from "@/components/admin/site-config/site-config-defaults"
+import { useSiteConfig } from "@/providers/site-config-provider"
+
 interface SpeakingMicCheckProps {
   onSkip: () => void
   onDone: () => void
@@ -14,22 +17,33 @@ export function SpeakingMicCheck({
   onSkip,
   onDone,
 }: SpeakingMicCheckProps): React.ReactElement {
+  const { config, resolveAsset } = useSiteConfig()
+  const bgSrc = resolveAsset(
+    config.speakingAssets.background,
+    DEFAULT_SITE_CONFIG_CLIENT.speakingAssets.background ?? "",
+  )
+  const micSrc = resolveAsset(
+    config.speakingAssets.micIcon,
+    DEFAULT_SITE_CONFIG_CLIENT.speakingAssets.micIcon ?? "",
+  )
   return (
     <div className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-y-auto bg-page-bg px-4 py-10">
       <Image
-        src="/clone-assets/speaking/bg.894c95ef.png"
+        src={bgSrc}
         alt=""
         fill
         priority
+        unoptimized
         className="pointer-events-none object-cover opacity-25"
       />
 
       <div className="relative z-10 flex w-full max-w-[620px] flex-col items-center rounded-[36px] bg-white p-8 text-center shadow-2xl ring-4 ring-amber-200/70">
         <Image
-          src="/clone-assets/speaking/ic-micro.298eb73f.png"
+          src={micSrc}
           alt="Micro"
           width={64}
           height={64}
+          unoptimized
           className="h-16 w-16 object-contain drop-shadow"
         />
 

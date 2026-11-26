@@ -58,6 +58,11 @@ export function gradeExam(exam: Exam, answers: AnswerMap): GradeResult {
     let structTotal = 0
 
     for (const part of structure.parts) {
+      if (part.kind === 'write' || part.kind === 'speak') {
+        result.byPart[part.id] = { correct: 0, total: 0 }
+        continue
+      }
+
       const partAnswers = answers[part.id] ?? {}
       let partCorrect = 0
       let partTotal = 0

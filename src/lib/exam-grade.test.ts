@@ -202,4 +202,42 @@ describe("gradeExam", () => {
     expect(grade.byStructure["struct-rw"]?.total).toBe(1)
     expect(grade.byPart["part-dd"]?.total).toBe(1)
   })
+
+  it("skips write and speak parts during objective grading", () => {
+    const withSubjective: Exam = {
+      ...exam,
+      structures: [
+        ...exam.structures,
+        {
+          id: "struct-subj",
+          name: "Subjective",
+          minutes: 15,
+          parts: [
+            {
+              id: "part-write",
+              kind: "write",
+              title: "Write Story",
+              maxScore: 5,
+              prompt: { title: "Phần 1", instruction: "Write a story", images: [], sampleAnswer: "" },
+              questions: [],
+            },
+            {
+              id: "part-speak",
+              kind: "speak",
+              title: "Speak",
+              maxScore: 10,
+              speakKind: "mic-plain",
+              speakQuestions: [{ id: "sq-1", kind: "mic-plain", text: "What is your name?" }],
+              questions: [],
+            },
+          ],
+        },
+      ],
+    }
+
+    const grade = gradeExam(withSubjective, {})
+    expect(grade.total.total).toBe(5)
+    expect(grade.byPart["part-write"]).toEqual({ correct: 0, total: 0 })
+    expect(grade.byPart["part-speak"]).toEqual({ correct: 0, total: 0 })
+  })
 })

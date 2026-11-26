@@ -1,6 +1,10 @@
+'use client'
+
 import { LayoutGrid, Timer, Upload, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
+import { useSiteConfig } from '@/providers/site-config-provider'
 import type { WritingTest } from '@/types/writing'
 
 interface WritingIntroProps {
@@ -54,17 +58,23 @@ function GradingOption({
 }: {
   option: (typeof GRADING_OPTIONS)[number]
 }): React.ReactElement {
+  const { config, resolveAsset } = useSiteConfig()
+  const checkedSrc = resolveAsset(
+    config.writingAssets.radioChecked,
+    DEFAULT_SITE_CONFIG_CLIENT.writingAssets.radioChecked ?? '',
+  )
+  const uncheckedSrc = resolveAsset(
+    config.writingAssets.radioUnchecked,
+    DEFAULT_SITE_CONFIG_CLIENT.writingAssets.radioUnchecked ?? '',
+  )
   return (
     <label className="flex cursor-pointer items-start gap-3 text-sm">
       <Image
-        src={
-          option.default
-            ? '/clone-assets/writing/radio-checked.png'
-            : '/clone-assets/writing/radio.png'
-        }
+        src={option.default ? checkedSrc : uncheckedSrc}
         alt=""
         width={24}
         height={24}
+        unoptimized
         className="mt-0.5 object-contain"
       />
       <span className="leading-snug text-slate-700">
@@ -77,13 +87,23 @@ function GradingOption({
 
 /** Màn chờ giới thiệu trước khi bắt đầu bài thi Viết (nút "Bước tiếp theo"). */
 export function WritingIntro({ test, onStart }: WritingIntroProps): React.ReactElement {
+  const { config, resolveAsset } = useSiteConfig()
+  const bgSrc = resolveAsset(
+    config.globalAssets.background,
+    DEFAULT_SITE_CONFIG_CLIENT.globalAssets.background ?? '',
+  )
+  const arrowLeftSrc = resolveAsset(
+    config.writingAssets.arrowLeft,
+    DEFAULT_SITE_CONFIG_CLIENT.writingAssets.arrowLeft ?? '',
+  )
   return (
     <div className="bg-page-bg relative flex min-h-[100dvh] w-full items-center justify-center overflow-y-auto px-4 py-10">
       <Image
-        src="/clone-assets/bg.1e17df80.png"
+        src={bgSrc}
         alt=""
         fill
         priority
+        unoptimized
         className="pointer-events-none object-cover opacity-80"
       />
 
@@ -94,10 +114,11 @@ export function WritingIntro({ test, onStart }: WritingIntroProps): React.ReactE
           className="absolute top-5 left-5 flex h-11 w-11 cursor-pointer items-center justify-center rounded-2xl bg-white shadow-md transition-transform hover:scale-105 active:scale-95"
         >
           <Image
-            src="/clone-assets/writing/arrow-left.png"
+            src={arrowLeftSrc}
             alt=""
             width={22}
             height={14}
+            unoptimized
             className="object-contain"
           />
         </button>

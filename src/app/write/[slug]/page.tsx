@@ -1,11 +1,6 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 
-import { WritingFlow } from '@/components/writing'
-import { writingTestMock } from '@/mocks/writing'
-import type { WritingTest } from '@/types/writing'
-
-const writingData: WritingTest = writingTestMock
+import { WritingFlowRoute } from '@/components/writing'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -13,33 +8,14 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  if (slug !== writingData.id) {
-    return {
-      title: 'Không tìm thấy bài viết',
-      description: 'Bài thi viết không tồn tại.',
-      keywords: ['tieng anh', 'luyen thi', 'luyenthiao', 'bai viet'],
-      alternates: { canonical: `/write/${slug}` },
-      openGraph: {
-        title: 'Không tìm thấy bài viết',
-        description: 'Bài thi viết không tồn tại.',
-      },
-    }
-  }
   return {
-    title: `${writingData.name} - Luyện thi`,
-    description: 'Bài thi viết theo chủ đề Luyện Thi Ảo — viết câu chuyện dựa trên ba bức tranh.',
-    keywords: ['tieng anh', 'luyen thi', 'luyenthiao', 'bai viet', 'writing'],
+    title: 'Bài thi Viết - Luyện thi',
+    description: 'Bài thi viết tiếng Anh trực tuyến trên Luyenthiao.',
     alternates: { canonical: `/write/${slug}` },
-    openGraph: {
-      title: `${writingData.name} - Luyện thi`,
-      description: 'Bài thi viết theo chủ đề Luyện Thi Ảo.',
-    },
   }
 }
 
 export default async function WritingTestPage({ params }: PageProps): Promise<React.ReactElement> {
   const { slug } = await params
-  if (slug !== writingData.id) notFound()
-
-  return <WritingFlow test={writingData} />
+  return <WritingFlowRoute slug={slug} />
 }

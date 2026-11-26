@@ -1,34 +1,35 @@
-"use client"
+'use client'
 
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-import { WritingIntro } from "./writing-intro"
-import { WritingSubmitDialog } from "./writing-submit-dialog"
-import { WritingWorkbench } from "./writing-workbench"
+import { WritingIntro } from './writing-intro'
+import { WritingSubmitDialog } from './writing-submit-dialog'
+import { WritingWorkbench } from './writing-workbench'
 
-import type { WritingTest } from "@/types/writing"
+import type { WritingTest } from '@/types/writing'
 
 interface WritingFlowProps {
   test: WritingTest
+  onSubmitAnswer?: (answer: string) => Promise<void>
 }
 
-type Phase = "intro" | "working"
+type Phase = 'intro' | 'working'
 
 /**
  * Điều phối luồng bài thi Viết: giới thiệu → làm bài → xác nhận nộp bài → kết quả.
  */
-export function WritingFlow({ test }: WritingFlowProps): React.ReactElement {
+export function WritingFlow({ test, onSubmitAnswer }: WritingFlowProps): React.ReactElement {
   const router = useRouter()
-  const [phase, setPhase] = useState<Phase>("intro")
+  const [phase, setPhase] = useState<Phase>('intro')
   const [submitOpen, setSubmitOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [draft, setDraft] = useState("")
+  const [draft, setDraft] = useState('')
 
   const attemptId = test.attempt.id
 
   const startExam = () => {
-    setPhase("working")
+    setPhase('working')
   }
 
   const requestSubmit = (answer: string) => {
@@ -36,9 +37,16 @@ export function WritingFlow({ test }: WritingFlowProps): React.ReactElement {
     setSubmitOpen(true)
   }
 
-  const confirmSubmit = () => {
+  const confirmSubmit = async () => {
     setSubmitting(true)
-    // Mô phỏng chờ máy AI chấm.
+    if (onSubmitAnswer) {
+      try {
+        await onSubmitAnswer(draft)
+      } catch {
+        setSubmitting(false)
+      }
+      return
+    }
     setTimeout(() => {
       const q = new URLSearchParams({ answer: draft }).toString()
       router.push(`/write/result/${attemptId}?${q}`)
@@ -46,21 +54,17 @@ export function WritingFlow({ test }: WritingFlowProps): React.ReactElement {
   }
 
   const exitToExamList = () => {
-    router.push("/testlevels/flyers")
+    router.push('/testlevels/flyers')
   }
 
-  if (phase === "working") {
+  if (phase === 'working') {
     return (
       <>
-        <WritingWorkbench
-          attempt={test.attempt}
-          onSubmit={requestSubmit}
-          onExit={exitToExamList}
-        />
+        <WritingWorkbench attempt={test.attempt} onSubmit={requestSubmit} onExit={exitToExamList} />
         <WritingSubmitDialog
           open={submitOpen}
           onCancel={() => setSubmitOpen(false)}
-          onConfirm={confirmSubmit}
+          onConfirm={() => void confirmSubmit()}
           submitting={submitting}
         />
       </>

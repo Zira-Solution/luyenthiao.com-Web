@@ -1,42 +1,98 @@
-import type { ReactElement } from "react";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import type { ReactElement } from 'react'
+
+import { DEFAULT_SITE_CONFIG_CLIENT } from '@/components/admin/site-config/site-config-defaults'
+import { DEMO_SPEAKING_TEST_PATH } from '@/constants'
+import { useSiteConfig } from '@/providers/site-config-provider'
 
 interface LevelHeaderProps {
-  levelName: string;
+  levelName: string
+  examIds?: string[]
 }
 
-export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
+export function LevelHeader({ levelName, examIds }: LevelHeaderProps): ReactElement {
+  const router = useRouter()
+  const { config, resolveAsset, mapText } = useSiteConfig()
+  const backText = mapText('back')
+  const videoText = mapText('videoSpeaking')
+  const randomText = mapText('random')
+  const backButtonSrc = resolveAsset(
+    config.mapAssets.backButton,
+    DEFAULT_SITE_CONFIG_CLIENT.mapAssets.backButton ?? '',
+  )
+  const backButtonMobileSrc = resolveAsset(
+    config.mapAssets.backButtonMobile,
+    DEFAULT_SITE_CONFIG_CLIENT.mapAssets.backButtonMobile ?? '',
+  )
+  const titleRibbonSrc = resolveAsset(
+    config.mapAssets.titleRibbon,
+    DEFAULT_SITE_CONFIG_CLIENT.mapAssets.titleRibbon ?? '',
+  )
+  const videoButtonSrc = resolveAsset(
+    config.mapAssets.videoButton,
+    DEFAULT_SITE_CONFIG_CLIENT.mapAssets.videoButton ?? '',
+  )
+  const randomButtonSrc = resolveAsset(
+    config.mapAssets.randomButton,
+    DEFAULT_SITE_CONFIG_CLIENT.mapAssets.randomButton ?? '',
+  )
+  const randomButtonMobileSrc = resolveAsset(
+    config.mapAssets.randomButtonMobile,
+    DEFAULT_SITE_CONFIG_CLIENT.mapAssets.randomButtonMobile ?? '',
+  )
+
+  const handleRandom = () => {
+    if (examIds && examIds.length > 0) {
+      const idx = Math.floor(Math.random() * examIds.length)
+      const chosen = examIds[idx]
+      if (chosen) {
+        router.push(`/check-point/${chosen}`)
+        return
+      }
+    }
+    router.push('/check-point/demo')
+  }
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 w-full flex justify-between items-center px-[3%] pt-2 md:pt-4 pointer-events-none">
+    <header className="pointer-events-none fixed top-0 right-0 left-0 z-30 flex w-full items-center justify-between px-[3%] pt-2 md:pt-4">
       {/* Back Button */}
-      <div className="w-[25%] max-w-[415px] pointer-events-auto">
+      <div className="pointer-events-auto w-[25%] max-w-[415px]">
         {/* Desktop Back Button */}
-        <Link href="/" className="hidden sm:block w-full max-w-[330px] hover:scale-105 active:scale-95 transition-transform block">
+        <Link
+          href="/"
+          className="block hidden w-full max-w-[330px] transition-transform hover:scale-105 active:scale-95 sm:block"
+        >
           <div className="relative aspect-[357/113] w-full">
             <Image
-              src="/clone-assets/exam/bg-back.13414e49.png"
-              alt="Trở về"
+              src={backButtonSrc}
+              alt={backText}
               fill
               priority
+              unoptimized
               className="object-contain"
             />
-            <div className="absolute inset-0 top-[14%] left-[50%] right-[16.5%] bottom-[42%] flex justify-center items-center">
-              <span className="text-white font-heading font-black text-xs md:text-sm lg:text-base uppercase tracking-wider select-none">
-                Trở về
+            <div className="absolute inset-0 top-[14%] right-[16.5%] bottom-[42%] left-[50%] flex items-center justify-center">
+              <span className="font-heading text-xs font-black tracking-wider text-white uppercase select-none md:text-sm lg:text-base">
+                {backText}
               </span>
             </div>
           </div>
         </Link>
         {/* Mobile Back Button */}
-        <Link href="/" className="sm:hidden w-[55%] max-w-[169px] hover:scale-105 active:scale-95 transition-transform block">
+        <Link
+          href="/"
+          className="block w-[55%] max-w-[169px] transition-transform hover:scale-105 active:scale-95 sm:hidden"
+        >
           <div className="relative aspect-[189/113] w-full">
             <Image
-              src="/clone-assets/exam/bg-back-m.1d28391b.png"
-              alt="Trở về"
+              src={backButtonMobileSrc}
+              alt={backText}
               fill
               priority
+              unoptimized
               className="object-contain"
             />
           </div>
@@ -44,38 +100,40 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
       </div>
 
       {/* Center Title & Speaking Banner */}
-      <div className="relative w-[46%] max-w-[654px] -translate-y-[15%] sm:-translate-y-[27%] pointer-events-auto flex flex-col items-center">
+      <div className="pointer-events-auto relative flex w-[46%] max-w-[654px] -translate-y-[15%] flex-col items-center sm:-translate-y-[27%]">
         {/* Ribbon Title */}
         <div className="relative aspect-[632/140] w-full">
           <Image
-            src="/clone-assets/exam/bg-title.de447cb5.png"
+            src={titleRibbonSrc}
             alt="Tiêu đề"
             fill
             priority
+            unoptimized
             className="object-contain"
           />
-          <div className="absolute inset-0 pt-[5.5%] flex items-center justify-center">
-            <span className="text-white font-heading font-black text-xs sm:text-lg md:text-2xl lg:text-3xl uppercase tracking-widest drop-shadow-[0_2px_3px_rgba(0,0,0,0.6)] select-none">
+          <div className="absolute inset-0 flex items-center justify-center pt-[5.5%]">
+            <span className="font-heading text-xs font-black tracking-widest text-white uppercase drop-shadow-[0_2px_3px_rgba(0,0,0,0.6)] select-none sm:text-lg md:text-2xl lg:text-3xl">
               {levelName}
             </span>
           </div>
         </div>
 
         {/* Video Speaking Button (Positioned absolute below ribbon) */}
-        <div className="absolute z-10 w-[70%] bottom-0 left-1/2 -translate-x-1/2 translate-y-[65%] sm:translate-y-[70%]">
+        <div className="absolute bottom-0 left-1/2 z-10 w-[70%] -translate-x-1/2 translate-y-[65%] sm:translate-y-[70%]">
           <Link
-            href="/speaking-listing/PLx6shCnHxKsrgZwgS5W9aDLRnT3_lg6GB__9e6839c3-7cf9-4d34-a198-e2f01575f95b"
-            className="relative aspect-[456/126] w-full block hover:scale-105 active:scale-95 transition-transform"
+            href={DEMO_SPEAKING_TEST_PATH}
+            className="relative block aspect-[456/126] w-full transition-transform hover:scale-105 active:scale-95"
           >
             <Image
-              src="/clone-assets/exam/bg-speaking-video-btn.80759ee2.png"
-              alt="Video bài thi nói"
+              src={videoButtonSrc}
+              alt={videoText}
               fill
+              unoptimized
               className="object-contain"
             />
-            <div className="absolute inset-0 top-[30%] left-[14%] right-[16%] bottom-[37%] flex justify-center items-center">
-              <span className="text-white font-heading font-black text-[8px] sm:text-[10px] md:text-[13px] uppercase tracking-wider drop-shadow-md select-none">
-                🎬 Video bài thi nói
+            <div className="absolute inset-0 top-[30%] right-[16%] bottom-[37%] left-[14%] flex items-center justify-center">
+              <span className="font-heading text-[8px] font-black tracking-wider text-white uppercase drop-shadow-md select-none sm:text-[10px] md:text-[13px]">
+                🎬 {videoText}
               </span>
             </div>
           </Link>
@@ -83,33 +141,44 @@ export function LevelHeader({ levelName }: LevelHeaderProps): ReactElement {
       </div>
 
       {/* Random Button */}
-      <div className="w-[25%] max-w-[415px] pointer-events-auto flex justify-end">
+      <div className="pointer-events-auto flex w-[25%] max-w-[415px] justify-end">
         {/* Desktop Random Button */}
-        <button className="hidden sm:block w-full max-w-[330px] hover:scale-105 active:scale-95 transition-transform relative aspect-[415/112] cursor-pointer">
+        <button
+          type="button"
+          onClick={handleRandom}
+          className="relative hidden aspect-[415/112] w-full max-w-[330px] cursor-pointer transition-transform hover:scale-105 active:scale-95 sm:block"
+        >
           <Image
-            src="/clone-assets/exam/bg-random.66cd8920.png"
-            alt="Ngẫu nhiên"
+            src={randomButtonSrc}
+            alt={randomText}
             fill
             priority
+            unoptimized
             className="object-contain"
           />
-          <div className="absolute inset-0 top-[14%] left-[11%] right-[43%] bottom-[42%] flex justify-center items-center">
-            <span className="text-white font-heading font-black text-xs md:text-sm lg:text-base uppercase tracking-wider select-none">
-              🎲 Ngẫu nhiên
+          <div className="absolute inset-0 top-[14%] right-[43%] bottom-[42%] left-[11%] flex items-center justify-center">
+            <span className="font-heading text-xs font-black tracking-wider text-white uppercase select-none md:text-sm lg:text-base">
+              🎲 {randomText}
             </span>
           </div>
         </button>
         {/* Mobile Random Button */}
-        <button className="sm:hidden w-[55%] max-w-[169px] hover:scale-105 active:scale-95 transition-transform relative aspect-[186/112] cursor-pointer">
+        <button
+          type="button"
+          onClick={handleRandom}
+          aria-label="Chọn đề ngẫu nhiên"
+          className="relative aspect-[186/112] w-[55%] max-w-[169px] cursor-pointer transition-transform hover:scale-105 active:scale-95 sm:hidden"
+        >
           <Image
-            src="/clone-assets/exam/bg-random-m.dc004e87.png"
-            alt="Ngẫu nhiên"
+            src={randomButtonMobileSrc}
+            alt={randomText}
             fill
             priority
+            unoptimized
             className="object-contain"
           />
         </button>
       </div>
     </header>
-  );
+  )
 }

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 const MAX_SECONDS = 10
 
 interface SpeakingMicRecordProps {
-  onRecorded: (recorded: { duration: number; blobUrl: string }) => void
+  onRecorded: (recorded: { duration: number; blobUrl: string; blob?: Blob }) => void
   onReset?: () => void
   label?: string
   /** Gọi khi không truy cập được micro (từ chối quyền hoặc thiết bị lỗi). */
@@ -97,7 +97,7 @@ export function SpeakingMicRecord({
         const duration = secondsRef.current
         setSeconds(0)
         secondsRef.current = 0
-        onRecorded?.({ duration, blobUrl: url })
+        onRecorded?.({ duration, blobUrl: url, blob })
       }
       recorderRef.current = recorder
       recorder.start()
